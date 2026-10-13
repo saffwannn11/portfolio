@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Akbar Academy - Simulation Lab</title>
+<meta name="description" content="Hands-on aviation, travel and tourism simulators: GDS terminals (Amadeus, Sabre, Galileo) and a Dubai tourism itinerary studio.">
+<meta name="theme-color" content="#060913">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/hub.css">
+<link rel="stylesheet" href="assets/css/gds.css">
+<link rel="stylesheet" href="assets/css/dubai.css">
+</head>
+<body>
+<div class="bg-glow"></div>
+<div class="app">
+  <aside class="side" id="side">
+    <a class="brand" href="#/hub">
+      <span class="logo"><svg viewBox="0 0 32 32" width="26" height="26"><path d="M3 18 29 5 21 27l-5-8-6 4 1-7z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></span>
+      <span><b>AKBAR ACADEMY</b><small>Simulation Lab</small></span>
+    </a>
+    <button class="pal-btn" id="palBtn"><span>Jump to...</span><kbd>Ctrl K</kbd></button>
+    <nav id="nav"></nav>
+    <div id="xpbox" class="xpbox"></div>
+    <div class="side-foot">onlinecourses.akbaracademy.com</div>
+  </aside>
+  <div class="scrim" id="scrim"></div>
+  <header class="topbar"><button id="menuBtn" aria-label="Menu"><i></i><i></i><i></i></button><b>AKBAR ACADEMY</b><span>Simulation Lab</span></header>
+  <main id="stage" class="stage"></main>
+</div>
+<div id="toasts"></div>
+
+<script src="assets/js/data/geo.js"></script>
+<script src="assets/js/core.js"></script>
+<script src="assets/js/data/dubai.js"></script>
+<script src="assets/js/modules/hub.js"></script>
+<script src="assets/js/modules/gds.js"></script>
+<script src="assets/js/modules/dubai.js"></script>
+<script src="assets/js/modules/soon.js"></script>
+<script>AA.start();</script>
+</body>
+</html>
