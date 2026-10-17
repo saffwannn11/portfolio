@@ -1,6 +1,6 @@
-# Prime Recruitments: WordPress Theme v1.2 (Elementor-ready)
+# Prime Recruitments: WordPress Theme v1.3 (Elementor-ready)
 
-A navy-and-gold recruitment and corporate gifting theme, built from your business card's branding. Every page is pre-built in Elementor using 24 custom Prime widgets.
+A professional recruitment and corporate gifting theme in charcoal, warm ivory and your logo's gold. Every page is pre-built in Elementor using 27 custom Prime widgets.
 
 ## Install or update
 
@@ -10,22 +10,51 @@ A navy-and-gold recruitment and corporate gifting theme, built from your busines
 
 Upload it as a **theme**, not as a plugin; the plugin uploader reports "No valid plugins were found".
 
-**Updating from v1.0 / v1.1**
+**Updating from an earlier version**
 1. Upload the zip the same way and choose **"Replace current with uploaded"**.
 2. Open any admin page once. The update then runs by itself:
-   - creates the new **Corporate Gifting** page
-   - gives every page you **haven't** edited the new design
-   - keeps pages you **have** edited in Elementor as they are, but adds the Corporate Gifting section to your homepage and swaps the old placeholder phone/email for your real details
+   - every page you **haven't** edited gets the new design and the new layouts
+   - pages you **have** edited in Elementor keep your content, shown in the new style
+3. To give edited pages the new layouts too, go to **Appearance → Prime Setup → Apply the latest design to all pages**. Your old layouts are backed up first, and **Restore my previous layouts** puts them back.
 
 Activating creates **20 pages** automatically and sets the homepage and URLs. Then:
 
 3. Install the free **Elementor** plugin and open any page with **Edit with Elementor**.
 4. *(Optional)* Install **Fluent Forms**. The theme then creates a ready **"Prime Recruitments Enquiry"** form for you, connects it to the popup and every CTA, and sends enquiries to your contact email.
 
-## What's in v1.2
+## What's new in v1.3
+
+- **No more blue.** The palette is charcoal (#141311), warm ivory (#FAF8F3 / #F3EFE6) and your logo's gold (#C9A227). This is the restrained look used by leading executive-search firms: dark neutrals, plenty of white space, serif headlines and one accent colour.
+- **New fonts.** Headings use *Playfair Display*, an editorial serif; body text uses *Source Sans 3*.
+- **Removed the "coded" look:**
+  - monospace `// 01` labels
+  - the code-console hero
+  - particles, the custom cursor, glowing gradients
+  - magnetic and tilting effects
+  - the giant footer wordmark
+- **New header.** A charcoal top bar with hours, email, phone and WhatsApp, then a white header with **Home** first in the menu: Home · Services · Corporate Gifting · Industries · Jobs · About · Contact.
+- **Photography.** Banners and image sections use warm black-and-white architecture photos (CC0, bundled in the theme). Every banner lets you pick a photo or upload your own.
+- **New sections (Elementor widgets):**
+  - **Hero with "How can we help?" card:** hiring / job / gifting, each opening the popup preset to that option
+  - **Image + text (about)**
+  - **Employers / job seekers split**
+  - **Call-to-action band** with Call and WhatsApp buttons
+- **Homepage restructured:**
+  - Hero → Stats → Who we are → Services (3×3 grid) → Process → Industries → Why Prime → Corporate Gifting → Employers/Job seekers → Testimonials → FAQ → Enquiry
+  - **Removed:** the scrolling marquee and the horizontal-scroll slider
+  - **Moved:** the India locations map to **About Us**, and job listings to the **Jobs** page (linked from the hero and the job-seekers panel)
+- **Inner pages:**
+  - photo banners with a quick-answer card
+  - a "Talk to a consultant" band on service, location, industry and audience pages
+  - numbered key facts
+  - testimonials on the For Employers page
+  - stats on About Us
+- **Readability:** automated contrast checks found no failures on six key pages at desktop and mobile widths.
+
+## Earlier (v1.2)
 
 - **Brand:** navy and gold from your business card, with your logo in the header, footer and preloader. All colour combinations, including hover states, were checked for readability.
-- **Logo:** to change it, use **Customize → Site Identity** (upload), or **Customize → Prime Recruitments → Logo**. There you can upload or paste an image URL, and set the logo link URL and height.
+- **Logo:** to change it, use **Customize → Site Identity** (upload), or **Customize → Prime Recruitments → Logo**. There you can upload or paste an image URL, and set the logo link URL and height. The header is white, so your normal full-colour logo works. You can also add an optional light version for the dark footer; without one, the logo sits on a white plate.
 - **Enquiry popup:** opens in the centre of the screen.
   - **Left:** brand panel with a mini business card and Call/WhatsApp/Email buttons. You can add your own background photo in Customize → Contact form.
   - **Right:** the form.
@@ -100,7 +129,7 @@ Keyword search volumes were not checked with a keyword tool. Confirm them in Sea
 
 ## Editing in Elementor
 
-- Search **"Prime"** in the Elementor panel to find the 24 widgets.
+- Search **"Prime"** in the Elementor panel to find the 27 widgets.
 - Every widget has three tabs:
   - **Content:** all text, links, images and lists
   - **Style:** accent, background, heading and text colours, heading font, padding
@@ -110,12 +139,13 @@ Keyword search volumes were not checked with a keyword tool. Confirm them in Sea
 - **Appearance → Prime Setup** can:
   - create missing pages
   - (re)create the Fluent Forms enquiry form
-  - reset all pages to the original design (this overwrites your edits and can't be undone)
+  - apply the latest design to all pages (your current layouts are backed up and can be restored)
 
 ## Tech notes
 
 - Requires WordPress 6.0+ and PHP 7.4+.
 - Tested on WordPress 6.8 with Elementor 3.35.
+- Photos: CC0 (public domain) architecture images from rawpixel, as shipped with WordPress's Twenty Twenty-Four theme, converted to warm monochrome WebP.
 - Fluent Forms couldn't be run in the test environment. The auto-created form was built from Fluent Forms 6.2's own source and template format. If it can't be created on your site, the theme shows a notice and keeps the built-in form working.
 - Animations use GSAP 3.13 + ScrollTrigger + SplitText and Lenis, all bundled locally.
 - Motion is reduced for visitors who prefer it, and paused inside the Elementor editor.

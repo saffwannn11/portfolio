@@ -13,25 +13,24 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Homepage layout.
+ * Stats from the Customizer (Prime Recruitments → Homepage stats).
  */
-function prime_home_sections() {
-	$services = prime_pages_in( 'service' );
-	$cards    = array();
-	foreach ( $services as $key => $p ) {
-		$cards[] = array(
-			'icon'   => $p['icon'],
-			'title'  => $p['menu'],
-			'text'   => $p['short'],
-			'points' => implode( "\n", wp_list_pluck( array_slice( $p['features'], 0, 3 ), 1 ) ),
-			'link'   => prime_link( prime_url( $key ) ),
+function prime_stats_items() {
+	$stats = array();
+	for ( $i = 1; $i <= 4; $i++ ) {
+		$stats[] = array(
+			'number' => prime_opt( "stat_{$i}_num" ),
+			'suffix' => prime_opt( "stat_{$i}_suffix" ),
+			'label'  => prime_opt( "stat_{$i}_label" ),
 		);
 	}
+	return $stats;
+}
 
-	$img = function ( $id ) {
-		return array( 'url' => 'https://images.unsplash.com/' . $id . '?auto=format&fit=crop&w=720&q=80', 'id' => '' );
-	};
-
+/**
+ * Locations section (used on the About page).
+ */
+function prime_geo_settings() {
 	$geo_cards = array();
 	foreach ( prime_pages_in( 'location' ) as $key => $p ) {
 		$geo_cards[] = array( 'icon' => 'pin', 'title' => 'Recruitment agency in ' . $p['menu'], 'subtitle' => implode( ' · ', array_slice( $p['cities'], 0, 3 ) ), 'link' => prime_link( prime_url( $key ) ) );
@@ -58,101 +57,122 @@ function prime_home_sections() {
 		$cities[] = array( 'name' => $c[0], 'lon' => $c[1], 'lat' => $c[2], 'hub' => $c[3], 'left' => $c[4] );
 	}
 
-	$stats = array();
-	for ( $i = 1; $i <= 4; $i++ ) {
-		$stats[] = array(
-			'number' => prime_opt( "stat_{$i}_num" ),
-			'suffix' => prime_opt( "stat_{$i}_suffix" ),
-			'label'  => prime_opt( "stat_{$i}_label" ),
-			'ring'   => 35 + $i * 15,
+	return array(
+		'label'  => 'Where we hire',
+		'title'  => 'Recruiting across India, *placing worldwide*',
+		'text'   => 'Local consultants in India’s largest hiring markets, pan-India delivery for tier-2 cities and remote roles, and overseas placements across the Gulf, UK and Europe.',
+		'anchor' => 'locations',
+		'cards'  => $geo_cards,
+		'cities' => $cities,
+	);
+}
+
+function prime_testimonials_settings( $title = 'Trusted by hiring managers *and candidates*' ) {
+	return array(
+		'label' => 'Client stories',
+		'title' => $title,
+		'items' => array_map(
+			function ( $t ) {
+				return array( 'quote' => $t[0], 'name' => $t[1], 'role' => $t[2] );
+			},
+			prime_testimonials()
+		),
+	);
+}
+
+/**
+ * Homepage layout.
+ */
+function prime_home_sections() {
+	$cards = array();
+	foreach ( prime_pages_in( 'service' ) as $key => $p ) {
+		$cards[] = array(
+			'icon'  => $p['icon'],
+			'title' => $p['menu'],
+			'text'  => $p['short'],
+			'link'  => prime_link( prime_url( $key ) ),
 		);
 	}
+
+	$img = function ( $id ) {
+		return array( 'url' => 'https://images.unsplash.com/' . $id . '?auto=format&fit=crop&w=720&q=80', 'id' => '' );
+	};
 
 	return array(
 		array(
 			'hero',
 			array(
-				'eyebrow'      => 'Now hiring across India & overseas',
-				'title_1'      => 'Recruitment agency',
-				'title_2'      => 'in India for teams',
-				'title_3'      => 'that',
-				'rotator'      => 'scale., build., lead., grow., win.',
-				'lead'         => 'Prime Recruitments finds, interviews and shortlists the people your business needs — permanent, contract, executive and volume hiring, delivered by specialists who answer the phone.',
-				'btn1_text'    => 'Hire talent',
-				'btn1_link'    => prime_link( prime_url( 'employers' ) ),
-				'btn2_text'    => 'Explore jobs',
-				'btn2_link'    => prime_link( prime_url( 'jobs' ) ),
-				'trust_title'  => 'Recruiter-screened shortlists',
-				'trust_text'   => 'Typically within 48–72 hours of your brief',
-				'console_file' => 'prime/match-engine.ts',
-				'console_role' => 'Senior Backend Engineer',
-				'console_city' => 'Bangalore',
-				'console_exp'  => '5–8 yrs',
-				'matches'      => array(
-					array( 'name' => 'Candidate A', 'skills' => 'Java · Kafka · AWS', 'score' => 96 ),
-					array( 'name' => 'Candidate R', 'skills' => 'Go · Postgres · GCP', 'score' => 91 ),
-					array( 'name' => 'Candidate S', 'skills' => 'Node · Redis · K8s', 'score' => 88 ),
-				),
-				'chips'        => array(
-					array( 'icon' => 'users', 'title' => 'Specialists', 'text' => 'for every function' ),
-					array( 'icon' => 'shield', 'title' => 'Interviewed', 'text' => 'every candidate' ),
-					array( 'icon' => 'globe', 'title' => 'Pan-India', 'text' => '+ overseas' ),
+				'eyebrow'     => 'Pan India Recruitment Solutions',
+				'title_1'     => 'Recruitment agency',
+				'title_2'     => 'in India for teams',
+				'title_3'     => 'that',
+				'rotator'     => 'grow., lead., scale., win.',
+				'lead'        => 'Prime Recruitments finds, interviews and shortlists the people your business needs — permanent, contract, executive and volume hiring, delivered by specialists who answer the phone.',
+				'btn1_text'   => 'Hire talent',
+				'btn1_link'   => prime_link( '#enquiry' ),
+				'btn2_text'   => 'Browse jobs',
+				'btn2_link'   => prime_link( prime_url( 'jobs' ) ),
+				'trust_title' => 'Every candidate interviewed.',
+				'trust_text'  => 'Shortlists typically within 48–72 hours of your brief.',
+				'panel_title' => 'How can we help?',
+				'panel_text'  => 'Choose an option and our team will reply within one working day.',
+				'options'     => array(
+					array( 'icon' => 'users', 'title' => 'I’m hiring', 'text' => 'Get an interviewed shortlist', 'link' => prime_link( '#enquiry' ), 'preset' => 'employer' ),
+					array( 'icon' => 'briefcase', 'title' => 'I’m looking for a job', 'text' => 'Free for candidates, always', 'link' => prime_link( '#enquiry' ), 'preset' => 'candidate' ),
+					array( 'icon' => 'gift', 'title' => 'Corporate gifting', 'text' => 'Branded gifts, delivered pan-India', 'link' => prime_link( '#enquiry' ), 'preset' => 'gifting' ),
 				),
 			),
 		),
+		array( 'stats', array( 'style' => 'light', 'items' => prime_stats_items() ) ),
 		array(
-			'marquee',
+			'about_split',
 			array(
-				'row_1' => implode( "\n", wp_list_pluck( $services, 'menu' ) ),
-				'row_2' => "Mumbai\nDelhi NCR\nBangalore\nPune\nHyderabad\nChennai\nKolkata\nDubai",
-			),
-		),
-		array(
-			'statement',
-			array(
-				'label_num' => '01',
-				'label'     => 'Our approach',
-				'text'      => 'We don’t send CVs. We send people worth meeting — interviewed, skills-checked and salary-aligned — so your managers spend their time hiring, not sifting.',
-				'sig_title' => 'The Prime promise',
-				'sig_text'  => 'Quality over volume, on every brief',
-				'link_text' => 'About Prime',
-				'link'      => prime_link( prime_url( 'about' ) ),
+				'label'      => 'Who we are',
+				'title'      => 'We don’t send CVs. We send *people worth meeting.*',
+				'anchor'     => 'about',
+				'badge_num'  => '100%',
+				'badge_text' => 'of candidates personally interviewed',
+				'text'       => "Prime Recruitments is a pan-India recruitment partner for companies that care about who they hire. Every profile we share has been interviewed, skills-checked and salary-aligned, so your managers spend their time hiring, not sifting.\nFor professionals, we are a recruiter who answers the phone, explains the role honestly and never charges a fee.",
+				'points'     => "Function-specialist consultants\nSalary benchmarks with every brief\nReplacement guarantee on permanent hires",
+				'sig_title'  => 'The Prime promise',
+				'sig_text'   => 'Quality over volume, on every brief',
+				'link_text'  => 'About Prime',
+				'link'       => prime_link( prime_url( 'about' ) ),
 			),
 		),
 		array(
 			'services_slider',
 			array(
-				'label_num'      => '02',
 				'label'          => 'Recruitment services',
 				'title'          => 'Eight ways to hire. *One accountable partner.*',
+				'intro'          => 'From a single leadership search to hundreds of frontline hires, choose the model that fits the role, budget and timeline.',
+				'anchor'         => 'services',
 				'cards'          => $cards,
-				'card_link_text' => 'Explore',
-				'cta_kicker'     => '// all services',
-				'cta_title'      => 'Not sure which model fits?',
+				'card_link_text' => 'Learn more',
+				'cta_kicker'     => 'Not sure which fits?',
+				'cta_title'      => 'Talk to a consultant',
 				'cta_text'       => 'Tell us the role. We’ll recommend the fastest, most cost-effective route.',
 				'cta_link_text'  => 'Compare services',
 				'cta_link'       => prime_link( prime_url( 'services' ) ),
 			),
 		),
-		array( 'stats', array( 'items' => $stats ) ),
 		array(
 			'process',
 			array(
-				'label_num' => '03',
-				'label'     => 'How it works',
-				'title'     => 'From brief to *signed offer* in four steps',
-				'text'      => 'A repeatable process that keeps hiring managers informed and candidates engaged at every stage.',
-				'btn_text'  => 'Share a role',
-				'btn_link'  => prime_link( prime_url( 'employers' ) ),
-				'steps'     => prime_steps_items( prime_default_steps() ),
+				'label'    => 'How it works',
+				'title'    => 'From brief to *signed offer* in four steps',
+				'text'     => 'A repeatable process that keeps hiring managers informed and candidates engaged at every stage.',
+				'btn_text' => 'Share a role',
+				'btn_link' => prime_link( '#enquiry' ),
+				'steps'    => prime_steps_items( prime_default_steps() ),
 			),
 		),
 		array(
 			'industries_reel',
 			array(
-				'label_num' => '04',
 				'label'     => 'Industries',
 				'title'     => 'Specialists who *speak your industry*',
+				'intro'     => 'Sector-specialist consultants who know your competitors, job titles and salary levels.',
 				'link_text' => 'All industries',
 				'link'      => prime_link( prime_url( 'industries' ) ),
 				'rows'      => array(
@@ -169,14 +189,13 @@ function prime_home_sections() {
 		array(
 			'why_bento',
 			array(
-				'label_num' => '05',
-				'label'     => 'Why Prime',
-				'title'     => 'Built for hiring that *actually works*',
-				'intro'     => 'Recruitment is a trust business. Here is what we do differently to earn it.',
-				'xl_label'  => 'Precision shortlists',
-				'xl_title'  => '3–5 interviewed candidates per role. Not 50 unread CVs.',
-				'funnel'    => "Market mapped\nApproached\nInterviewed\nShortlist",
-				'cards'     => array(
+				'label'    => 'Why Prime',
+				'title'    => 'Built for hiring that *actually works*',
+				'intro'    => 'Recruitment is a trust business. Here is what we do differently to earn it.',
+				'xl_label' => 'Precision shortlists',
+				'xl_title' => '3–5 interviewed candidates per role. Not 50 unread CVs.',
+				'funnel'   => "Market mapped\nApproached\nInterviewed\nShortlist",
+				'cards'    => array(
 					array( 'icon' => 'chart', 'title' => 'Salary intelligence', 'text' => 'Live benchmarks with every brief, so offers land first time.', 'style' => 'light' ),
 					array( 'icon' => 'shield', 'title' => 'Replacement guarantee', 'text' => 'If a permanent hire leaves early, we replace them free.', 'style' => 'dark' ),
 					array( 'icon' => 'users', 'title' => 'Function specialists', 'text' => 'Tech recruiters for tech. Finance recruiters for finance.', 'style' => 'light' ),
@@ -186,48 +205,39 @@ function prime_home_sections() {
 		),
 		array( 'gifting', prime_gifting_settings( true ) ),
 		array(
-			'testimonials',
+			'audience_split',
 			array(
-				'label_num' => '07',
-				'label'     => 'In their words',
-				'items'     => array_map(
-					function ( $t ) {
-						return array( 'quote' => $t[0], 'name' => $t[1], 'role' => $t[2] );
-					},
-					prime_testimonials()
+				'label'  => 'Employers and job seekers',
+				'panels' => array(
+					array(
+						'label'    => 'For employers',
+						'title'    => 'Hire with *confidence*',
+						'text'     => 'Share a role and receive a short, interviewed and salary-aligned shortlist, with a dedicated consultant from brief to joining.',
+						'points'   => "Permanent, contract & volume hiring\nTransparent, success-based pricing",
+						'btn_text' => 'Hire talent',
+						'btn_link' => prime_link( prime_url( 'employers' ) ),
+						'preset'   => 'employer',
+					),
+					array(
+						'label'    => 'For job seekers',
+						'title'    => 'Find your *next role*',
+						'text'     => 'Explore openings with growing companies across India and abroad. A real recruiter reads every application.',
+						'points'   => "Never a fee for candidates\nHonest feedback, every time",
+						'btn_text' => 'Browse jobs',
+						'btn_link' => prime_link( prime_url( 'jobs' ) ),
+						'preset'   => 'candidate',
+					),
 				),
 			),
 		),
-		array(
-			'geo',
-			array(
-				'label_num' => '08',
-				'label'     => 'Where we hire',
-				'title'     => 'Recruiting across India, *placing worldwide*',
-				'text'      => 'Local consultants in India’s largest hiring markets, pan-India delivery for tier-2 cities and remote roles, and overseas placements across the Gulf, UK and Europe.',
-				'cards'     => $geo_cards,
-				'cities'    => $cities,
-			),
-		),
-		array(
-			'jobs',
-			array(
-				'label_num' => '09',
-				'label'     => 'Featured roles',
-				'title'     => 'Latest job vacancies *worth a look*',
-				'link_text' => 'View all jobs',
-				'link'      => prime_link( prime_url( 'jobs' ) ),
-				'jobs'      => array_slice( prime_jobs_items(), 0, 6 ),
-			),
-		),
+		array( 'testimonials', prime_testimonials_settings() ),
 		array(
 			'faq',
 			array(
-				'label_num' => '10',
 				'label'     => 'Questions, answered',
 				'title'     => 'Recruitment questions, *answered*',
 				'intro'     => 'Straight answers to what employers and candidates ask us most.',
-				'link_text' => 'Ask us anything',
+				'link_text' => 'Contact us',
 				'link'      => prime_link( prime_url( 'contact' ) ),
 				'items'     => prime_faq_items( prime_home_faqs() ),
 			),
@@ -247,11 +257,6 @@ function prime_page_sections( $key ) {
 	$type     = $page['type'];
 	$is_cand  = in_array( $key, array( 'jobs', 'job-seekers' ), true );
 	$cities   = isset( $page['cities'] ) ? $page['cities'] : prime_default_cities();
-	$sec      = 0;
-	$num      = function () use ( &$sec ) {
-		$sec++;
-		return prime_nn( $sec );
-	};
 	$out = array();
 
 	$out[] = array(
@@ -277,7 +282,6 @@ function prime_page_sections( $key ) {
 		$out[] = array(
 			'business_card',
 			array(
-				'label_num' => $num(),
 				'label'     => 'Talk to us directly',
 				'title'     => 'Your direct line to *Prime*',
 				'text'      => 'Call, WhatsApp or email our team, or save our contact card to your phone. For hiring, job search and corporate gifting enquiries.',
@@ -305,12 +309,11 @@ function prime_page_sections( $key ) {
 		$out[]    = array(
 			'intro',
 			array(
-				'label_num' => $num(),
 				'label'     => 'Overview',
 				'title'     => $page['intro_h'],
 				'content'   => '<p>' . implode( "</p>\n<p>", array_map( 'esc_html', $page['intro'] ) ) . '</p>',
 				'glance'    => array(
-					array( 'label' => 'Service', 'value' => $page['menu'] ),
+					'about' === $type ? array( 'label' => 'Company', 'value' => 'Prime Recruitments' ) : array( 'label' => 'Service', 'value' => $page['menu'] ),
 					array( 'label' => 'Best for', 'value' => $is_cand ? 'Job seekers' : 'Employers & HR teams' ),
 					array( 'label' => 'Coverage', 'value' => $coverage ),
 					array( 'label' => 'Response', 'value' => 'Within 1 working day' ),
@@ -320,21 +323,24 @@ function prime_page_sections( $key ) {
 		);
 	}
 
+	if ( 'about' === $type ) {
+		$out[] = array( 'stats', array( 'style' => 'light', 'title' => 'Prime Recruitments in numbers', 'items' => prime_stats_items() ) );
+	}
+
 	if ( 'hub' === $type ) {
 		$cards = array();
 		foreach ( prime_pages_in( 'service' ) as $sk => $sp ) {
 			$cards[] = array( 'icon' => $sp['icon'], 'title' => $sp['menu'], 'text' => $sp['short'], 'keyword' => $sp['focus_kw'], 'link' => prime_link( prime_url( $sk ) ) );
 		}
-		$out[] = array( 'hub_grid', array( 'label_num' => $num(), 'label' => 'Service lines', 'title' => $page['features_h'], 'cards' => $cards ) );
+		$out[] = array( 'hub_grid', array( 'label' => 'Service lines', 'title' => $page['features_h'], 'cards' => $cards ) );
 	} elseif ( 'jobs' === $type ) {
-		$out[] = array( 'jobs', array( 'label_num' => $num(), 'label' => 'Current openings', 'title' => 'Open roles *hiring now*', 'background' => 'paper', 'anchor' => 'openings', 'jobs' => prime_jobs_items() ) );
+		$out[] = array( 'jobs', array( 'label' => 'Current openings', 'title' => 'Open roles *hiring now*', 'background' => 'paper', 'anchor' => 'openings', 'jobs' => prime_jobs_items() ) );
 	}
 
 	if ( ! empty( $page['features'] ) ) {
 		$out[] = array(
 			'features',
 			array(
-				'label_num' => $num(),
 				'label'     => 'industries' === $type ? 'Sectors' : 'Capabilities',
 				'title'     => $page['features_h'],
 				'intro'     => $page['meta_desc'],
@@ -349,14 +355,48 @@ function prime_page_sections( $key ) {
 	}
 
 	if ( ! empty( $page['roles'] ) ) {
-		$out[] = array( 'roles', array( 'label_num' => $num(), 'label' => 'Roles we hire', 'roles' => implode( "\n", $page['roles'] ) ) );
+		$out[] = array( 'roles', array( 'label' => 'Roles we hire', 'roles' => implode( "\n", $page['roles'] ) ) );
+	}
+
+	if ( 'about' === $type ) {
+		$out[] = array( 'geo', prime_geo_settings() );
+	}
+	if ( 'employers' === $key ) {
+		$out[] = array( 'testimonials', prime_testimonials_settings( 'What hiring managers *say about us*' ) );
+	}
+
+	$band = in_array( $type, array( 'service', 'location', 'industries', 'hub', 'audience', 'gifting' ), true );
+	if ( $band ) {
+		if ( 'gifting' === $type ) {
+			$band_title = 'Planning festive or event gifts? *Get a quote.*';
+		} elseif ( 'location' === $type ) {
+			$band_title = 'Hiring in ' . $page['city'] . '? *Talk to our team.*';
+		} elseif ( 'service' === $type ) {
+			$band_title = 'Speak to a *' . strtolower( $page['menu'] ) . '* specialist';
+		} elseif ( $is_cand ) {
+			$band_title = 'Looking for your next role? *Talk to a recruiter.*';
+		} else {
+			$band_title = 'Not sure where to start? *Talk to us.*';
+		}
+		$out[] = array(
+			'cta_band',
+			array(
+				'label'         => 'gifting' === $type ? 'Corporate gifting' : 'Talk to a consultant',
+				'title'         => $band_title,
+				'text'          => 'Call or WhatsApp us, or send a quick brief. A consultant replies within one working day.',
+				'btn_text'      => 'gifting' === $type ? 'Get a gifting quote' : ( $is_cand ? 'Submit your CV' : 'Send a brief' ),
+				'btn_link'      => prime_link( '#enquiry' ),
+				'preset'        => 'gifting' === $type ? 'gifting' : ( $is_cand ? 'candidate' : 'employer' ),
+				'show_call'     => 'yes',
+				'show_whatsapp' => 'yes',
+			),
+		);
 	}
 
 	if ( in_array( $type, array( 'service', 'location', 'gifting' ), true ) ) {
 		$out[] = array(
 			'timeline',
 			array(
-				'label_num' => $num(),
 				'label'     => 'Process',
 				'title'     => 'location' === $type ? 'How we hire *in ' . $page['city'] . '*' : ( 'gifting' === $type ? 'From brief to doorstep in *four steps*' : 'How we deliver *' . $page['menu'] . '*' ),
 				'steps'     => prime_steps_items( isset( $page['steps'] ) ? $page['steps'] : prime_default_steps() ),
@@ -373,11 +413,9 @@ function prime_page_sections( $key ) {
 	$out[] = array(
 		'facts',
 		array(
-			'label_num'       => $num(),
 			'label'           => 'Key facts',
 			'title'           => $page['menu'] . ': the essentials',
 			'facts'           => implode( "\n", $page['facts'] ),
-			'areas_label_num' => $num(),
 			'areas_label'     => 'overseas' === $key ? 'Countries we recruit for' : 'Areas served',
 			'areas_title'     => 'location' === $type ? 'Covering every corner of *' . $page['city'] . '*' : ( 'overseas' === $key ? 'Placing Indian talent *worldwide*' : 'Hiring *across India*' ),
 			'areas'           => implode( "\n", $cities ),
@@ -388,7 +426,6 @@ function prime_page_sections( $key ) {
 	$out[] = array(
 		'faq',
 		array(
-			'label_num' => $num(),
 			'label'     => 'Questions, answered',
 			'title'     => ucfirst( $page['focus_kw'] ) . ': *FAQs*',
 			'intro'     => 'Straight answers to what employers and candidates ask us most.',
@@ -406,14 +443,14 @@ function prime_page_sections( $key ) {
 				$cards[] = array( 'icon' => $r['icon'], 'kicker' => $r['eyebrow'], 'title' => wp_strip_all_tags( str_replace( '*', '', $r['h1'] ) ), 'link' => prime_link( prime_url( $rk ) ) );
 			}
 		}
-		$out[] = array( 'related', array( 'label_num' => $num(), 'label' => 'Keep exploring', 'cards' => $cards ) );
+		$out[] = array( 'related', array( 'label' => 'Keep exploring', 'cards' => $cards ) );
 	}
 
 	$preset       = 'gifting' === $type ? 'gifting' : ( $is_cand ? 'candidate' : 'employer' );
 	$cta          = prime_cta_defaults( $preset );
 	$cta['title'] = 'gifting' === $type ? 'Plan your next gifting *campaign.*' : ( $is_cand ? 'Your next role *starts here.*' : 'Ready to hire? *Let’s talk.*' );
-	if ( 'contact' === $type ) {
-		$cta['show_contacts'] = ''; // Already on the business card above.
+	if ( 'contact' === $type || $band ) {
+		$cta['show_contacts'] = ''; // Phone & WhatsApp already shown above.
 	}
 	$out[]        = array( 'cta_form', $cta );
 
@@ -451,7 +488,6 @@ function prime_jobs_items() {
 
 function prime_cta_defaults( $preset ) {
 	return array(
-		'label_num'     => 'Contact',
 		'label'         => 'Start a conversation',
 		'title'         => 'Tell us who you need. *We’ll take it from there.*',
 		'lead'          => 'Share a role or your CV. A recruiter replies within one working day — no obligation, no spam.',
@@ -495,7 +531,6 @@ function prime_widget_defaults( $widget ) {
 function prime_gifting_settings( $home ) {
 	$g = prime_page( 'gifting' );
 	return array(
-		'label_num'   => $home ? '06' : '01',
 		'label'       => 'Corporate gifting',
 		'title'       => $g['intro_h'],
 		'text'        => implode( "\n", $g['intro'] ),

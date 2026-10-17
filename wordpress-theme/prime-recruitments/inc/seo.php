@@ -150,7 +150,7 @@ function prime_schema() {
 			'knowsAbout'  => array( 'Recruitment', 'Executive search', 'IT recruitment', 'Contract staffing', 'Recruitment process outsourcing', 'Bulk hiring', 'Healthcare recruitment', 'Overseas recruitment' ),
 		);
 		$logo_id     = get_theme_mod( 'custom_logo' );
-		$org['logo'] = $logo_id ? wp_get_attachment_image_url( $logo_id, 'full' ) : ( prime_opt( 'logo_url' ) ? prime_opt( 'logo_url' ) : PRIME_URI . '/assets/img/logo-mark.png' );
+		$org['logo'] = $logo_id ? wp_get_attachment_image_url( $logo_id, 'full' ) : ( prime_opt( 'logo_url' ) ? prime_opt( 'logo_url' ) : prime_img( 'logo-mark-dark.png' ) );
 		$org['slogan']       = 'Connecting talent with opportunity';
 		$org['contactPoint'] = array(
 			'@type'             => 'ContactPoint',

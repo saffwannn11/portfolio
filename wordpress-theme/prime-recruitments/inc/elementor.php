@@ -19,79 +19,85 @@ defined( 'ABSPATH' ) || exit;
  * Repeater field: name => array( 'repeater', label, array( 'fields' => [...], 'title' => 'field' ) ).
  */
 function prime_widget_schemas() {
-	$label  = array(
-		'label_num' => array( 'text', 'Label number (e.g. 01)' ),
-		'label'     => array( 'text', 'Label' ),
-	);
-	$title  = array( 'title' => array( 'text', 'Heading (wrap words in *asterisks* for the italic accent)' ) );
+	$label  = array( 'label' => array( 'text', 'Eyebrow label (small gold text above the heading)' ) );
+	$title  = array( 'title' => array( 'text', 'Heading (wrap words in *asterisks* for the gold italic accent)' ) );
 	$anchor = array( 'anchor' => array( 'text', 'Section anchor ID (for #links)' ) );
+	$photos = array(
+		'facade'   => 'Building facade (dark)',
+		'tower'    => 'Tower & sky',
+		'windows'  => 'Windows pattern',
+		'geometry' => 'Geometric facade',
+		'atrium'   => 'Atrium roof',
+		'corridor' => 'Gallery corridor',
+		'stairs'   => 'Spiral staircase',
+	);
+	$preset = array( 'select', 'Popup opens on (when the link is #enquiry)', array( 'options' => array( '' => 'Page default', 'employer' => 'I’m hiring', 'candidate' => 'I need a job', 'gifting' => 'Corporate gifting' ) ) );
 
 	return array(
 		'hero'            => array(
 			'title'  => 'Hero (homepage)',
 			'icon'   => 'eicon-header',
 			'fields' => array(
-				'eyebrow'      => array( 'text', 'Eyebrow pill' ),
-				'title_1'      => array( 'text', 'Headline line 1' ),
-				'title_2'      => array( 'text', 'Headline line 2' ),
-				'title_3'      => array( 'text', 'Headline line 3 (before rotating word)' ),
-				'rotator'      => array( 'text', 'Rotating words (comma separated)' ),
-				'lead'         => array( 'textarea', 'Intro text' ),
-				'btn1_text'    => array( 'text', 'Primary button text' ),
-				'btn1_link'    => array( 'url', 'Primary button link' ),
-				'btn2_text'    => array( 'text', 'Secondary button text' ),
-				'btn2_link'    => array( 'url', 'Secondary button link' ),
-				'trust_title'  => array( 'text', 'Trust line – title' ),
-				'trust_text'   => array( 'text', 'Trust line – text' ),
-				'console_file' => array( 'text', 'Code card – file name' ),
-				'console_role' => array( 'text', 'Code card – role' ),
-				'console_city' => array( 'text', 'Code card – city' ),
-				'console_exp'  => array( 'text', 'Code card – experience' ),
-				'matches'      => array( 'repeater', 'Code card – candidate matches', array( 'title' => 'name', 'fields' => array( 'name' => array( 'text', 'Name' ), 'skills' => array( 'text', 'Skills' ), 'score' => array( 'number', 'Match %' ) ) ) ),
-				'chips'        => array( 'repeater', 'Floating chips (max 3)', array( 'title' => 'title', 'fields' => array( 'icon' => array( 'icon', 'Icon' ), 'title' => array( 'text', 'Title' ), 'text' => array( 'text', 'Text' ) ) ) ),
-			),
-		),
-		'marquee'         => array(
-			'title'  => 'Kinetic marquee',
-			'icon'   => 'eicon-animation-text',
-			'fields' => array(
-				'row_1' => array( 'textarea', 'Row 1 (one item per line)' ),
-				'row_2' => array( 'textarea', 'Row 2 – outline (one item per line)' ),
-			),
-		),
-		'statement'       => array(
-			'title'  => 'Scroll statement',
-			'icon'   => 'eicon-blockquote',
-			'fields' => $label + array(
-				'text'      => array( 'textarea', 'Statement (lights up word by word on scroll)' ),
-				'sig_title' => array( 'text', 'Signature title' ),
-				'sig_text'  => array( 'text', 'Signature text' ),
-				'link_text' => array( 'text', 'Link text' ),
-				'link'      => array( 'url', 'Link' ),
-			),
-		),
-		'services_slider' => array(
-			'title'  => 'Services slider (horizontal scroll)',
-			'icon'   => 'eicon-slider-push',
-			'fields' => $label + $title + array(
-				'cards'          => array( 'repeater', 'Service cards', array( 'title' => 'title', 'fields' => array( 'icon' => array( 'icon', 'Icon' ), 'title' => array( 'text', 'Title' ), 'text' => array( 'textarea', 'Text' ), 'points' => array( 'textarea', 'Bullet points (one per line)' ), 'link' => array( 'url', 'Link' ) ) ) ),
-				'card_link_text' => array( 'text', 'Card link text' ),
-				'cta_kicker'     => array( 'text', 'Last card – kicker' ),
-				'cta_title'      => array( 'text', 'Last card – title' ),
-				'cta_text'       => array( 'textarea', 'Last card – text' ),
-				'cta_link_text'  => array( 'text', 'Last card – link text' ),
-				'cta_link'       => array( 'url', 'Last card – link' ),
+				'image'       => array( 'media', 'Background photo (empty = built-in photo)' ),
+				'eyebrow'     => array( 'text', 'Eyebrow' ),
+				'title_1'     => array( 'text', 'Headline line 1' ),
+				'title_2'     => array( 'text', 'Headline line 2' ),
+				'title_3'     => array( 'text', 'Headline line 3 (before the rotating word)' ),
+				'rotator'     => array( 'text', 'Rotating words (comma separated)' ),
+				'lead'        => array( 'textarea', 'Intro text' ),
+				'btn1_text'   => array( 'text', 'Primary button text' ),
+				'btn1_link'   => array( 'url', 'Primary button link (#enquiry = popup)' ),
+				'btn2_text'   => array( 'text', 'Secondary button text' ),
+				'btn2_link'   => array( 'url', 'Secondary button link' ),
+				'trust_title' => array( 'text', 'Trust line – bold part' ),
+				'trust_text'  => array( 'text', 'Trust line – text' ),
+				'panel_title' => array( 'text', 'Right card – title' ),
+				'panel_text'  => array( 'text', 'Right card – text' ),
+				'options'     => array( 'repeater', 'Right card – options', array( 'title' => 'title', 'fields' => array( 'icon' => array( 'icon', 'Icon' ), 'title' => array( 'text', 'Title' ), 'text' => array( 'text', 'Text' ), 'link' => array( 'url', 'Link (#enquiry = popup)' ), 'preset' => $preset ) ) ),
 			),
 		),
 		'stats'           => array(
-			'title'  => 'Animated stats',
+			'title'  => 'Stats band',
 			'icon'   => 'eicon-counter',
 			'fields' => array(
-				'items' => array( 'repeater', 'Stats', array( 'title' => 'label', 'fields' => array( 'number' => array( 'text', 'Number' ), 'suffix' => array( 'text', 'Suffix' ), 'label' => array( 'text', 'Label' ), 'ring' => array( 'number', 'Ring fill %' ) ) ) ),
+				'title' => array( 'text', 'Small heading (optional)' ),
+				'style' => array( 'select', 'Style', array( 'options' => array( 'light' => 'Light', 'dark' => 'Dark' ) ) ),
+				'items' => array( 'repeater', 'Stats', array( 'title' => 'label', 'fields' => array( 'number' => array( 'text', 'Number' ), 'suffix' => array( 'text', 'Suffix' ), 'label' => array( 'text', 'Label' ) ) ) ),
+			),
+		),
+		'about_split'     => array(
+			'title'  => 'Image + text (about)',
+			'icon'   => 'eicon-image-box',
+			'fields' => $label + $title + $anchor + array(
+				'image'      => array( 'media', 'Photo (empty = built-in photo)' ),
+				'reverse'    => array( 'switcher', 'Photo on the right' ),
+				'background' => array( 'select', 'Background', array( 'options' => array( 'white' => 'White', 'sand' => 'Warm ivory' ) ) ),
+				'badge_num'  => array( 'text', 'Photo badge – number' ),
+				'badge_text' => array( 'text', 'Photo badge – text' ),
+				'text'       => array( 'textarea', 'Text (one paragraph per line)' ),
+				'points'     => array( 'textarea', 'Checklist (one per line)' ),
+				'sig_title'  => array( 'text', 'Signature – title' ),
+				'sig_text'   => array( 'text', 'Signature – text' ),
+				'link_text'  => array( 'text', 'Button text' ),
+				'link'       => array( 'url', 'Button link' ),
+			),
+		),
+		'services_slider' => array(
+			'title'  => 'Services grid',
+			'icon'   => 'eicon-gallery-grid',
+			'fields' => $label + $title + $anchor + array(
+				'intro'          => array( 'textarea', 'Intro (right of the heading)' ),
+				'cards'          => array( 'repeater', 'Service cards', array( 'title' => 'title', 'fields' => array( 'icon' => array( 'icon', 'Icon' ), 'title' => array( 'text', 'Title' ), 'text' => array( 'textarea', 'Text' ), 'link' => array( 'url', 'Link' ) ) ) ),
+				'card_link_text' => array( 'text', 'Card link text' ),
+				'cta_kicker'     => array( 'text', 'Dark card – kicker' ),
+				'cta_title'      => array( 'text', 'Dark card – title' ),
+				'cta_text'       => array( 'textarea', 'Dark card – text' ),
+				'cta_link_text'  => array( 'text', 'Dark card – link text' ),
+				'cta_link'       => array( 'url', 'Dark card – link' ),
 			),
 		),
 		'process'         => array(
-			'title'  => 'Process (sticky + line)',
+			'title'  => 'Process steps',
 			'icon'   => 'eicon-time-line',
 			'fields' => $label + $title + array(
 				'text'     => array( 'textarea', 'Text' ),
@@ -104,33 +110,42 @@ function prime_widget_schemas() {
 			'title'  => 'Industries hover list',
 			'icon'   => 'eicon-bullet-list',
 			'fields' => $label + $title + array(
+				'intro'     => array( 'textarea', 'Intro (optional)' ),
 				'link_text' => array( 'text', 'Link text' ),
 				'link'      => array( 'url', 'Link' ),
 				'rows'      => array( 'repeater', 'Rows', array( 'title' => 'title', 'fields' => array( 'title' => array( 'text', 'Title' ), 'link' => array( 'url', 'Link' ), 'image' => array( 'media', 'Hover image' ) ) ) ),
 			),
 		),
 		'why_bento'       => array(
-			'title'  => 'Why us bento grid',
-			'icon'   => 'eicon-gallery-grid',
+			'title'  => 'Why us grid',
+			'icon'   => 'eicon-gallery-masonry',
 			'fields' => $label + $title + array(
 				'intro'    => array( 'textarea', 'Intro' ),
 				'xl_label' => array( 'text', 'Large card – label' ),
 				'xl_title' => array( 'textarea', 'Large card – title' ),
 				'funnel'   => array( 'textarea', 'Large card – funnel steps (one per line)' ),
-				'cards'    => array( 'repeater', 'Small cards (4)', array( 'title' => 'title', 'fields' => array( 'icon' => array( 'icon', 'Icon' ), 'title' => array( 'text', 'Title' ), 'text' => array( 'textarea', 'Text' ), 'style' => array( 'select', 'Style', array( 'options' => array( 'light' => 'Light', 'dark' => 'Dark', 'blue' => 'Blue' ) ) ) ) ) ),
+				'cards'    => array( 'repeater', 'Small cards (4)', array( 'title' => 'title', 'fields' => array( 'icon' => array( 'icon', 'Icon' ), 'title' => array( 'text', 'Title' ), 'text' => array( 'textarea', 'Text' ), 'style' => array( 'select', 'Style', array( 'options' => array( 'light' => 'White', 'dark' => 'Charcoal', 'blue' => 'Gold' ) ) ) ) ) ),
+			),
+		),
+		'audience_split'  => array(
+			'title'  => 'Employers / job seekers split',
+			'icon'   => 'eicon-column',
+			'fields' => array(
+				'label'  => array( 'text', 'Section name (for screen readers)' ),
+				'panels' => array( 'repeater', 'Panels (2)', array( 'title' => 'label', 'fields' => array( 'image' => array( 'media', 'Photo (empty = built-in)' ), 'label' => array( 'text', 'Eyebrow' ), 'title' => array( 'text', 'Heading' ), 'text' => array( 'textarea', 'Text' ), 'points' => array( 'textarea', 'Checklist (one per line)' ), 'btn_text' => array( 'text', 'Button text' ), 'btn_link' => array( 'url', 'Button link' ), 'preset' => $preset ) ) ),
 			),
 		),
 		'testimonials'    => array(
-			'title'  => 'Testimonials slider',
+			'title'  => 'Testimonials',
 			'icon'   => 'eicon-testimonial-carousel',
-			'fields' => $label + array(
+			'fields' => $label + $title + array(
 				'items' => array( 'repeater', 'Testimonials', array( 'title' => 'name', 'fields' => array( 'quote' => array( 'textarea', 'Quote' ), 'name' => array( 'text', 'Name / title' ), 'role' => array( 'text', 'Company / place' ) ) ) ),
 			),
 		),
 		'geo'             => array(
 			'title'  => 'Locations + India map',
 			'icon'   => 'eicon-map-pin',
-			'fields' => $label + $title + array(
+			'fields' => $label + $title + $anchor + array(
 				'text'   => array( 'textarea', 'Text' ),
 				'cards'  => array( 'repeater', 'Location cards', array( 'title' => 'title', 'fields' => array( 'icon' => array( 'icon', 'Icon' ), 'title' => array( 'text', 'Title' ), 'subtitle' => array( 'text', 'Subtitle' ), 'link' => array( 'url', 'Link' ) ) ) ),
 				'cities' => array( 'repeater', 'Map cities', array( 'title' => 'name', 'fields' => array( 'name' => array( 'text', 'City' ), 'lon' => array( 'number', 'Longitude', array( 'step' => 0.01 ) ), 'lat' => array( 'number', 'Latitude', array( 'step' => 0.01 ) ), 'hub' => array( 'switcher', 'Hub (lines start here)' ), 'left' => array( 'switcher', 'Label on the left' ) ) ) ),
@@ -142,7 +157,7 @@ function prime_widget_schemas() {
 			'fields' => $label + $title + $anchor + array(
 				'link_text'  => array( 'text', 'Link text' ),
 				'link'       => array( 'url', 'Link' ),
-				'background' => array( 'select', 'Background', array( 'options' => array( 'white' => 'White', 'paper' => 'Light grey' ) ) ),
+				'background' => array( 'select', 'Background', array( 'options' => array( 'white' => 'White', 'paper' => 'Warm ivory' ) ) ),
 				'all_label'  => array( 'text', '"All" filter label' ),
 				'jobs'       => array( 'repeater', 'Jobs', array( 'title' => 'title', 'fields' => array( 'title' => array( 'text', 'Job title' ), 'category' => array( 'text', 'Category (used for filters)' ), 'location' => array( 'text', 'Location' ), 'type' => array( 'text', 'Type' ), 'experience' => array( 'text', 'Experience' ), 'summary' => array( 'textarea', 'Summary' ), 'ref' => array( 'text', 'Reference' ), 'link' => array( 'url', 'Apply link' ) ) ) ),
 			),
@@ -152,8 +167,8 @@ function prime_widget_schemas() {
 			'icon'   => 'eicon-accordion',
 			'fields' => $label + $title + array(
 				'intro'     => array( 'textarea', 'Intro' ),
-				'link_text' => array( 'text', 'Link text' ),
-				'link'      => array( 'url', 'Link' ),
+				'link_text' => array( 'text', 'Contact link text' ),
+				'link'      => array( 'url', 'Contact link' ),
 				'items'     => array( 'repeater', 'Questions', array( 'title' => 'question', 'fields' => array( 'question' => array( 'text', 'Question' ), 'answer' => array( 'textarea', 'Answer' ) ) ) ),
 			),
 		),
@@ -168,21 +183,35 @@ function prime_widget_schemas() {
 				'form_shortcode' => array( 'text', 'Form shortcode (optional – e.g. [fluentform id="3"]). Empty = Customizer form.' ),
 			),
 		),
+		'cta_band'        => array(
+			'title'  => 'Call-to-action band (photo)',
+			'icon'   => 'eicon-call-to-action',
+			'fields' => $label + $title + array(
+				'image'         => array( 'media', 'Background photo (empty = built-in)' ),
+				'text'          => array( 'textarea', 'Text' ),
+				'btn_text'      => array( 'text', 'Button text' ),
+				'btn_link'      => array( 'url', 'Button link (#enquiry = popup)' ),
+				'preset'        => $preset,
+				'show_call'     => array( 'switcher', 'Show call button' ),
+				'show_whatsapp' => array( 'switcher', 'Show WhatsApp button' ),
+			),
+		),
 		'banner'          => array(
 			'title'  => 'Page banner',
 			'icon'   => 'eicon-banner',
 			'fields' => array(
-				'variant'     => array( 'select', 'Banner style', array( 'options' => array( 'mesh' => 'Aurora mesh', 'grid' => 'Perspective grid', 'orbit' => 'Orbit rings', 'beam' => 'Light beams', 'wave' => 'Waves' ) ) ),
+				'variant'     => array( 'select', 'Background photo', array( 'options' => $photos ) ),
+				'image'       => array( 'media', 'Your own photo (overrides the choice above)' ),
 				'show_crumbs' => array( 'switcher', 'Show breadcrumb' ),
 				'crumb'       => array( 'text', 'Breadcrumb label (empty = page title)' ),
-				'eyebrow'     => array( 'text', 'Eyebrow pill' ),
-				'title'       => array( 'textarea', 'H1 heading (*asterisks* = italic accent)' ),
+				'eyebrow'     => array( 'text', 'Eyebrow' ),
+				'title'       => array( 'textarea', 'H1 heading (*asterisks* = gold italic accent)' ),
 				'lead'        => array( 'textarea', 'Intro text' ),
 				'btn1_text'   => array( 'text', 'Primary button text' ),
 				'btn1_link'   => array( 'url', 'Primary button link' ),
 				'btn2_text'   => array( 'text', 'Secondary button text' ),
 				'btn2_link'   => array( 'url', 'Secondary button link' ),
-				'chips'       => array( 'textarea', 'Chips (one per line)' ),
+				'chips'       => array( 'textarea', 'Highlights (one per line)' ),
 				'show_answer' => array( 'switcher', 'Show quick-answer card (AEO)' ),
 				'answer_q'    => array( 'text', 'Quick answer – question' ),
 				'answer_text' => array( 'textarea', 'Quick answer – answer (40–60 words)' ),
@@ -190,7 +219,7 @@ function prime_widget_schemas() {
 		),
 		'contact_cards'   => array(
 			'title'  => 'Contact cards',
-			'icon'   => 'eicon-call-to-action',
+			'icon'   => 'eicon-info-circle-o',
 			'fields' => array(
 				'items' => array( 'repeater', 'Cards', array( 'title' => 'label', 'fields' => array( 'icon' => array( 'icon', 'Icon' ), 'label' => array( 'text', 'Label' ), 'value' => array( 'text', 'Value' ), 'link' => array( 'url', 'Link (optional)' ) ) ) ),
 			),
@@ -221,7 +250,7 @@ function prime_widget_schemas() {
 			),
 		),
 		'roles'           => array(
-			'title'  => 'Roles marquee',
+			'title'  => 'Roles ticker',
 			'icon'   => 'eicon-tags',
 			'fields' => $label + array( 'roles' => array( 'textarea', 'Roles (one per line)' ) ),
 		),
@@ -236,13 +265,12 @@ function prime_widget_schemas() {
 			'title'  => 'Key facts + areas served',
 			'icon'   => 'eicon-checkbox',
 			'fields' => $label + $anchor + array(
-				'title'           => array( 'text', 'Facts heading' ),
-				'facts'           => array( 'textarea', 'Key facts (one per line – short, quotable statements)' ),
-				'areas_label_num' => array( 'text', 'Areas – label number' ),
-				'areas_label'     => array( 'text', 'Areas – label' ),
-				'areas_title'     => array( 'text', 'Areas – heading' ),
-				'areas'           => array( 'textarea', 'Areas (one per line)' ),
-				'links'           => array( 'repeater', 'Area links', array( 'title' => 'text', 'fields' => array( 'text' => array( 'text', 'Text' ), 'link' => array( 'url', 'Link' ) ) ) ),
+				'title'       => array( 'text', 'Facts heading' ),
+				'facts'       => array( 'textarea', 'Key facts (one per line – short, quotable statements)' ),
+				'areas_label' => array( 'text', 'Areas – eyebrow' ),
+				'areas_title' => array( 'text', 'Areas – heading' ),
+				'areas'       => array( 'textarea', 'Areas (one per line)' ),
+				'links'       => array( 'repeater', 'Area links', array( 'title' => 'text', 'fields' => array( 'text' => array( 'text', 'Text' ), 'link' => array( 'url', 'Link' ) ) ) ),
 			),
 		),
 		'gifting'         => array(
@@ -276,6 +304,25 @@ function prime_widget_schemas() {
 			'icon'   => 'eicon-flip-box',
 			'fields' => $label + array(
 				'cards' => array( 'repeater', 'Cards', array( 'title' => 'title', 'fields' => array( 'icon' => array( 'icon', 'Icon' ), 'kicker' => array( 'text', 'Kicker' ), 'title' => array( 'text', 'Title' ), 'link' => array( 'url', 'Link' ) ) ) ),
+			),
+		),
+		'statement'       => array(
+			'title'  => 'Statement (large quote)',
+			'icon'   => 'eicon-blockquote',
+			'fields' => $label + array(
+				'text'      => array( 'textarea', 'Statement (lights up word by word on scroll)' ),
+				'sig_title' => array( 'text', 'Signature title' ),
+				'sig_text'  => array( 'text', 'Signature text' ),
+				'link_text' => array( 'text', 'Link text' ),
+				'link'      => array( 'url', 'Link' ),
+			),
+		),
+		'marquee'         => array(
+			'title'  => 'Text ticker',
+			'icon'   => 'eicon-animation-text',
+			'fields' => array(
+				'row_1' => array( 'textarea', 'Row 1 (one item per line)' ),
+				'row_2' => array( 'textarea', 'Row 2 (one item per line)' ),
 			),
 		),
 	);
@@ -411,6 +458,11 @@ function prime_build_elementor_data( $sections ) {
  */
 function prime_write_elementor_layout( $post_id, $sections ) {
 	$json = wp_json_encode( prime_build_elementor_data( $sections ) );
+	// Keep the previous layout if it was edited, so a reset can be undone.
+	$old = (string) get_post_meta( $post_id, '_elementor_data', true );
+	if ( '' !== $old && ! prime_layout_untouched( $post_id ) ) {
+		update_post_meta( $post_id, '_prime_layout_backup', wp_slash( $old ) );
+	}
 	update_post_meta( $post_id, '_elementor_data', wp_slash( $json ) );
 	update_post_meta( $post_id, '_prime_layout_sig', md5( $json ) );
 	update_post_meta( $post_id, '_elementor_edit_mode', 'builder' );

@@ -11,7 +11,7 @@ defined( 'ABSPATH' ) || exit;
 <head>
 <meta charset="<?php bloginfo( 'charset' ); ?>">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#070b16">
+<meta name="theme-color" content="#ffffff">
 <?php wp_head(); ?>
 </head>
 <body <?php body_class(); ?>>
@@ -20,16 +20,23 @@ defined( 'ABSPATH' ) || exit;
 
 <div class="preloader" aria-hidden="true">
 	<div class="preloader__inner">
-		<span class="preloader__logo">
-			<svg class="preloader__ring" viewBox="0 0 120 120"><circle cx="60" cy="60" r="56"/></svg>
-			<img class="preloader__mark" src="<?php echo esc_url( prime_mark_url() ); ?>" width="64" height="58" alt="" decoding="async" fetchpriority="high">
-		</span>
-		<span class="preloader__word"><b>PRIME</b> RECRUITMENTS</span>
+		<img class="preloader__mark" src="<?php echo esc_url( prime_mark_url() ); ?>" width="64" height="58" alt="" decoding="async" fetchpriority="high">
+		<span class="preloader__word">PRIME RECRUITMENTS</span>
+		<span class="preloader__bar"><i></i></span>
 	</div>
 </div>
 
-<div class="cursor" aria-hidden="true"><span class="cursor__dot"></span><span class="cursor__ring"></span></div>
-<div class="scroll-progress" aria-hidden="true"><i></i></div>
+<div class="topbar">
+	<div class="container topbar__inner">
+		<p class="topbar__tag"><?php echo esc_html( prime_opt( 'contact_hours' ) ); ?></p>
+		<div class="topbar__links">
+			<a href="mailto:<?php echo esc_attr( prime_opt( 'contact_email' ) ); ?>"><?php echo prime_icon( 'mail', 14 ); // phpcs:ignore ?><span><?php echo esc_html( prime_opt( 'contact_email' ) ); ?></span></a>
+			<?php if ( prime_tel_url() ) : ?><a href="<?php echo esc_attr( prime_tel_url() ); ?>"><?php echo prime_icon( 'phone', 14 ); // phpcs:ignore ?><span><?php echo esc_html( prime_opt( 'contact_phone' ) ); ?></span></a><?php endif; ?>
+			<?php if ( prime_whatsapp_url() ) : ?><a href="<?php echo esc_url( prime_whatsapp_url() ); ?>" target="_blank" rel="noopener"><?php echo prime_icon( 'whatsapp', 14 ); // phpcs:ignore ?><span>WhatsApp</span></a><?php endif; ?>
+			<?php if ( prime_socials() ) : ?><span class="topbar__social social social--sm"><?php echo prime_socials(); // phpcs:ignore ?></span><?php endif; ?>
+		</div>
+	</div>
+</div>
 
 <header class="site-header" id="site-header">
 	<div class="site-header__inner">
@@ -49,6 +56,7 @@ defined( 'ABSPATH' ) || exit;
 				?>
 			<?php else : ?>
 				<ul class="main-nav__list">
+					<li class="<?php echo is_front_page() ? 'is-current' : ''; ?>"><a href="<?php echo esc_url( home_url( '/' ) ); ?>" <?php echo is_front_page() ? 'aria-current="page"' : ''; ?>><?php esc_html_e( 'Home', 'prime' ); ?></a></li>
 					<li class="has-mega">
 						<a href="<?php echo esc_url( prime_url( 'services' ) ); ?>"><?php esc_html_e( 'Services', 'prime' ); ?> <i class="chev"></i></a>
 						<div class="mega">
@@ -61,7 +69,7 @@ defined( 'ABSPATH' ) || exit;
 								<?php endforeach; ?>
 							</div>
 							<a class="mega__feature" href="<?php echo esc_url( prime_url( 'employers' ) ); ?>">
-								<span class="label"><span class="label__num">//</span><?php esc_html_e( 'For employers', 'prime' ); ?></span>
+								<span class="eyebrow"><?php esc_html_e( 'For employers', 'prime' ); ?></span>
 								<strong><?php esc_html_e( 'Get an interviewed shortlist in 48–72 hours.', 'prime' ); ?></strong>
 								<span class="link-arrow"><?php esc_html_e( 'Share a role', 'prime' ); ?> <?php echo prime_icon( 'arrow', 16 ); // phpcs:ignore ?></span>
 							</a>
@@ -71,7 +79,7 @@ defined( 'ABSPATH' ) || exit;
 					<li><a href="<?php echo esc_url( prime_url( 'industries' ) ); ?>"><?php esc_html_e( 'Industries', 'prime' ); ?></a></li>
 					<li><a href="<?php echo esc_url( prime_url( 'jobs' ) ); ?>"><?php esc_html_e( 'Jobs', 'prime' ); ?></a></li>
 					<li class="has-drop">
-						<a href="<?php echo esc_url( prime_url( 'about' ) ); ?>"><?php esc_html_e( 'Company', 'prime' ); ?> <i class="chev"></i></a>
+						<a href="<?php echo esc_url( prime_url( 'about' ) ); ?>"><?php esc_html_e( 'About', 'prime' ); ?> <i class="chev"></i></a>
 						<div class="drop">
 							<a href="<?php echo esc_url( prime_url( 'about' ) ); ?>"><?php esc_html_e( 'About Us', 'prime' ); ?></a>
 							<a href="<?php echo esc_url( prime_url( 'employers' ) ); ?>"><?php esc_html_e( 'For Employers', 'prime' ); ?></a>
@@ -79,16 +87,15 @@ defined( 'ABSPATH' ) || exit;
 							<?php foreach ( prime_pages_in( 'location' ) as $key => $p ) : ?>
 								<a href="<?php echo esc_url( prime_url( $key ) ); ?>"><?php echo esc_html( sprintf( /* translators: %s: city */ __( 'Recruitment in %s', 'prime' ), $p['menu'] ) ); ?></a>
 							<?php endforeach; ?>
-							<a href="<?php echo esc_url( prime_url( 'contact' ) ); ?>"><?php esc_html_e( 'Contact', 'prime' ); ?></a>
 						</div>
 					</li>
+					<li><a href="<?php echo esc_url( prime_url( 'contact' ) ); ?>"><?php esc_html_e( 'Contact', 'prime' ); ?></a></li>
 				</ul>
 			<?php endif; ?>
 		</nav>
 
 		<div class="site-header__actions">
-			<?php if ( prime_tel_url() ) : ?><a class="header-call" href="<?php echo esc_attr( prime_tel_url() ); ?>" aria-label="<?php echo esc_attr( sprintf( /* translators: %s phone */ __( 'Call %s', 'prime' ), prime_opt( 'contact_phone' ) ) ); ?>"><?php echo prime_icon( 'phone', 18 ); // phpcs:ignore ?><span><?php echo esc_html( prime_opt( 'contact_phone' ) ); ?></span></a><?php endif; ?>
-			<a class="btn btn--primary btn--sm" href="<?php echo esc_url( prime_url( 'contact' ) ); ?>#enquiry" data-modal="enquiry" data-preset="employer" data-magnetic><span><?php echo esc_html( prime_opt( 'header_cta_text' ) ); ?></span><?php echo prime_icon( 'arrow-ur', 16 ); // phpcs:ignore ?></a>
+			<a class="btn btn--primary btn--sm header-cta" href="<?php echo esc_url( prime_url( 'contact' ) ); ?>#enquiry" data-modal="enquiry" data-preset="employer"><span><?php echo esc_html( prime_opt( 'header_cta_text' ) ); ?></span><?php echo prime_icon( 'arrow', 16 ); // phpcs:ignore ?></a>
 			<button class="burger" type="button" aria-label="<?php esc_attr_e( 'Open menu', 'prime' ); ?>" aria-expanded="false" aria-controls="mobile-menu"><span></span><span></span></button>
 		</div>
 	</div>
@@ -96,7 +103,7 @@ defined( 'ABSPATH' ) || exit;
 
 <div class="mobile-menu" id="mobile-menu" hidden>
 	<div class="mobile-menu__inner">
-		<p class="label"><span class="label__num">//</span><?php esc_html_e( 'Menu', 'prime' ); ?></p>
+		<p class="eyebrow"><?php esc_html_e( 'Menu', 'prime' ); ?></p>
 		<ul class="mobile-menu__list">
 			<li><a href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php esc_html_e( 'Home', 'prime' ); ?></a></li>
 			<li><a href="<?php echo esc_url( prime_url( 'services' ) ); ?>"><?php esc_html_e( 'Services', 'prime' ); ?></a></li>
@@ -115,10 +122,10 @@ defined( 'ABSPATH' ) || exit;
 		</div>
 		<a class="btn btn--primary btn--full" href="<?php echo esc_url( prime_url( 'contact' ) ); ?>#enquiry" data-modal="enquiry"><span><?php esc_html_e( 'Start a conversation', 'prime' ); ?></span><?php echo prime_icon( 'arrow', 18 ); // phpcs:ignore ?></a>
 		<div class="mobile-menu__contact">
-			<?php if ( prime_tel_url() ) : ?><a class="btn btn--ghost" href="<?php echo esc_attr( prime_tel_url() ); ?>"><?php echo prime_icon( 'phone', 18 ); // phpcs:ignore ?><span><?php esc_html_e( 'Call', 'prime' ); ?></span></a><?php endif; ?>
-			<?php if ( prime_whatsapp_url() ) : ?><a class="btn btn--ghost" href="<?php echo esc_url( prime_whatsapp_url() ); ?>" target="_blank" rel="noopener"><?php echo prime_icon( 'whatsapp', 18 ); // phpcs:ignore ?><span>WhatsApp</span></a><?php endif; ?>
+			<?php if ( prime_tel_url() ) : ?><a class="btn btn--outline" href="<?php echo esc_attr( prime_tel_url() ); ?>"><?php echo prime_icon( 'phone', 18 ); // phpcs:ignore ?><span><?php esc_html_e( 'Call', 'prime' ); ?></span></a><?php endif; ?>
+			<?php if ( prime_whatsapp_url() ) : ?><a class="btn btn--whatsapp" href="<?php echo esc_url( prime_whatsapp_url() ); ?>" target="_blank" rel="noopener"><?php echo prime_icon( 'whatsapp', 18 ); // phpcs:ignore ?><span>WhatsApp</span></a><?php endif; ?>
 		</div>
-		<?php if ( prime_socials() ) : ?><div class="footer-social mobile-menu__social"><?php echo prime_socials(); // phpcs:ignore ?></div><?php endif; ?>
+		<?php if ( prime_socials() ) : ?><div class="social mobile-menu__social"><?php echo prime_socials(); // phpcs:ignore ?></div><?php endif; ?>
 	</div>
 </div>
 

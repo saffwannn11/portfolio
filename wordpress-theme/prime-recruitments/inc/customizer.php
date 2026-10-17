@@ -20,6 +20,7 @@ function prime_opt_defaults() {
 		'form_recipient'  => '',
 		'logo_url'        => '',
 		'logo_link'       => '',
+		'logo_footer_url' => '',
 		'logo_height'     => '46',
 		'contact_person'  => 'Fahim Dalla',
 		'contact_role'    => 'HR Manager',
@@ -44,8 +45,8 @@ function prime_opt_defaults() {
 		'stat_2_suffix'   => '+',
 		'stat_2_label'    => 'Industries and functions covered',
 		'stat_3_num'      => '3',
-		'stat_3_suffix'   => '-step',
-		'stat_3_label'    => 'Screening before you meet anyone',
+		'stat_3_suffix'   => '',
+		'stat_3_label'    => 'Screening stages before you meet anyone',
 		'stat_4_num'      => '100',
 		'stat_4_suffix'   => '%',
 		'stat_4_label'    => 'Candidates personally interviewed',
@@ -77,7 +78,8 @@ function prime_customize_register( $wp_customize ) {
 		'prime_logo'    => array(
 			'title'  => __( 'Logo', 'prime' ),
 			'fields' => array(
-				'logo_url'    => array( __( 'Logo image (upload or paste a URL). Use a light/transparent logo – the header and footer are dark.', 'prime' ), 'image', '' ),
+				'logo_url'        => array( __( 'Logo image (upload or paste a URL). Shown on the white header – your normal full-colour logo works best.', 'prime' ), 'image', '' ),
+				'logo_footer_url' => array( __( 'Footer logo – light/white version (optional). The footer is dark; without this your logo sits on a white plate.', 'prime' ), 'image', '' ),
 				'logo_link'   => array( __( 'Logo link URL (empty = homepage)', 'prime' ), 'url', '' ),
 				'logo_height' => array( __( 'Logo height in px (24–120)', 'prime' ), 'number', '' ),
 			),
@@ -93,7 +95,7 @@ function prime_customize_register( $wp_customize ) {
 			'fields' => array(
 				'fluentform_id'  => array( __( 'Fluent Forms form ID', 'prime' ), 'text', __( 'Filled in automatically: when Fluent Forms is active the theme creates a "Prime Recruitments Enquiry" form and connects it. To use a different form, paste its ID (the number in [fluentform id="3"]). Empty = built-in form.', 'prime' ) ),
 				'form_recipient' => array( __( 'Built-in form: send enquiries to', 'prime' ), 'email', __( 'Defaults to the site admin email.', 'prime' ) ),
-				'modal_image'    => array( __( 'Popup – left side image (optional, shown behind a navy overlay)', 'prime' ), 'image', '' ),
+				'modal_image'    => array( __( 'Popup – left side image (optional, shown behind a dark overlay)', 'prime' ), 'image', '' ),
 			),
 		),
 		'prime_contact' => array(
@@ -195,7 +197,7 @@ add_action( 'customize_register', 'prime_customize_register' );
 function prime_brand_color_css() {
 	$c = sanitize_hex_color( prime_opt( 'brand_color' ) );
 	if ( $c && '#c9a227' !== strtolower( $c ) ) {
-		wp_add_inline_style( 'prime-main', ':root{--gold:' . $c . ';--blue:' . $c . ';--gold-2:' . $c . ';}' );
+		wp_add_inline_style( 'prime-main', ':root{--gold:' . $c . ';--gold-2:' . $c . ';}' );
 	}
 }
 add_action( 'wp_enqueue_scripts', 'prime_brand_color_css', 20 );

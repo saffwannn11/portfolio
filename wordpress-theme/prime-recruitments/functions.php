@@ -7,7 +7,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'PRIME_VERSION', '1.2.0' );
+define( 'PRIME_VERSION', '1.3.0' );
 define( 'PRIME_DIR', get_template_directory() );
 define( 'PRIME_URI', get_template_directory_uri() );
 
@@ -55,7 +55,7 @@ add_action( 'after_setup_theme', 'prime_theme_setup' );
 function prime_enqueue_assets() {
 	wp_enqueue_style(
 		'prime-fonts',
-		'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Instrument+Serif:ital@1&family=JetBrains+Mono:wght@400&display=swap',
+		'https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;600;700&display=swap',
 		array(),
 		null
 	);
@@ -78,7 +78,7 @@ function prime_enqueue_assets() {
 
 	if ( prime_opt( 'fluentform_id' ) ) {
 		// Fluent Forms ships its own CSS; ours (in main.css) restyles it to match the theme.
-		wp_add_inline_style( 'prime-main', '.prime-form-shell .fluentform{--fluentform-primary:#3366ff}' );
+		wp_add_inline_style( 'prime-main', '.prime-form-shell .fluentform{--fluentform-primary:#c9a227}' );
 	}
 }
 add_action( 'wp_enqueue_scripts', 'prime_enqueue_assets' );

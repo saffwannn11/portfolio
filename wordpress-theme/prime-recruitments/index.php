@@ -18,8 +18,8 @@ if ( is_singular() && prime_is_elementor_page( get_queried_object_id() ) ) {
 	return;
 }
 ?>
-<section class="banner banner--mesh banner--compact">
-	<div class="banner__bg" aria-hidden="true"><span class="aurora a1"></span><span class="aurora a2"></span><span class="banner__grid"></span></div>
+<section class="banner banner--compact">
+	<div class="banner__media" aria-hidden="true"><img src="<?php echo esc_url( prime_photo( 'windows' ) ); ?>" alt="" decoding="async"></div>
 	<div class="container banner__inner">
 		<nav class="crumbs" aria-label="<?php esc_attr_e( 'Breadcrumb', 'prime' ); ?>"><a href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php esc_html_e( 'Home', 'prime' ); ?></a><span>/</span><span aria-current="page"><?php echo esc_html( is_singular() ? get_the_title() : wp_strip_all_tags( get_the_archive_title() ) ); ?></span></nav>
 		<h1 class="banner__title" data-split><?php echo esc_html( is_singular() ? get_the_title() : ( is_home() ? __( 'Insights', 'prime' ) : wp_strip_all_tags( get_the_archive_title() ) ) ); ?></h1>
@@ -32,7 +32,7 @@ if ( is_singular() && prime_is_elementor_page( get_queried_object_id() ) ) {
 			<?php while ( have_posts() ) : the_post(); ?>
 				<article <?php post_class( 'prose' ); ?>>
 					<?php if ( has_post_thumbnail() ) : ?><figure class="prose__media"><?php the_post_thumbnail( 'large' ); ?></figure><?php endif; ?>
-					<p class="mono muted"><?php echo esc_html( get_the_date() ); ?></p>
+					<p class="post-date"><?php echo esc_html( get_the_date() ); ?></p>
 					<?php the_content(); ?>
 				</article>
 			<?php endwhile; ?>
@@ -41,7 +41,7 @@ if ( is_singular() && prime_is_elementor_page( get_queried_object_id() ) ) {
 				<?php while ( have_posts() ) : the_post(); ?>
 					<a <?php post_class( 'post-card' ); ?> href="<?php the_permalink(); ?>">
 						<?php if ( has_post_thumbnail() ) : ?><span class="post-card__media"><?php the_post_thumbnail( 'medium_large' ); ?></span><?php endif; ?>
-						<span class="mono"><?php echo esc_html( get_the_date() ); ?></span>
+						<span class="post-date"><?php echo esc_html( get_the_date() ); ?></span>
 						<h2><?php the_title(); ?></h2>
 						<p><?php echo esc_html( wp_trim_words( get_the_excerpt(), 22 ) ); ?></p>
 					</a>

@@ -155,7 +155,7 @@ abstract class Prime_Elementor_Widget extends Widget_Base {
 			array(
 				'label'     => __( 'Accent colour', 'prime' ),
 				'type'      => Controls_Manager::COLOR,
-				'selectors' => array( '{{WRAPPER}}' => '--blue: {{VALUE}}; --blue-2: {{VALUE}};' ),
+				'selectors' => array( '{{WRAPPER}}' => '--gold: {{VALUE}}; --gold-2: {{VALUE}}; --accent-text: {{VALUE}};' ),
 			)
 		);
 		$this->add_control(
@@ -171,7 +171,7 @@ abstract class Prime_Elementor_Widget extends Widget_Base {
 			array(
 				'label'     => __( 'Heading colour', 'prime' ),
 				'type'      => Controls_Manager::COLOR,
-				'selectors' => array( '{{WRAPPER}} .h2, {{WRAPPER}} .h3, {{WRAPPER}} .hero__title, {{WRAPPER}} .banner__title, {{WRAPPER}} h3' => 'color: {{VALUE}};' ),
+				'selectors' => array( '{{WRAPPER}} .h2, {{WRAPPER}} .h3, {{WRAPPER}} .hero__title, {{WRAPPER}} .banner__title, {{WRAPPER}} .audience__title, {{WRAPPER}} h3' => 'color: {{VALUE}};' ),
 			)
 		);
 		$this->add_control(
@@ -179,7 +179,7 @@ abstract class Prime_Elementor_Widget extends Widget_Base {
 			array(
 				'label'     => __( 'Text colour', 'prime' ),
 				'type'      => Controls_Manager::COLOR,
-				'selectors' => array( '{{WRAPPER}} p:not(.label):not(.stat__num), {{WRAPPER}} li' => 'color: {{VALUE}};' ),
+				'selectors' => array( '{{WRAPPER}} p:not(.eyebrow):not(.stat__num), {{WRAPPER}} li' => 'color: {{VALUE}};' ),
 			)
 		);
 		$this->add_group_control(
@@ -243,3 +243,6 @@ class Prime_Widget_Facts extends Prime_Elementor_Widget { protected $prime_key =
 class Prime_Widget_Gifting extends Prime_Elementor_Widget { protected $prime_key = 'gifting'; }
 class Prime_Widget_Business_Card extends Prime_Elementor_Widget { protected $prime_key = 'business_card'; }
 class Prime_Widget_Related extends Prime_Elementor_Widget { protected $prime_key = 'related'; }
+class Prime_Widget_About_Split extends Prime_Elementor_Widget { protected $prime_key = 'about_split'; }
+class Prime_Widget_Audience_Split extends Prime_Elementor_Widget { protected $prime_key = 'audience_split'; }
+class Prime_Widget_Cta_Band extends Prime_Elementor_Widget { protected $prime_key = 'cta_band'; }

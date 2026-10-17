@@ -11,13 +11,12 @@ $phone_href = preg_replace( '/[^0-9+]/', '', prime_opt( 'contact_phone' ) );
 </main>
 
 <footer class="site-footer">
-	<div class="site-footer__glow" aria-hidden="true"></div>
 	<div class="container">
 		<div class="footer-grid">
 			<div class="footer-brand">
 				<?php prime_logo( 'footer' ); ?>
 				<p><?php echo esc_html( prime_home_seo()['meta_desc'] ); ?></p>
-				<?php if ( prime_socials() ) : ?><div class="footer-social"><?php echo prime_socials(); // phpcs:ignore ?></div><?php endif; ?>
+				<?php if ( prime_socials() ) : ?><div class="social social--dark"><?php echo prime_socials(); // phpcs:ignore ?></div><?php endif; ?>
 			</div>
 			<div>
 				<h3 class="footer-title"><?php esc_html_e( 'Services', 'prime' ); ?></h3>
@@ -52,11 +51,9 @@ $phone_href = preg_replace( '/[^0-9+]/', '', prime_opt( 'contact_phone' ) );
 			</div>
 		</div>
 
-		<div class="footer-wordmark" aria-hidden="true"><span>PRIME</span></div>
-
 		<div class="footer-bottom">
 			<span>© <?php echo esc_html( gmdate( 'Y' ) ); ?> <?php bloginfo( 'name' ); ?>. <?php esc_html_e( 'All rights reserved.', 'prime' ); ?></span>
-			<span class="mono"><?php esc_html_e( 'We never charge candidates a fee.', 'prime' ); ?></span>
+			<span class="footer-note"><?php esc_html_e( 'We never charge candidates a fee.', 'prime' ); ?></span>
 			<?php
 			if ( has_nav_menu( 'footer' ) ) {
 				wp_nav_menu(

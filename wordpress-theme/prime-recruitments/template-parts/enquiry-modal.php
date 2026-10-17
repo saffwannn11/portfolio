@@ -16,10 +16,10 @@ $side_img = prime_opt( 'modal_image' );
 
 		<aside class="pmodal__side" <?php echo $side_img ? 'style="--side-img:url(' . esc_url( $side_img ) . ')"' : ''; ?>>
 			<div class="pmodal__brand">
-				<img src="<?php echo esc_url( PRIME_URI . '/assets/img/logo-mark-light.png' ); ?>" width="44" height="40" alt="" loading="lazy" decoding="async">
+				<img src="<?php echo esc_url( prime_img( 'logo-mark-light.png' ) ); ?>" width="44" height="40" alt="" loading="lazy" decoding="async">
 				<span><strong>PRIME</strong> RECRUITMENTS</span>
 			</div>
-			<p class="pmodal__kicker mono" data-modal-kicker>// <?php esc_html_e( 'Hiring made simple', 'prime' ); ?></p>
+			<p class="pmodal__kicker" data-modal-kicker><?php esc_html_e( 'Hiring made simple', 'prime' ); ?></p>
 			<p class="pmodal__headline" data-modal-headline><?php esc_html_e( 'The right people, in your inbox fast.', 'prime' ); ?></p>
 			<ul class="pmodal__points">
 				<li><?php echo prime_icon( 'check', 16 ); // phpcs:ignore ?><?php esc_html_e( 'Reply within one working day', 'prime' ); ?></li>
@@ -41,7 +41,7 @@ $side_img = prime_opt( 'modal_image' );
 		</aside>
 
 		<div class="pmodal__main">
-			<p class="label"><span class="label__num">//</span><?php esc_html_e( 'Enquiry', 'prime' ); ?></p>
+			<p class="eyebrow"><?php esc_html_e( 'Enquiry', 'prime' ); ?></p>
 			<h2 class="pmodal__title" id="pmodal-title" data-modal-title><?php esc_html_e( 'Tell us what you need', 'prime' ); ?></h2>
 			<p class="pmodal__sub"><?php esc_html_e( 'Share a few details and our team will get back to you within one working day.', 'prime' ); ?></p>
 			<?php prime_form( 'employer', '', 'light' ); ?>

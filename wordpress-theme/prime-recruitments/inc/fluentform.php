@@ -118,7 +118,7 @@ function prime_ff_template( $forms ) {
 						'help_message'     => '',
 						'background_color' => '#c9a227',
 						'button_size'      => 'lg',
-						'color'            => '#0b2342',
+						'color'            => '#141311',
 						'button_ui'        => array( 'type' => 'default', 'text' => 'Send enquiry', 'img_url' => '' ),
 					),
 					'editor_options' => array( 'title' => 'Submit Button' ),

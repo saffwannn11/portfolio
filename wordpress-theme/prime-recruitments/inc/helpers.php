@@ -75,6 +75,17 @@ function prime_logo( $context = 'header' ) {
 	$height = max( 24, min( 120, (int) prime_opt( 'logo_height' ) ) );
 	$name   = get_bloginfo( 'name' );
 
+	// Optional light logo for the dark footer.
+	if ( 'footer' === $context && prime_opt( 'logo_footer_url' ) ) {
+		printf(
+			'<a href="%1$s" class="brand brand--footer brand--custom brand--light" rel="home"><img class="brand__img" src="%2$s" alt="%3$s" style="max-height:%4$dpx" loading="lazy" decoding="async"></a>',
+			esc_url( $link ),
+			esc_url( prime_opt( 'logo_footer_url' ) ),
+			esc_attr( $name ),
+			(int) $height
+		);
+		return;
+	}
 	if ( has_custom_logo() ) {
 		$id  = get_theme_mod( 'custom_logo' );
 		$img = wp_get_attachment_image( $id, 'full', false, array( 'class' => 'brand__img', 'alt' => $name, 'style' => 'max-height:' . $height . 'px', 'loading' => 'eager', 'decoding' => 'async' ) );
@@ -98,8 +109,46 @@ function prime_logo( $context = 'header' ) {
 		esc_url( $link ),
 		esc_attr( $context ),
 		esc_attr( $name ),
-		esc_url( PRIME_URI . '/assets/img/logo-mark-light.png' )
+		esc_url( prime_img( 'footer' === $context ? 'logo-mark-light.png' : 'logo-mark-dark.png' ) )
 	);
+}
+
+/**
+ * URL of a bundled theme image.
+ */
+function prime_img( $file ) {
+	return PRIME_URI . '/assets/img/' . $file;
+}
+
+/**
+ * Bundled photography (CC0, monochrome) used by banners and image sections.
+ * Old banner style keys map onto photos so existing pages keep working.
+ */
+function prime_photos() {
+	return array(
+		'facade'   => 'photo-facade.webp',
+		'tower'    => 'photo-tower.webp',
+		'windows'  => 'photo-windows.webp',
+		'geometry' => 'photo-geometry.webp',
+		'atrium'   => 'photo-atrium.webp',
+		'corridor' => 'photo-corridor.webp',
+		'stairs'   => 'photo-stairs.webp',
+	);
+}
+
+function prime_photo( $key ) {
+	$legacy = array( 'mesh' => 'facade', 'grid' => 'windows', 'orbit' => 'tower', 'beam' => 'atrium', 'wave' => 'geometry' );
+	$key    = isset( $legacy[ $key ] ) ? $legacy[ $key ] : $key;
+	$all    = prime_photos();
+	return prime_img( isset( $all[ $key ] ) ? $all[ $key ] : $all['facade'] );
+}
+
+/**
+ * Media setting with a bundled photo fallback.
+ */
+function prime_media_or_photo( $v, $photo ) {
+	$url = prime_media_url( $v );
+	return $url ? $url : prime_photo( $photo );
 }
 
 /**
@@ -171,14 +220,17 @@ function prime_icon( $name, $size = 22 ) {
 }
 
 /**
- * Section label in the "coded" mono style: <span>// 02</span> Label
+ * Section eyebrow: a short gold rule followed by the label. The number
+ * argument is kept for backwards compatibility and no longer printed.
  */
 function prime_label( $num, $text, $extra_class = '' ) {
+	if ( '' === trim( (string) $text ) ) {
+		return;
+	}
 	printf(
-		'<p class="label %3$s"><span class="label__num">// %1$s</span>%2$s</p>',
-		esc_html( $num ),
+		'<p class="eyebrow %2$s">%1$s</p>',
 		esc_html( $text ),
-		esc_attr( $extra_class )
+		esc_attr( str_replace( 'label--light', 'eyebrow--light', $extra_class ) )
 	);
 }
 
@@ -288,5 +340,5 @@ function prime_mark_url() {
 			return $img;
 		}
 	}
-	return prime_opt( 'logo_url' ) ? prime_opt( 'logo_url' ) : PRIME_URI . '/assets/img/logo-mark-light.png';
+	return prime_opt( 'logo_url' ) ? prime_opt( 'logo_url' ) : prime_img( 'logo-mark-dark.png' );
 }

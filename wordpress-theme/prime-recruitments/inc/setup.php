@@ -172,7 +172,21 @@ function prime_setup_page() {
 	$created = null;
 	if ( isset( $_POST['prime_setup'] ) && check_admin_referer( 'prime_setup' ) && current_user_can( 'manage_options' ) ) {
 		$action = sanitize_key( wp_unslash( $_POST['prime_setup'] ) );
-		if ( 'fluent' === $action ) {
+		if ( 'restore' === $action ) {
+			$created = array();
+			foreach ( get_posts( array( 'post_type' => 'page', 'posts_per_page' => -1, 'meta_key' => '_prime_layout_backup', 'fields' => 'ids' ) ) as $pid ) {
+				$backup = (string) get_post_meta( $pid, '_prime_layout_backup', true );
+				if ( '' !== $backup ) {
+					update_post_meta( $pid, '_elementor_data', wp_slash( $backup ) );
+					delete_post_meta( $pid, '_prime_layout_backup' );
+					delete_post_meta( $pid, '_prime_layout_sig' );
+					delete_post_meta( $pid, '_elementor_css' );
+					delete_post_meta( $pid, '_elementor_element_cache' );
+					$created[] = get_the_title( $pid );
+				}
+			}
+			prime_clear_elementor_cache();
+		} elseif ( 'fluent' === $action ) {
 			set_theme_mod( 'prime_fluentform_id', '' );
 			prime_ff_reset_attempt();
 			prime_ff_maybe_create();
@@ -183,7 +197,7 @@ function prime_setup_page() {
 	}
 	echo '<div class="wrap"><h1>' . esc_html__( 'Prime Recruitments – Setup', 'prime' ) . '</h1>';
 	if ( null !== $created ) {
-		echo '<div class="notice notice-success"><p>' . esc_html( $created ? 'Created: ' . implode( ', ', $created ) : 'All pages already exist.' ) . '</p></div>';
+		echo '<div class="notice notice-success"><p>' . esc_html( $created ? 'Done: ' . implode( ', ', $created ) : 'All pages are up to date.' ) . '</p></div>';
 	}
 	echo '<p>' . esc_html__( 'Creates any missing pages and adds the Elementor layout to Prime pages that do not have one yet. Your edits are never changed.', 'prime' ) . '</p>';
 	echo '<p><strong>' . ( did_action( 'elementor/loaded' ) ? esc_html__( 'Elementor is active – open any page and click “Edit with Elementor”.', 'prime' ) : esc_html__( 'Elementor is not active yet – install the free Elementor plugin to edit pages visually. Pages already contain their Elementor layouts.', 'prime' ) ) . '</strong></p>';
@@ -193,7 +207,11 @@ function prime_setup_page() {
 	if ( class_exists( '\\FluentForm\\App\\Services\\Form\\FormService' ) ) {
 		echo '<button class="button" name="prime_setup" value="fluent">' . esc_html__( 'Create the Fluent Forms enquiry form', 'prime' ) . '</button> ';
 	}
-	echo '<button class="button" name="prime_setup" value="rebuild" onclick="return confirm(\'' . esc_js( __( 'Reset every Prime page to the original design? Elementor edits on those pages will be replaced and cannot be restored.', 'prime' ) ) . '\')">' . esc_html__( 'Reset all pages to original design', 'prime' ) . '</button></p></form>';
+	echo '<button class="button" name="prime_setup" value="rebuild" onclick="return confirm(\'' . esc_js( __( 'Apply the latest Prime design to every Prime page? Your current Elementor layouts are backed up and can be restored with the Restore button.', 'prime' ) ) . '\')">' . esc_html__( 'Apply the latest design to all pages', 'prime' ) . '</button> ';
+	if ( get_posts( array( 'post_type' => 'page', 'posts_per_page' => 1, 'meta_key' => '_prime_layout_backup', 'fields' => 'ids' ) ) ) {
+		echo '<button class="button" name="prime_setup" value="restore">' . esc_html__( 'Restore my previous layouts', 'prime' ) . '</button>';
+	}
+	echo '</p></form>';
 
 	echo '<h2>' . esc_html__( 'Pages and SEO', 'prime' ) . '</h2><table class="widefat striped"><thead><tr><th>Page</th><th>URL</th><th>Meta title</th><th>Focus keyword</th></tr></thead><tbody>';
 	foreach ( prime_pages() as $key => $p ) {
@@ -324,6 +342,6 @@ function prime_upgrade_notice() {
 		return;
 	}
 	delete_transient( 'prime_upgrade_notice' );
-	echo '<div class="notice notice-success is-dismissible"><p><strong>Prime Recruitments updated to ' . esc_html( PRIME_VERSION ) . '.</strong> ' . esc_html__( 'New pages were added and unedited pages received the new design. Pages you edited in Elementor were kept – the new Corporate Gifting section was added to your homepage.', 'prime' ) . '</p></div>';
+	echo '<div class="notice notice-success is-dismissible"><p><strong>Prime Recruitments updated to ' . esc_html( PRIME_VERSION ) . '.</strong> ' . esc_html__( 'Unedited pages received the new design and layout. Pages you edited in Elementor keep your content in the new style.', 'prime' ) . ' <a href="' . esc_url( admin_url( 'themes.php?page=prime-setup' ) ) . '">' . esc_html__( 'Apply the new layouts to edited pages too', 'prime' ) . '</a></p></div>';
 }
 add_action( 'admin_notices', 'prime_upgrade_notice' );
