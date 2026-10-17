@@ -14,12 +14,14 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Print the enquiry form.
  *
- * @param string $preset    Pre-selected enquiry type: 'employer' or 'candidate'.
+ * @param string $preset    Pre-selected enquiry type: 'employer', 'candidate' or 'gifting'.
  * @param string $shortcode Optional form shortcode set on the Elementor widget.
+ * @param string $variant   'dark' (default, for dark sections) or 'light' (popup).
  */
-function prime_form( $preset = 'employer', $shortcode = '' ) {
-	$ff_id = absint( prime_opt( 'fluentform_id' ) );
-	echo '<div class="prime-form-shell">';
+function prime_form( $preset = 'employer', $shortcode = '', $variant = 'dark' ) {
+	$ff_id  = absint( prime_opt( 'fluentform_id' ) );
+	$preset = in_array( $preset, array( 'employer', 'candidate', 'gifting' ), true ) ? $preset : 'employer';
+	echo '<div class="prime-form-shell prime-form-shell--' . esc_attr( 'light' === $variant ? 'light' : 'dark' ) . '" data-preset="' . esc_attr( $preset ) . '">';
 
 	if ( $shortcode && preg_match( '/^\[[a-z0-9_\-]+[^\]]*\]$/i', trim( $shortcode ) ) ) {
 		echo do_shortcode( trim( $shortcode ) ); // phpcs:ignore
@@ -35,7 +37,7 @@ function prime_form( $preset = 'employer', $shortcode = '' ) {
 
 	$status = isset( $_GET['enquiry'] ) ? sanitize_key( wp_unslash( $_GET['enquiry'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	if ( 'sent' === $status ) {
-		echo '<div class="form-notice form-notice--ok" role="status">' . prime_icon( 'check', 18 ) . esc_html__( 'Thank you — your enquiry has been sent. A recruiter will reply within one working day.', 'prime' ) . '</div>';
+		echo '<div class="form-notice form-notice--ok" role="status">' . prime_icon( 'check', 18 ) . esc_html__( 'Thank you — your enquiry has been sent. Our team will reply within one working day.', 'prime' ) . '</div>';
 	} elseif ( 'error' === $status ) {
 		echo '<div class="form-notice form-notice--err" role="alert">' . esc_html__( 'Sorry, something went wrong. Please check the required fields and try again, or email us directly.', 'prime' ) . '</div>';
 	}
@@ -48,17 +50,18 @@ function prime_form( $preset = 'employer', $shortcode = '' ) {
 
 		<fieldset class="pf-toggle">
 			<legend class="sr-only"><?php esc_html_e( 'I am', 'prime' ); ?></legend>
-			<label><input type="radio" name="type" value="employer" <?php checked( 'candidate' !== $preset ); ?>><span><?php esc_html_e( 'I’m hiring', 'prime' ); ?></span></label>
-			<label><input type="radio" name="type" value="candidate" <?php checked( 'candidate' === $preset ); ?>><span><?php esc_html_e( 'I’m looking for a job', 'prime' ); ?></span></label>
+			<label><input type="radio" name="type" value="employer" <?php checked( 'employer', $preset ); ?>><span><?php esc_html_e( 'I’m hiring', 'prime' ); ?></span></label>
+			<label><input type="radio" name="type" value="candidate" <?php checked( 'candidate', $preset ); ?>><span><?php esc_html_e( 'I need a job', 'prime' ); ?></span></label>
+			<label><input type="radio" name="type" value="gifting" <?php checked( 'gifting', $preset ); ?>><span><?php esc_html_e( 'Corporate gifting', 'prime' ); ?></span></label>
 		</fieldset>
 
 		<div class="pf-grid">
 			<label class="pf-field"><input type="text" name="name" required placeholder=" " autocomplete="name"><span><?php esc_html_e( 'Full name', 'prime' ); ?> *</span></label>
 			<label class="pf-field"><input type="email" name="email" required placeholder=" " autocomplete="email"><span><?php esc_html_e( 'Email', 'prime' ); ?> *</span></label>
 			<label class="pf-field"><input type="tel" name="phone" required placeholder=" " autocomplete="tel"><span><?php esc_html_e( 'Phone', 'prime' ); ?> *</span></label>
-			<label class="pf-field"><input type="text" name="company" placeholder=" "><span class="pf-employer"><?php esc_html_e( 'Company', 'prime' ); ?></span><span class="pf-candidate"><?php esc_html_e( 'Current role', 'prime' ); ?></span></label>
-			<label class="pf-field pf-wide"><input type="text" name="role" placeholder=" "><span class="pf-employer"><?php esc_html_e( 'Role(s) you are hiring for', 'prime' ); ?></span><span class="pf-candidate"><?php esc_html_e( 'Role you are looking for + CV link', 'prime' ); ?></span></label>
-			<label class="pf-field pf-wide"><textarea name="message" rows="3" placeholder=" "></textarea><span><?php esc_html_e( 'Tell us more (location, timeline, salary range)', 'prime' ); ?></span></label>
+			<label class="pf-field"><input type="text" name="company" placeholder=" "><span class="pf-employer pf-gifting"><?php esc_html_e( 'Company', 'prime' ); ?></span><span class="pf-candidate"><?php esc_html_e( 'Current role', 'prime' ); ?></span></label>
+			<label class="pf-field pf-wide"><input type="text" name="role" placeholder=" "><span class="pf-employer"><?php esc_html_e( 'Role(s) you are hiring for', 'prime' ); ?></span><span class="pf-candidate"><?php esc_html_e( 'Role you are looking for + CV link', 'prime' ); ?></span><span class="pf-gifting"><?php esc_html_e( 'Gift type, quantity & budget per gift', 'prime' ); ?></span></label>
+			<label class="pf-field pf-wide"><textarea name="message" rows="3" placeholder=" "></textarea><span class="pf-employer pf-candidate"><?php esc_html_e( 'Tell us more (location, timeline, salary range)', 'prime' ); ?></span><span class="pf-gifting"><?php esc_html_e( 'Occasion, delivery city & date', 'prime' ); ?></span></label>
 		</div>
 		<label class="pf-consent"><input type="checkbox" name="consent" value="1" required> <span><?php esc_html_e( 'I agree to be contacted about my enquiry.', 'prime' ); ?></span></label>
 		<button type="submit" class="btn btn--primary btn--full" data-magnetic><span><?php esc_html_e( 'Send enquiry', 'prime' ); ?></span><?php echo prime_icon( 'arrow', 18 ); // phpcs:ignore ?></button>
@@ -102,7 +105,8 @@ function prime_handle_enquiry() {
 	if ( ! is_email( $to ) ) {
 		$to = get_option( 'admin_email' );
 	}
-	$label   = 'candidate' === $data['type'] ? 'Job seeker' : 'Employer';
+	$labels  = array( 'candidate' => 'Job seeker', 'gifting' => 'Corporate gifting', 'employer' => 'Employer' );
+	$label   = isset( $labels[ $data['type'] ] ) ? $labels[ $data['type'] ] : 'Employer';
 	$subject = sprintf( '[%s] New %s enquiry from %s', get_bloginfo( 'name' ), strtolower( $label ), $data['name'] );
 	$body    = "Enquiry type: {$label}\n"
 		. "Name: {$data['name']}\n"

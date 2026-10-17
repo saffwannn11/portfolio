@@ -37,6 +37,73 @@
 		d.addEventListener('keydown', function (e) { if (e.key === 'Escape') set(false); });
 	})();
 
+	// Enquiry popup: centred dialog opened by any #enquiry link or [data-modal].
+	(function () {
+		var modal = d.getElementById('prime-modal');
+		if (!modal) return;
+		var title = $('[data-modal-title]', modal), head = $('[data-modal-headline]', modal), kick = $('[data-modal-kicker]', modal);
+		var copy = {
+			employer: ['Tell us who you need', 'The right people, in your inbox fast.', '// Hiring made simple'],
+			candidate: ['Find your next role', 'Your next career move starts here.', '// Always free for job seekers'],
+			gifting: ['Plan your corporate gifts', 'Gifts that make every relationship memorable.', '// Corporate gifting']
+		};
+		var lastFocus = null;
+		function setPreset(p) {
+			p = copy[p] ? p : 'employer';
+			if (title) title.textContent = copy[p][0];
+			if (head) head.textContent = copy[p][1];
+			if (kick) kick.textContent = copy[p][2];
+			$$('input[name="type"], input[name="enquiry_type"]', modal).forEach(function (r) {
+				if (r.value === p && !r.checked) { r.checked = true; r.dispatchEvent(new Event('change', { bubbles: true })); }
+			});
+		}
+		function focusables() {
+			return $$('a[href], button:not([disabled]), input:not([type="hidden"]):not([disabled]), textarea, select', modal).filter(function (el) { return el.offsetParent !== null; });
+		}
+		function open(preset) {
+			lastFocus = d.activeElement;
+			setPreset(preset);
+			modal.hidden = false;
+			requestAnimationFrame(function () { modal.classList.add('is-open'); });
+			d.body.classList.add('modal-open');
+			if (lenis) lenis.stop();
+			setTimeout(function () {
+				var f = $$('.pmodal__main input:not([type="hidden"]):not([type="radio"]):not([type="checkbox"]), .pmodal__main textarea', modal).filter(function (el) {
+					return !el.closest('.hp-field') && el.offsetParent !== null && el.tabIndex !== -1;
+				})[0];
+				if (f && window.innerWidth > 760) f.focus({ preventScroll: true });
+			}, 380);
+		}
+		function close() {
+			modal.classList.remove('is-open');
+			d.body.classList.remove('modal-open');
+			if (lenis) lenis.start();
+			setTimeout(function () { modal.hidden = true; }, 420);
+			if (lastFocus && lastFocus.focus) lastFocus.focus({ preventScroll: true });
+		}
+		d.addEventListener('click', function (e) {
+			var t = e.target.closest('[data-modal="enquiry"], a[href$="#enquiry"]');
+			if (!t || modal.contains(t) || editMode) return;
+			e.preventDefault();
+			var href = t.getAttribute('href') || '';
+			var pageShell = $('.cta-form .prime-form-shell');
+			var preset = t.getAttribute('data-preset') || (/job-seekers|\/jobs/.test(href) ? 'candidate' : '') || (pageShell && pageShell.getAttribute('data-preset')) || 'employer';
+			open(preset);
+		});
+		modal.addEventListener('click', function (e) { if (e.target.closest('[data-close]')) close(); });
+		d.addEventListener('keydown', function (e) {
+			if (!modal.classList.contains('is-open')) return;
+			if (e.key === 'Escape') { close(); return; }
+			if (e.key === 'Tab') {
+				var f = focusables(); if (!f.length) return;
+				var first = f[0], last = f[f.length - 1];
+				if (e.shiftKey && d.activeElement === first) { e.preventDefault(); last.focus(); }
+				else if (!e.shiftKey && d.activeElement === last) { e.preventDefault(); first.focus(); }
+			}
+		});
+		window.primeOpenEnquiry = open;
+	})();
+
 	// Header state, progress bar, back-to-top
 	(function () {
 		var header = $('#site-header');
@@ -221,6 +288,7 @@
 		gsap.ticker.add(function (time) { lenis.raf(time * 1000); });
 		gsap.ticker.lagSmoothing(0);
 		d.addEventListener('click', function (e) {
+			if (e.defaultPrevented) return;
 			var a = e.target.closest('a[href*="#"]');
 			if (!a) return;
 			var url = new URL(a.href, location.href);
@@ -245,13 +313,14 @@
 			done();
 			return;
 		}
-		var count = $('.preloader__count', pre);
-		var obj = { v: 0 };
-		var tl = gsap.timeline({ onComplete: function () { pre.classList.add('is-done'); setTimeout(done, 250); } });
-		tl.from('.preloader__mark', { scale: 0.4, rotate: -30, opacity: 0, duration: 0.8 })
-			.to(obj, { v: 100, duration: 1.1, ease: 'power2.inOut', onUpdate: function () { count.textContent = Math.round(obj.v); } }, 0.1)
-			.to('.preloader__bar i', { scaleX: 1, duration: 1.1, ease: 'power2.inOut' }, 0.1)
-			.to('.preloader__inner', { y: -20, opacity: 0, duration: 0.5, ease: 'power2.in' });
+		// The animation is pure CSS (logo + ring draw); keep it brief: at least
+		// ~0.75s since navigation start, then fade out and start the page motion.
+		var t0 = (window.performance && performance.timing && performance.timing.navigationStart) || Date.now();
+		var wait = Math.max(0, 750 - (Date.now() - t0));
+		setTimeout(function () {
+			pre.classList.add('is-done');
+			setTimeout(done, 120);
+		}, wait);
 	}
 
 	/* ------------------------------------------------------------------
@@ -316,7 +385,7 @@
 
 		// Particle constellation
 		var canvas = $('.hero__canvas', heroEl);
-		if (canvas && canvas.getContext) {
+		if (canvas && canvas.getContext && window.innerWidth > 760) {
 			var ctx = canvas.getContext('2d');
 			var dpr = Math.min(window.devicePixelRatio || 1, 2);
 			var pts = [], W = 0, H = 0, mouse = { x: -9999, y: -9999 }, running = true;
@@ -524,7 +593,12 @@
 		var preview = $('.reel__preview', wrap);
 		var img = $('img', preview);
 		var rows = $$('.reel__row', wrap);
-		rows.forEach(function (r) { var i = new Image(); i.src = r.getAttribute('data-img'); });
+		var preloaded = false;
+		wrap.addEventListener('pointerenter', function () {
+			if (preloaded) return;
+			preloaded = true;
+			rows.forEach(function (r) { var i = new Image(); i.src = r.getAttribute('data-img'); });
+		});
 		var xTo = gsap.quickTo(preview, 'x', { duration: 0.6, ease: 'power3' });
 		var yTo = gsap.quickTo(preview, 'y', { duration: 0.6, ease: 'power3' });
 		var rTo = gsap.quickTo(preview, 'rotate', { duration: 0.8, ease: 'power3' });
@@ -576,7 +650,7 @@
 	function wordmark() {
 		var w = $('.footer-wordmark span');
 		if (!w) return;
-		gsap.from(w, { yPercent: 70, opacity: 0, ease: 'none', scrollTrigger: { trigger: '.footer-wordmark', start: 'top bottom', end: 'bottom bottom', scrub: true } });
+		gsap.from(w, { yPercent: 45, ease: 'none', scrollTrigger: { trigger: '.footer-wordmark', start: 'top bottom', end: 'bottom bottom', scrub: true } });
 	}
 
 	/* Cursor, magnetic buttons, 3D tilt */

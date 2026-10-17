@@ -94,7 +94,7 @@ function prime_home_sections() {
 					array( 'name' => 'Candidate S', 'skills' => 'Node · Redis · K8s', 'score' => 88 ),
 				),
 				'chips'        => array(
-					array( 'icon' => 'zap', 'title' => '48–72h', 'text' => 'first shortlist' ),
+					array( 'icon' => 'users', 'title' => 'Specialists', 'text' => 'for every function' ),
 					array( 'icon' => 'shield', 'title' => 'Interviewed', 'text' => 'every candidate' ),
 					array( 'icon' => 'globe', 'title' => 'Pan-India', 'text' => '+ overseas' ),
 				),
@@ -184,10 +184,11 @@ function prime_home_sections() {
 				),
 			),
 		),
+		array( 'gifting', prime_gifting_settings( true ) ),
 		array(
 			'testimonials',
 			array(
-				'label_num' => '06',
+				'label_num' => '07',
 				'label'     => 'In their words',
 				'items'     => array_map(
 					function ( $t ) {
@@ -200,7 +201,7 @@ function prime_home_sections() {
 		array(
 			'geo',
 			array(
-				'label_num' => '07',
+				'label_num' => '08',
 				'label'     => 'Where we hire',
 				'title'     => 'Recruiting across India, *placing worldwide*',
 				'text'      => 'Local consultants in India’s largest hiring markets, pan-India delivery for tier-2 cities and remote roles, and overseas placements across the Gulf, UK and Europe.',
@@ -211,7 +212,7 @@ function prime_home_sections() {
 		array(
 			'jobs',
 			array(
-				'label_num' => '08',
+				'label_num' => '09',
 				'label'     => 'Featured roles',
 				'title'     => 'Latest job vacancies *worth a look*',
 				'link_text' => 'View all jobs',
@@ -222,7 +223,7 @@ function prime_home_sections() {
 		array(
 			'faq',
 			array(
-				'label_num' => '09',
+				'label_num' => '10',
 				'label'     => 'Questions, answered',
 				'title'     => 'Recruitment questions, *answered*',
 				'intro'     => 'Straight answers to what employers and candidates ask us most.',
@@ -261,7 +262,7 @@ function prime_page_sections( $key ) {
 			'title'       => $page['h1'],
 			'crumb'       => $page['menu'],
 			'lead'        => $page['lead'],
-			'btn1_text'   => $is_cand ? 'Submit your CV' : 'Get a shortlist',
+			'btn1_text'   => 'gifting' === $type ? 'Get a gifting quote' : ( $is_cand ? 'Submit your CV' : 'Get a shortlist' ),
 			'btn1_link'   => prime_link( '#enquiry' ),
 			'btn2_text'   => 'Read FAQs',
 			'btn2_link'   => prime_link( '#faq' ),
@@ -273,21 +274,22 @@ function prime_page_sections( $key ) {
 	);
 
 	if ( 'contact' === $type ) {
-		$tel   = preg_replace( '/[^0-9+]/', '', prime_opt( 'contact_phone' ) );
 		$out[] = array(
-			'contact_cards',
+			'business_card',
 			array(
-				'items' => array(
-					array( 'icon' => 'mail', 'label' => 'Email us', 'value' => prime_opt( 'contact_email' ), 'link' => prime_link( 'mailto:' . prime_opt( 'contact_email' ) ) ),
-					array( 'icon' => 'phone', 'label' => 'Call us', 'value' => prime_opt( 'contact_phone' ), 'link' => prime_link( 'tel:' . $tel ) ),
-					array( 'icon' => 'file', 'label' => 'Send your CV', 'value' => prime_opt( 'careers_email' ), 'link' => prime_link( 'mailto:' . prime_opt( 'careers_email' ) ) ),
-					array( 'icon' => 'pin', 'label' => prime_opt( 'contact_hours' ), 'value' => prime_opt( 'contact_address' ), 'link' => prime_link( '' ) ),
-				),
+				'label_num' => $num(),
+				'label'     => 'Talk to us directly',
+				'title'     => 'Your direct line to *Prime*',
+				'text'      => 'Call, WhatsApp or email our team, or save our contact card to your phone. For hiring, job search and corporate gifting enquiries.',
 			),
 		);
 	}
 
-	if ( ! empty( $page['intro'] ) ) {
+	if ( 'gifting' === $type ) {
+		$out[] = array( 'gifting', prime_gifting_settings( false ) );
+	}
+
+	if ( ! empty( $page['intro'] ) && 'gifting' !== $type ) {
 		$toc = array();
 		if ( ! empty( $page['features'] ) || 'hub' === $type ) {
 			$toc[] = array( 'text' => wp_strip_all_tags( str_replace( '*', '', $page['features_h'] ) ), 'anchor' => 'hub' === $type ? 'services-list' : 'features' );
@@ -350,13 +352,13 @@ function prime_page_sections( $key ) {
 		$out[] = array( 'roles', array( 'label_num' => $num(), 'label' => 'Roles we hire', 'roles' => implode( "\n", $page['roles'] ) ) );
 	}
 
-	if ( in_array( $type, array( 'service', 'location' ), true ) ) {
+	if ( in_array( $type, array( 'service', 'location', 'gifting' ), true ) ) {
 		$out[] = array(
 			'timeline',
 			array(
 				'label_num' => $num(),
 				'label'     => 'Process',
-				'title'     => 'location' === $type ? 'How we hire *in ' . $page['city'] . '*' : 'How we deliver *' . $page['menu'] . '*',
+				'title'     => 'location' === $type ? 'How we hire *in ' . $page['city'] . '*' : ( 'gifting' === $type ? 'From brief to doorstep in *four steps*' : 'How we deliver *' . $page['menu'] . '*' ),
 				'steps'     => prime_steps_items( isset( $page['steps'] ) ? $page['steps'] : prime_default_steps() ),
 			),
 		);
@@ -407,8 +409,12 @@ function prime_page_sections( $key ) {
 		$out[] = array( 'related', array( 'label_num' => $num(), 'label' => 'Keep exploring', 'cards' => $cards ) );
 	}
 
-	$cta          = prime_cta_defaults( $is_cand ? 'candidate' : 'employer' );
-	$cta['title'] = $is_cand ? 'Your next role *starts here.*' : 'Ready to hire? *Let’s talk.*';
+	$preset       = 'gifting' === $type ? 'gifting' : ( $is_cand ? 'candidate' : 'employer' );
+	$cta          = prime_cta_defaults( $preset );
+	$cta['title'] = 'gifting' === $type ? 'Plan your next gifting *campaign.*' : ( $is_cand ? 'Your next role *starts here.*' : 'Ready to hire? *Let’s talk.*' );
+	if ( 'contact' === $type ) {
+		$cta['show_contacts'] = ''; // Already on the business card above.
+	}
 	$out[]        = array( 'cta_form', $cta );
 
 	return $out;
@@ -449,7 +455,7 @@ function prime_cta_defaults( $preset ) {
 		'label'         => 'Start a conversation',
 		'title'         => 'Tell us who you need. *We’ll take it from there.*',
 		'lead'          => 'Share a role or your CV. A recruiter replies within one working day — no obligation, no spam.',
-		'points'        => "Interviewed shortlist, typically in 48–72 hours\nTransparent, success-based pricing\nNever a fee for job seekers",
+		'points'        => "A dedicated consultant from brief to joining\nTransparent, success-based pricing\nNever a fee for job seekers",
 		'show_contacts' => 'yes',
 		'preset'        => $preset,
 	);
@@ -481,4 +487,26 @@ function prime_widget_defaults( $widget ) {
 		unset( $out['crumb'] ); // New pages show their own title in the breadcrumb.
 	}
 	return $out;
+}
+
+/**
+ * Corporate gifting section settings (homepage version links to the page).
+ */
+function prime_gifting_settings( $home ) {
+	$g = prime_page( 'gifting' );
+	return array(
+		'label_num'   => $home ? '06' : '01',
+		'label'       => 'Corporate gifting',
+		'title'       => $g['intro_h'],
+		'text'        => implode( "\n", $g['intro'] ),
+		'list_title'  => 'Popular corporate gifts in India include:',
+		'items'       => implode( "\n", $g['gifts'] ),
+		'ideal_title' => 'Ideal for',
+		'ideal'       => implode( "\n", $g['ideal'] ),
+		'badges'      => implode( "\n", $g['badges'] ),
+		'btn_text'    => 'Get a gifting quote',
+		'btn_link'    => prime_link( '#enquiry' ),
+		'btn2_text'   => $home ? 'Explore corporate gifting' : '',
+		'btn2_link'   => prime_link( $home ? prime_url( 'gifting' ) : '' ),
+	);
 }

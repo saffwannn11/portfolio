@@ -14,19 +14,29 @@ defined( 'ABSPATH' ) || exit;
  */
 function prime_opt_defaults() {
 	return array(
-		'brand_color'     => '#2f5bff',
+		'brand_color'     => '#c9a227',
+		'modal_image'     => '',
 		'fluentform_id'   => '',
 		'form_recipient'  => '',
-		'contact_email'   => 'hello@primerecruitments.com',
-		'careers_email'   => 'careers@primerecruitments.com',
-		'contact_phone'   => '+91 00000 00000',
-		'whatsapp'        => '',
-		'contact_address' => 'Add your office address, City, State, PIN',
+		'logo_url'        => '',
+		'logo_link'       => '',
+		'logo_height'     => '46',
+		'contact_person'  => 'Fahim Dalla',
+		'contact_role'    => 'HR Manager',
+		'contact_email'   => 'hr@primerecruitments.com',
+		'careers_email'   => 'hr@primerecruitments.com',
+		'contact_phone'   => '+91 82912 22211',
+		'whatsapp'        => '918291222211',
+		'whatsapp_text'   => 'Hi Prime Recruitments, I would like to know more about your services.',
+		'website'         => 'www.primerecruitments.com',
+		'contact_address' => 'Prime Recruitments, Pan India Recruitment Solutions',
 		'contact_hours'   => 'Mon – Sat, 9:30 AM – 6:30 PM IST',
 		'header_cta_text' => 'Hire Talent',
 		'social_linkedin' => '',
 		'social_instagram'=> '',
+		'social_facebook' => '',
 		'social_x'        => '',
+		'social_youtube'  => '',
 		'stat_1_num'      => '48',
 		'stat_1_suffix'   => 'hrs',
 		'stat_1_label'    => 'Target time to first shortlist',
@@ -64,6 +74,14 @@ function prime_customize_register( $wp_customize ) {
 	);
 
 	$sections = array(
+		'prime_logo'    => array(
+			'title'  => __( 'Logo', 'prime' ),
+			'fields' => array(
+				'logo_url'    => array( __( 'Logo image (upload or paste a URL). Use a light/transparent logo – the header and footer are dark.', 'prime' ), 'image', '' ),
+				'logo_link'   => array( __( 'Logo link URL (empty = homepage)', 'prime' ), 'url', '' ),
+				'logo_height' => array( __( 'Logo height in px (24–120)', 'prime' ), 'number', '' ),
+			),
+		),
 		'prime_colors'  => array(
 			'title'  => __( 'Brand colour', 'prime' ),
 			'fields' => array(
@@ -73,17 +91,22 @@ function prime_customize_register( $wp_customize ) {
 		'prime_form'    => array(
 			'title'  => __( 'Contact form (Fluent Forms)', 'prime' ),
 			'fields' => array(
-				'fluentform_id'  => array( __( 'Fluent Forms form ID', 'prime' ), 'text', __( 'Install Fluent Forms, build your form, then paste its ID here (the number in [fluentform id="3"]). Leave empty to use the built-in form.', 'prime' ) ),
+				'fluentform_id'  => array( __( 'Fluent Forms form ID', 'prime' ), 'text', __( 'Filled in automatically: when Fluent Forms is active the theme creates a "Prime Recruitments Enquiry" form and connects it. To use a different form, paste its ID (the number in [fluentform id="3"]). Empty = built-in form.', 'prime' ) ),
 				'form_recipient' => array( __( 'Built-in form: send enquiries to', 'prime' ), 'email', __( 'Defaults to the site admin email.', 'prime' ) ),
+				'modal_image'    => array( __( 'Popup – left side image (optional, shown behind a navy overlay)', 'prime' ), 'image', '' ),
 			),
 		),
 		'prime_contact' => array(
 			'title'  => __( 'Contact details', 'prime' ),
 			'fields' => array(
+				'contact_person'  => array( __( 'Contact person (business card)', 'prime' ), 'text', '' ),
+				'contact_role'    => array( __( 'Contact person – role', 'prime' ), 'text', '' ),
+				'website'         => array( __( 'Website (shown on the business card)', 'prime' ), 'text', '' ),
 				'contact_email'   => array( __( 'Email', 'prime' ), 'email', '' ),
 				'careers_email'   => array( __( 'Careers / CV email', 'prime' ), 'email', '' ),
 				'contact_phone'   => array( __( 'Phone', 'prime' ), 'text', '' ),
-				'whatsapp'        => array( __( 'WhatsApp number (digits only, with country code)', 'prime' ), 'text', '' ),
+				'whatsapp'        => array( __( 'WhatsApp number (digits only, with country code, e.g. 918291222211)', 'prime' ), 'text', '' ),
+				'whatsapp_text'   => array( __( 'WhatsApp pre-filled message', 'prime' ), 'text', '' ),
 				'contact_address' => array( __( 'Office address', 'prime' ), 'textarea', '' ),
 				'contact_hours'   => array( __( 'Office hours', 'prime' ), 'text', '' ),
 				'header_cta_text' => array( __( 'Header button text', 'prime' ), 'text', '' ),
@@ -98,7 +121,9 @@ function prime_customize_register( $wp_customize ) {
 			'fields' => array(
 				'social_linkedin'  => array( 'LinkedIn URL', 'url', '' ),
 				'social_instagram' => array( 'Instagram URL', 'url', '' ),
+				'social_facebook'  => array( 'Facebook URL', 'url', '' ),
 				'social_x'         => array( 'X / Twitter URL', 'url', '' ),
+				'social_youtube'   => array( 'YouTube URL', 'url', '' ),
 			),
 		),
 	);
@@ -130,6 +155,10 @@ function prime_customize_register( $wp_customize ) {
 				$sanitize = 'sanitize_textarea_field';
 			} elseif ( 'color' === $type ) {
 				$sanitize = 'sanitize_hex_color';
+			} elseif ( 'image' === $type ) {
+				$sanitize = 'esc_url_raw';
+			} elseif ( 'number' === $type ) {
+				$sanitize = 'absint';
 			}
 			$wp_customize->add_setting(
 				'prime_' . $key,
@@ -140,6 +169,10 @@ function prime_customize_register( $wp_customize ) {
 			);
 			if ( 'color' === $type ) {
 				$wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'prime_' . $key, array( 'label' => $label, 'section' => $section_id ) ) );
+				continue;
+			}
+			if ( 'image' === $type ) {
+				$wp_customize->add_control( new WP_Customize_Image_Control( $wp_customize, 'prime_' . $key, array( 'label' => $label, 'section' => $section_id ) ) );
 				continue;
 			}
 			$wp_customize->add_control(
@@ -161,8 +194,8 @@ add_action( 'customize_register', 'prime_customize_register' );
  */
 function prime_brand_color_css() {
 	$c = sanitize_hex_color( prime_opt( 'brand_color' ) );
-	if ( $c && '#2f5bff' !== strtolower( $c ) ) {
-		wp_add_inline_style( 'prime-main', ':root{--blue:' . $c . ';--blue-2:' . $c . ';}' );
+	if ( $c && '#c9a227' !== strtolower( $c ) ) {
+		wp_add_inline_style( 'prime-main', ':root{--gold:' . $c . ';--blue:' . $c . ';--gold-2:' . $c . ';}' );
 	}
 }
 add_action( 'wp_enqueue_scripts', 'prime_brand_color_css', 20 );

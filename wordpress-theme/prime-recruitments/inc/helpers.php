@@ -64,22 +64,41 @@ function prime_pages_in( $group ) {
 }
 
 /**
- * Logo, or a clearly marked placeholder slot until one is uploaded in
- * Appearance → Customize → Site Identity.
+ * Brand logo. Priority:
+ * 1. Logo uploaded in Appearance → Customize → Site Identity.
+ * 2. Logo image URL pasted in Customize → Prime Recruitments → Logo.
+ * 3. Built-in Prime Recruitments logo (from the business card).
+ * The link target is configurable too (defaults to the homepage).
  */
 function prime_logo( $context = 'header' ) {
+	$link   = prime_opt( 'logo_link' ) ? prime_opt( 'logo_link' ) : home_url( '/' );
+	$height = max( 24, min( 120, (int) prime_opt( 'logo_height' ) ) );
+	$name   = get_bloginfo( 'name' );
+
 	if ( has_custom_logo() ) {
-		echo '<span class="brand-logo brand-logo--' . esc_attr( $context ) . '">';
-		the_custom_logo();
-		echo '</span>';
+		$id  = get_theme_mod( 'custom_logo' );
+		$img = wp_get_attachment_image( $id, 'full', false, array( 'class' => 'brand__img', 'alt' => $name, 'style' => 'max-height:' . $height . 'px', 'loading' => 'eager', 'decoding' => 'async' ) );
+		printf( '<a href="%1$s" class="brand brand--%2$s brand--custom" rel="home">%3$s</a>', esc_url( $link ), esc_attr( $context ), $img ); // phpcs:ignore
+		return;
+	}
+	$url = prime_opt( 'logo_url' );
+	if ( $url ) {
+		printf(
+			'<a href="%1$s" class="brand brand--%2$s brand--custom" rel="home"><img class="brand__img" src="%3$s" alt="%4$s" style="max-height:%5$dpx" loading="eager" decoding="async"></a>',
+			esc_url( $link ),
+			esc_attr( $context ),
+			esc_url( $url ),
+			esc_attr( $name ),
+			(int) $height
+		);
 		return;
 	}
 	printf(
-		'<a href="%1$s" class="brand-slot brand-slot--%2$s" aria-label="%3$s"><span class="brand-slot__mark" aria-hidden="true">P</span><span class="brand-slot__text">%4$s<em>Recruitments</em></span></a>',
-		esc_url( home_url( '/' ) ),
+		'<a href="%1$s" class="brand brand--%2$s" rel="home" aria-label="%3$s"><img class="brand__mark" src="%4$s" width="48" height="44" alt="" loading="eager" decoding="async"><span class="brand__text"><strong>PRIME</strong><em>RECRUITMENTS</em></span></a>',
+		esc_url( $link ),
 		esc_attr( $context ),
-		esc_attr( get_bloginfo( 'name' ) ),
-		esc_html__( 'Prime', 'prime' )
+		esc_attr( $name ),
+		esc_url( PRIME_URI . '/assets/img/logo-mark-light.png' )
 	);
 }
 
@@ -114,6 +133,15 @@ function prime_icon_paths() {
 		'linkedin'  => '<rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 10v7M8 7v.01M12 17v-4a2 2 0 0 1 4 0v4M12 10v7"/>',
 		'instagram' => '<rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5v.01"/>',
 		'x'         => '<path d="M4 4l16 16M20 4 4 20"/>',
+		'facebook'  => '<path d="M14 8h3V4h-3a4 4 0 0 0-4 4v3H7v4h3v6h4v-6h3l1-4h-4V8Z"/>',
+		'youtube'   => '<rect x="2.5" y="5" width="19" height="14" rx="4"/><path d="m10 9 5 3-5 3Z"/>',
+		'whatsapp'  => '<path d="M4 20l1.3-3.9A8 8 0 1 1 8 18.7Z"/><path d="M9 9.5c0 3 2.5 5.5 5.5 5.5l1-1.5-2-1-1 1a4 4 0 0 1-2-2l1-1-1-2Z"/>',
+		'gift'      => '<rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13M5 12v9h14v-9M12 8S10.5 3.5 8 4.5 8.5 8 12 8ZM12 8s1.5-4.5 4-3.5S15.5 8 12 8Z"/>',
+		'truck'     => '<path d="M3 6h11v10H3ZM14 9h4l3 3v4h-7"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/>',
+		'star'      => '<path d="m12 3 2.7 5.6 6.1.8-4.5 4.2 1.1 6.1L12 16.8l-5.4 2.9 1.1-6.1-4.5-4.2 6.1-.8Z"/>',
+		'download'  => '<path d="M12 4v11M7 10l5 5 5-5M5 20h14"/>',
+		'palette'   => '<path d="M12 3a9 9 0 1 0 0 18c1.2 0 1.6-1 1.2-1.9-.5-1 .2-2.1 1.3-2.1H17a4 4 0 0 0 4-4c0-5.5-4-10-9-10Z"/><circle cx="7.5" cy="11" r="1"/><circle cx="10" cy="7" r="1"/><circle cx="15" cy="7.5" r="1"/>',
+		'calendar'  => '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',
 	);
 }
 
@@ -167,10 +195,10 @@ function prime_heading_html( $text ) {
  */
 function prime_socials() {
 	$out = '';
-	foreach ( array( 'linkedin', 'instagram', 'x' ) as $net ) {
+	foreach ( array( 'linkedin', 'instagram', 'facebook', 'x', 'youtube' ) as $net ) {
 		$url = prime_opt( 'social_' . $net );
 		if ( $url ) {
-			$out .= sprintf( '<a href="%1$s" target="_blank" rel="noopener" aria-label="%2$s">%3$s</a>', esc_url( $url ), esc_attr( ucfirst( $net ) ), prime_icon( $net, 18 ) );
+			$out .= sprintf( '<a href="%1$s" target="_blank" rel="noopener" aria-label="%2$s">%3$s</a>', esc_url( $url ), esc_attr( 'x' === $net ? 'X (Twitter)' : ( 'youtube' === $net ? 'YouTube' : ( 'linkedin' === $net ? 'LinkedIn' : ucfirst( $net ) ) ) ), prime_icon( $net, 18 ) );
 		}
 	}
 	return $out;
@@ -227,4 +255,38 @@ function prime_lines( $text ) {
  */
 function prime_link( $url ) {
 	return array( 'url' => $url, 'is_external' => '', 'nofollow' => '' );
+}
+
+/**
+ * WhatsApp chat URL with the pre-filled message.
+ */
+function prime_whatsapp_url( $text = '' ) {
+	$num = preg_replace( '/\D/', '', (string) prime_opt( 'whatsapp' ) );
+	if ( ! $num ) {
+		return '';
+	}
+	$text = $text ? $text : prime_opt( 'whatsapp_text' );
+	return 'https://wa.me/' . $num . ( $text ? '?text=' . rawurlencode( $text ) : '' );
+}
+
+/**
+ * tel: URL for the main phone number.
+ */
+function prime_tel_url() {
+	$tel = preg_replace( '/[^0-9+]/', '', (string) prime_opt( 'contact_phone' ) );
+	return $tel ? 'tel:' . $tel : '';
+}
+
+/**
+ * Logo mark used by the preloader: the uploaded/pasted logo if any,
+ * otherwise the built-in light mark.
+ */
+function prime_mark_url() {
+	if ( has_custom_logo() ) {
+		$img = wp_get_attachment_image_url( get_theme_mod( 'custom_logo' ), 'medium' );
+		if ( $img ) {
+			return $img;
+		}
+	}
+	return prime_opt( 'logo_url' ) ? prime_opt( 'logo_url' ) : PRIME_URI . '/assets/img/logo-mark-light.png';
 }

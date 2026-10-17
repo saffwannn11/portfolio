@@ -125,7 +125,7 @@ function prime_sec_statement( $s ) {
 			<p class="statement__text" data-scrub-text><?php echo esc_html( prime_v( $s, 'text' ) ); ?></p>
 			<div class="statement__foot">
 				<div class="statement__sig" data-anim="fade-up">
-					<span class="brand-slot__mark" aria-hidden="true">P</span>
+					<img class="statement__mark" src="<?php echo esc_url( PRIME_URI . '/assets/img/logo-mark.png' ); ?>" width="44" height="40" alt="" loading="lazy" decoding="async">
 					<span><strong><?php echo esc_html( prime_v( $s, 'sig_title' ) ); ?></strong><small><?php echo esc_html( prime_v( $s, 'sig_text' ) ); ?></small></span>
 				</div>
 				<?php if ( prime_v( $s, 'link_text' ) ) : ?><a class="link-arrow" <?php echo prime_link_attrs( prime_v( $s, 'link' ) ); // phpcs:ignore ?> data-anim="fade-up"><?php echo esc_html( $s['link_text'] ); ?> <?php echo prime_icon( 'arrow', 16 ); // phpcs:ignore ?></a><?php endif; ?>
@@ -763,6 +763,123 @@ function prime_sec_related( $s ) {
 					</a>
 				<?php endforeach; ?>
 			</div>
+		</div>
+	</section>
+	<?php
+}
+
+/* ==========================================================================
+   CORPORATE GIFTING + BUSINESS CARD
+   ========================================================================== */
+
+function prime_sec_gifting( $s ) {
+	$items  = prime_lines( prime_v( $s, 'items' ) );
+	$ideal  = prime_lines( prime_v( $s, 'ideal' ) );
+	$badges = prime_lines( prime_v( $s, 'badges' ) );
+	$paras  = prime_lines( prime_v( $s, 'text' ) );
+	$photo  = prime_media_url( prime_v( $s, 'image' ) );
+	$icons  = array( 'layers', 'palette', 'star', 'truck' );
+	?>
+	<section class="section gifting prime-sec" id="<?php echo esc_attr( prime_v( $s, 'anchor', 'corporate-gifting' ) ); ?>">
+		<div class="container gifting__layout">
+			<div class="gifting__visual" data-anim="rise">
+				<?php if ( $photo ) : ?>
+					<img class="gifting__photo" src="<?php echo esc_url( $photo ); ?>" alt="<?php echo esc_attr( wp_strip_all_tags( str_replace( '*', '', prime_v( $s, 'title' ) ) ) ); ?>" loading="lazy" decoding="async">
+				<?php else : ?>
+					<div class="gift-art" aria-hidden="true">
+						<span class="gift-art__glow"></span>
+						<svg class="gift-art__box" viewBox="0 0 240 240">
+							<defs>
+								<linearGradient id="gaGold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f1d27a"/><stop offset="1" stop-color="#b8901c"/></linearGradient>
+								<linearGradient id="gaNavy" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fbf7ee"/><stop offset="1" stop-color="#ddd2b9"/></linearGradient>
+							</defs>
+							<rect x="44" y="104" width="152" height="112" rx="10" fill="url(#gaNavy)"/>
+							<rect x="34" y="78" width="172" height="36" rx="9" fill="#f1ead9"/>
+							<rect x="108" y="78" width="24" height="138" fill="url(#gaGold)"/>
+							<path d="M120 78c-10-26-46-38-52-18-5 16 26 20 52 18Z" fill="none" stroke="url(#gaGold)" stroke-width="10" stroke-linejoin="round"/>
+							<path d="M120 78c10-26 46-38 52-18 5 16-26 20-52 18Z" fill="none" stroke="url(#gaGold)" stroke-width="10" stroke-linejoin="round"/>
+							<circle cx="120" cy="78" r="10" fill="#f1d27a"/>
+						</svg>
+						<span class="gift-art__chip gift-art__chip--1"><?php echo prime_icon( 'palette', 16 ); // phpcs:ignore ?><span><strong><?php esc_html_e( 'Your logo', 'prime' ); ?></strong><small><?php esc_html_e( 'on every gift', 'prime' ); ?></small></span></span>
+						<span class="gift-art__chip gift-art__chip--2"><?php echo prime_icon( 'truck', 16 ); // phpcs:ignore ?><span><strong><?php esc_html_e( 'Pan-India', 'prime' ); ?></strong><small><?php esc_html_e( 'delivery', 'prime' ); ?></small></span></span>
+						<svg class="gift-art__stamp" viewBox="0 0 120 120"><defs><path id="gaCircle" d="M60 60m-46 0a46 46 0 1 1 92 0a46 46 0 1 1-92 0"/></defs><text><textPath href="#gaCircle">CUSTOMISED • BULK ORDERS • PAN-INDIA • </textPath></text></svg>
+					</div>
+				<?php endif; ?>
+			</div>
+			<div class="gifting__copy">
+				<?php prime_label( prime_v( $s, 'label_num' ), prime_v( $s, 'label', __( 'Corporate gifting', 'prime' ) ) ); ?>
+				<h2 class="h2" data-split><?php echo prime_h( prime_v( $s, 'title' ) ); // phpcs:ignore ?></h2>
+				<div class="gifting__text" data-anim="fade-up"><?php foreach ( $paras as $p ) : ?><p><?php echo esc_html( $p ); ?></p><?php endforeach; ?></div>
+				<?php if ( $items ) : ?>
+					<h3 class="gifting__subtitle"><?php echo esc_html( prime_v( $s, 'list_title', __( 'Popular corporate gifts in India include:', 'prime' ) ) ); ?></h3>
+					<ul class="gift-list" data-anim="stagger"><?php foreach ( $items as $it ) : ?><li><?php echo prime_icon( 'check', 16 ); // phpcs:ignore ?><span><?php echo esc_html( $it ); ?></span></li><?php endforeach; ?></ul>
+				<?php endif; ?>
+				<?php if ( $ideal ) : ?>
+					<div class="gifting__ideal" data-anim="fade-up"><span class="mono"><?php echo esc_html( prime_v( $s, 'ideal_title', __( 'Ideal for', 'prime' ) ) ); ?></span><ul><?php foreach ( $ideal as $i ) : ?><li><?php echo esc_html( $i ); ?></li><?php endforeach; ?></ul></div>
+				<?php endif; ?>
+				<?php if ( $badges ) : ?>
+					<ul class="gift-badges" data-anim="stagger"><?php foreach ( $badges as $k => $b ) : ?><li><?php echo prime_icon( $icons[ $k % 4 ], 18 ); // phpcs:ignore ?><?php echo esc_html( $b ); ?></li><?php endforeach; ?></ul>
+				<?php endif; ?>
+				<div class="gifting__actions" data-anim="fade-up">
+					<?php if ( prime_v( $s, 'btn_text' ) ) : ?><a class="btn btn--dark btn--lg" <?php echo prime_link_attrs( prime_v( $s, 'btn_link', '#enquiry' ) ); // phpcs:ignore ?> data-modal="enquiry" data-preset="gifting" data-magnetic><span><?php echo esc_html( $s['btn_text'] ); ?></span><?php echo prime_icon( 'gift', 18 ); // phpcs:ignore ?></a><?php endif; ?>
+					<?php if ( prime_v( $s, 'btn2_text' ) ) : ?><a class="link-arrow" <?php echo prime_link_attrs( prime_v( $s, 'btn2_link' ) ); // phpcs:ignore ?>><?php echo esc_html( $s['btn2_text'] ); ?> <?php echo prime_icon( 'arrow', 16 ); // phpcs:ignore ?></a><?php endif; ?>
+				</div>
+			</div>
+		</div>
+	</section>
+	<?php
+}
+
+/**
+ * The business card, recreated in HTML (also used inside the enquiry popup).
+ */
+function prime_business_card_html( $s = array() ) {
+	$name  = prime_v( $s, 'person', prime_opt( 'contact_person' ) );
+	$role  = prime_v( $s, 'role', prime_opt( 'contact_role' ) );
+	$email = prime_opt( 'contact_email' );
+	$phone = prime_opt( 'contact_phone' );
+	$site  = prime_opt( 'website' );
+	$addr  = prime_opt( 'contact_address' );
+	ob_start();
+	?>
+	<div class="bcard" data-tilt>
+		<div class="bcard__brand">
+			<img src="<?php echo esc_url( PRIME_URI . '/assets/img/logo-mark.png' ); ?>" width="96" height="88" alt="" loading="lazy" decoding="async">
+			<strong>PRIME<br>RECRUITMENTS</strong>
+			<small><?php esc_html_e( 'Connecting talent with opportunity', 'prime' ); ?></small>
+		</div>
+		<div class="bcard__info">
+			<?php if ( $name ) : ?><p class="bcard__name"><?php echo esc_html( $name ); ?></p><?php endif; ?>
+			<?php if ( $role ) : ?><p class="bcard__role"><?php echo esc_html( $role ); ?></p><?php endif; ?>
+			<ul>
+				<?php if ( $email ) : ?><li><span><?php echo prime_icon( 'mail', 13 ); // phpcs:ignore ?></span><a href="mailto:<?php echo esc_attr( $email ); ?>"><?php echo esc_html( $email ); ?></a></li><?php endif; ?>
+				<?php if ( $phone ) : ?><li><span><?php echo prime_icon( 'phone', 13 ); // phpcs:ignore ?></span><a href="<?php echo esc_attr( prime_tel_url() ); ?>"><?php echo esc_html( $phone ); ?></a></li><?php endif; ?>
+				<?php if ( $site ) : ?><li><span><?php echo prime_icon( 'globe', 13 ); // phpcs:ignore ?></span><a href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php echo esc_html( $site ); ?></a></li><?php endif; ?>
+				<?php if ( $addr ) : ?><li><span><?php echo prime_icon( 'pin', 13 ); // phpcs:ignore ?></span><span><?php echo esc_html( $addr ); ?></span></li><?php endif; ?>
+			</ul>
+		</div>
+	</div>
+	<?php
+	return ob_get_clean();
+}
+
+function prime_sec_business_card( $s ) {
+	?>
+	<section class="section bcard-section prime-sec" id="<?php echo esc_attr( prime_v( $s, 'anchor', 'business-card' ) ); ?>">
+		<div class="container bcard-section__layout">
+			<div class="bcard-section__copy">
+				<?php prime_label( prime_v( $s, 'label_num' ), prime_v( $s, 'label', __( 'Talk to us directly', 'prime' ) ) ); ?>
+				<h2 class="h2" data-split><?php echo prime_h( prime_v( $s, 'title', 'Your direct line to *Prime*' ) ); // phpcs:ignore ?></h2>
+				<p class="muted" data-anim="fade-up"><?php echo esc_html( prime_v( $s, 'text' ) ); ?></p>
+				<div class="bcard-actions" data-anim="stagger">
+					<?php if ( prime_tel_url() ) : ?><a class="btn btn--dark" href="<?php echo esc_attr( prime_tel_url() ); ?>"><?php echo prime_icon( 'phone', 18 ); // phpcs:ignore ?><span><?php esc_html_e( 'Call now', 'prime' ); ?></span></a><?php endif; ?>
+					<?php if ( prime_whatsapp_url() ) : ?><a class="btn btn--whatsapp" href="<?php echo esc_url( prime_whatsapp_url() ); ?>" target="_blank" rel="noopener"><?php echo prime_icon( 'whatsapp', 18 ); // phpcs:ignore ?><span>WhatsApp</span></a><?php endif; ?>
+					<a class="btn btn--outline" href="mailto:<?php echo esc_attr( prime_opt( 'contact_email' ) ); ?>"><?php echo prime_icon( 'mail', 18 ); // phpcs:ignore ?><span><?php esc_html_e( 'Email', 'prime' ); ?></span></a>
+					<a class="btn btn--outline" href="<?php echo esc_url( home_url( '/prime-contact.vcf' ) ); ?>" download><?php echo prime_icon( 'download', 18 ); // phpcs:ignore ?><span><?php esc_html_e( 'Save contact', 'prime' ); ?></span></a>
+				</div>
+				<?php if ( prime_socials() ) : ?><div class="bcard-social" data-anim="fade-up"><span class="mono"><?php esc_html_e( 'Follow us', 'prime' ); ?></span><div class="footer-social"><?php echo prime_socials(); // phpcs:ignore ?></div></div><?php endif; ?>
+			</div>
+			<div class="bcard-section__card" data-anim="rise"><?php echo prime_business_card_html( $s ); // phpcs:ignore ?></div>
 		</div>
 	</section>
 	<?php

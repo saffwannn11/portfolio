@@ -114,7 +114,7 @@ function prime_meta_tags() {
 	printf( '<meta property="og:url" content="%s">' . "\n", esc_url( $seo['url'] ) );
 	printf( '<meta property="og:site_name" content="%s">' . "\n", esc_attr( get_bloginfo( 'name' ) ) );
 	echo '<meta property="og:locale" content="en_IN">' . "\n";
-	$img = is_singular() && has_post_thumbnail() ? get_the_post_thumbnail_url( null, 'large' ) : '';
+	$img = is_singular() && has_post_thumbnail() ? get_the_post_thumbnail_url( null, 'large' ) : PRIME_URI . '/screenshot.png';
 	if ( $img ) {
 		printf( '<meta property="og:image" content="%s">' . "\n", esc_url( $img ) );
 	}
@@ -149,11 +149,19 @@ function prime_schema() {
 			'areaServed'  => array( '@type' => 'Country', 'name' => 'India' ),
 			'knowsAbout'  => array( 'Recruitment', 'Executive search', 'IT recruitment', 'Contract staffing', 'Recruitment process outsourcing', 'Bulk hiring', 'Healthcare recruitment', 'Overseas recruitment' ),
 		);
-		$logo_id = get_theme_mod( 'custom_logo' );
-		if ( $logo_id ) {
-			$org['logo'] = wp_get_attachment_image_url( $logo_id, 'full' );
-		}
-		$same = array_filter( array( prime_opt( 'social_linkedin' ), prime_opt( 'social_instagram' ), prime_opt( 'social_x' ) ) );
+		$logo_id     = get_theme_mod( 'custom_logo' );
+		$org['logo'] = $logo_id ? wp_get_attachment_image_url( $logo_id, 'full' ) : ( prime_opt( 'logo_url' ) ? prime_opt( 'logo_url' ) : PRIME_URI . '/assets/img/logo-mark.png' );
+		$org['slogan']       = 'Connecting talent with opportunity';
+		$org['contactPoint'] = array(
+			'@type'             => 'ContactPoint',
+			'contactType'       => 'customer service',
+			'telephone'         => prime_opt( 'contact_phone' ),
+			'email'             => prime_opt( 'contact_email' ),
+			'areaServed'        => 'IN',
+			'availableLanguage' => array( 'English', 'Hindi' ),
+		);
+		$org['makesOffer'] = array( '@type' => 'Offer', 'itemOffered' => array( '@type' => 'Service', 'name' => 'Corporate gifting', 'url' => prime_url( 'gifting' ) ) );
+		$same = array_filter( array( prime_opt( 'social_linkedin' ), prime_opt( 'social_instagram' ), prime_opt( 'social_facebook' ), prime_opt( 'social_x' ), prime_opt( 'social_youtube' ) ) );
 		if ( $same ) {
 			$org['sameAs'] = array_values( $same );
 		}
@@ -213,7 +221,7 @@ function prime_schema() {
 		}
 	}
 
-	if ( $page && in_array( $page['type'], array( 'service', 'location' ), true ) ) {
+	if ( $page && in_array( $page['type'], array( 'service', 'location', 'gifting' ), true ) ) {
 		$areas = isset( $page['cities'] ) ? $page['cities'] : prime_default_cities();
 		$graph[] = array(
 			'@type'       => 'Service',
@@ -342,3 +350,39 @@ function prime_llms_txt() {
 	exit;
 }
 add_action( 'template_redirect', 'prime_llms_txt', 0 );
+
+/* --------------------------------------------------------------------------
+ * /prime-contact.vcf – "Save contact" card for phones (business card)
+ * ------------------------------------------------------------------------ */
+
+function prime_vcard() {
+	$path      = isset( $_SERVER['REQUEST_URI'] ) ? wp_parse_url( esc_url_raw( wp_unslash( $_SERVER['REQUEST_URI'] ) ), PHP_URL_PATH ) : '';
+	$home_path = wp_parse_url( home_url( '/' ), PHP_URL_PATH );
+	if ( rtrim( (string) $home_path, '/' ) . '/prime-contact.vcf' !== $path ) {
+		return;
+	}
+	$clean = function ( $v ) {
+		return str_replace( array( "\r", "\n", ';', ',' ), array( '', ' ', '\\;', '\\,' ), (string) $v );
+	};
+	$name  = trim( prime_opt( 'contact_person' ) );
+	$parts = explode( ' ', $name, 2 );
+	$lines = array(
+		'BEGIN:VCARD',
+		'VERSION:3.0',
+		'N:' . $clean( isset( $parts[1] ) ? $parts[1] : '' ) . ';' . $clean( $parts[0] ) . ';;;',
+		'FN:' . $clean( $name ? $name : get_bloginfo( 'name' ) ),
+		'ORG:' . $clean( get_bloginfo( 'name' ) ),
+		'TITLE:' . $clean( prime_opt( 'contact_role' ) ),
+		'TEL;TYPE=WORK,VOICE:' . preg_replace( '/[^0-9+]/', '', prime_opt( 'contact_phone' ) ),
+		'EMAIL;TYPE=WORK,INTERNET:' . $clean( prime_opt( 'contact_email' ) ),
+		'URL:' . home_url( '/' ),
+		'ADR;TYPE=WORK:;;' . $clean( prime_opt( 'contact_address' ) ) . ';;;;India',
+		'END:VCARD',
+	);
+	status_header( 200 );
+	header( 'Content-Type: text/vcard; charset=utf-8' );
+	header( 'Content-Disposition: attachment; filename="prime-recruitments.vcf"' );
+	echo implode( "\r\n", $lines ) . "\r\n"; // phpcs:ignore
+	exit;
+}
+add_action( 'template_redirect', 'prime_vcard', 0 );

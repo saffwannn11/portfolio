@@ -240,4 +240,6 @@ class Prime_Widget_Features extends Prime_Elementor_Widget { protected $prime_ke
 class Prime_Widget_Roles extends Prime_Elementor_Widget { protected $prime_key = 'roles'; }
 class Prime_Widget_Timeline extends Prime_Elementor_Widget { protected $prime_key = 'timeline'; }
 class Prime_Widget_Facts extends Prime_Elementor_Widget { protected $prime_key = 'facts'; }
+class Prime_Widget_Gifting extends Prime_Elementor_Widget { protected $prime_key = 'gifting'; }
+class Prime_Widget_Business_Card extends Prime_Elementor_Widget { protected $prime_key = 'business_card'; }
 class Prime_Widget_Related extends Prime_Elementor_Widget { protected $prime_key = 'related'; }

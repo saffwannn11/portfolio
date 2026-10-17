@@ -164,7 +164,7 @@ function prime_widget_schemas() {
 				'lead'           => array( 'textarea', 'Text' ),
 				'points'         => array( 'textarea', 'Checklist (one per line)' ),
 				'show_contacts'  => array( 'switcher', 'Show email & phone' ),
-				'preset'         => array( 'select', 'Form opens on', array( 'options' => array( 'employer' => 'I’m hiring', 'candidate' => 'I’m looking for a job' ) ) ),
+				'preset'         => array( 'select', 'Form opens on', array( 'options' => array( 'employer' => 'I’m hiring', 'candidate' => 'I need a job', 'gifting' => 'Corporate gifting' ) ) ),
 				'form_shortcode' => array( 'text', 'Form shortcode (optional – e.g. [fluentform id="3"]). Empty = Customizer form.' ),
 			),
 		),
@@ -243,6 +243,32 @@ function prime_widget_schemas() {
 				'areas_title'     => array( 'text', 'Areas – heading' ),
 				'areas'           => array( 'textarea', 'Areas (one per line)' ),
 				'links'           => array( 'repeater', 'Area links', array( 'title' => 'text', 'fields' => array( 'text' => array( 'text', 'Text' ), 'link' => array( 'url', 'Link' ) ) ) ),
+			),
+		),
+		'gifting'         => array(
+			'title'  => 'Corporate gifting showcase',
+			'icon'   => 'eicon-gallery-justified',
+			'fields' => $label + $title + $anchor + array(
+				'text'        => array( 'textarea', 'Text (one paragraph per line)' ),
+				'image'       => array( 'media', 'Left image (optional – empty shows the built-in gift illustration)' ),
+				'list_title'  => array( 'text', 'List heading' ),
+				'items'       => array( 'textarea', 'Gift list (one per line)' ),
+				'ideal_title' => array( 'text', '"Ideal for" label' ),
+				'ideal'       => array( 'textarea', 'Ideal for (one per line)' ),
+				'badges'      => array( 'textarea', 'Badges (one per line)' ),
+				'btn_text'    => array( 'text', 'Button text (opens the enquiry popup)' ),
+				'btn_link'    => array( 'url', 'Button link (#enquiry = popup)' ),
+				'btn2_text'   => array( 'text', 'Secondary link text' ),
+				'btn2_link'   => array( 'url', 'Secondary link' ),
+			),
+		),
+		'business_card'   => array(
+			'title'  => 'Business card + quick contact',
+			'icon'   => 'eicon-person',
+			'fields' => $label + $title + $anchor + array(
+				'text'   => array( 'textarea', 'Text' ),
+				'person' => array( 'text', 'Name on card (empty = Customizer contact person)' ),
+				'role'   => array( 'text', 'Role on card (empty = Customizer role)' ),
 			),
 		),
 		'related'         => array(
@@ -386,6 +412,7 @@ function prime_build_elementor_data( $sections ) {
 function prime_write_elementor_layout( $post_id, $sections ) {
 	$json = wp_json_encode( prime_build_elementor_data( $sections ) );
 	update_post_meta( $post_id, '_elementor_data', wp_slash( $json ) );
+	update_post_meta( $post_id, '_prime_layout_sig', md5( $json ) );
 	update_post_meta( $post_id, '_elementor_edit_mode', 'builder' );
 	update_post_meta( $post_id, '_elementor_template_type', 'wp-page' );
 	update_post_meta( $post_id, '_elementor_version', defined( 'ELEMENTOR_VERSION' ) ? ELEMENTOR_VERSION : '3.25.0' );

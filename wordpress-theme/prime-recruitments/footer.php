@@ -13,19 +13,11 @@ $phone_href = preg_replace( '/[^0-9+]/', '', prime_opt( 'contact_phone' ) );
 <footer class="site-footer">
 	<div class="site-footer__glow" aria-hidden="true"></div>
 	<div class="container">
-		<div class="footer-cta" data-anim="fade-up">
-			<h2 class="footer-cta__title"><?php echo wp_kses_post( prime_heading_html( 'Ready when *you are.*' ) ); ?></h2>
-			<div class="footer-cta__actions">
-				<a class="btn btn--primary" href="<?php echo esc_url( prime_url( 'employers' ) ); ?>" data-magnetic><span><?php esc_html_e( 'Hire talent', 'prime' ); ?></span><?php echo prime_icon( 'arrow', 18 ); // phpcs:ignore ?></a>
-				<a class="btn btn--ghost" href="<?php echo esc_url( prime_url( 'job-seekers' ) ); ?>" data-magnetic><span><?php esc_html_e( 'Find a job', 'prime' ); ?></span><?php echo prime_icon( 'arrow', 18 ); // phpcs:ignore ?></a>
-			</div>
-		</div>
-
 		<div class="footer-grid">
 			<div class="footer-brand">
 				<?php prime_logo( 'footer' ); ?>
 				<p><?php echo esc_html( prime_home_seo()['meta_desc'] ); ?></p>
-				<div class="footer-social"><?php echo prime_socials(); // phpcs:ignore ?></div>
+				<?php if ( prime_socials() ) : ?><div class="footer-social"><?php echo prime_socials(); // phpcs:ignore ?></div><?php endif; ?>
 			</div>
 			<div>
 				<h3 class="footer-title"><?php esc_html_e( 'Services', 'prime' ); ?></h3>
@@ -38,7 +30,7 @@ $phone_href = preg_replace( '/[^0-9+]/', '', prime_opt( 'contact_phone' ) );
 			<div>
 				<h3 class="footer-title"><?php esc_html_e( 'Company', 'prime' ); ?></h3>
 				<ul class="footer-links">
-					<?php foreach ( array( 'about', 'services', 'industries', 'jobs', 'employers', 'job-seekers', 'contact' ) as $key ) : ?>
+					<?php foreach ( array( 'about', 'services', 'gifting', 'industries', 'jobs', 'employers', 'job-seekers', 'contact' ) as $key ) : ?>
 						<li><a href="<?php echo esc_url( prime_url( $key ) ); ?>"><?php echo esc_html( prime_page( $key )['menu'] ); ?></a></li>
 					<?php endforeach; ?>
 				</ul>
@@ -54,6 +46,7 @@ $phone_href = preg_replace( '/[^0-9+]/', '', prime_opt( 'contact_phone' ) );
 				<ul class="footer-contact">
 					<li><?php echo prime_icon( 'mail', 16 ); // phpcs:ignore ?><a href="mailto:<?php echo esc_attr( prime_opt( 'contact_email' ) ); ?>"><?php echo esc_html( prime_opt( 'contact_email' ) ); ?></a></li>
 					<li><?php echo prime_icon( 'phone', 16 ); // phpcs:ignore ?><a href="tel:<?php echo esc_attr( $phone_href ); ?>"><?php echo esc_html( prime_opt( 'contact_phone' ) ); ?></a></li>
+					<?php if ( prime_whatsapp_url() ) : ?><li><?php echo prime_icon( 'whatsapp', 16 ); // phpcs:ignore ?><a href="<?php echo esc_url( prime_whatsapp_url() ); ?>" target="_blank" rel="noopener"><?php esc_html_e( 'Chat on WhatsApp', 'prime' ); ?></a></li><?php endif; ?>
 					<li><?php echo prime_icon( 'pin', 16 ); // phpcs:ignore ?><span><?php echo esc_html( prime_opt( 'contact_address' ) ); ?></span></li>
 				</ul>
 			</div>
@@ -87,11 +80,22 @@ $phone_href = preg_replace( '/[^0-9+]/', '', prime_opt( 'contact_phone' ) );
 	</div>
 </footer>
 
-<?php if ( prime_opt( 'whatsapp' ) ) : ?>
-	<a class="whatsapp-fab" href="https://wa.me/<?php echo esc_attr( preg_replace( '/\D/', '', prime_opt( 'whatsapp' ) ) ); ?>" target="_blank" rel="noopener" aria-label="WhatsApp">
-		<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2c-1.5 0-3-.4-4.3-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.4.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.4.1-.7.3-.2.3-.9.9-.9 2.2s.9 2.5 1 2.7c.1.2 1.8 2.8 4.4 3.9 1.6.7 2.3.8 3.1.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3Z"/></svg>
-	</a>
-<?php endif; ?>
+<?php get_template_part( 'template-parts/enquiry-modal' ); ?>
+
+<div class="fab" aria-label="<?php esc_attr_e( 'Quick contact', 'prime' ); ?>">
+	<?php if ( prime_whatsapp_url() ) : ?>
+		<a class="fab__btn fab__btn--wa" href="<?php echo esc_url( prime_whatsapp_url() ); ?>" target="_blank" rel="noopener" aria-label="<?php esc_attr_e( 'Chat on WhatsApp', 'prime' ); ?>"><svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2c-1.5 0-3-.4-4.3-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.4.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.4.1-.7.3-.2.3-.9.9-.9 2.2s.9 2.5 1 2.7c.1.2 1.8 2.8 4.4 3.9 1.6.7 2.3.8 3.1.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3Z"/></svg><span class="fab__tip"><?php esc_html_e( 'WhatsApp us', 'prime' ); ?></span></a>
+	<?php endif; ?>
+	<?php if ( prime_tel_url() ) : ?>
+		<a class="fab__btn fab__btn--call" href="<?php echo esc_attr( prime_tel_url() ); ?>" aria-label="<?php esc_attr_e( 'Call us', 'prime' ); ?>"><?php echo prime_icon( 'phone', 22 ); // phpcs:ignore ?><span class="fab__tip"><?php echo esc_html( prime_opt( 'contact_phone' ) ); ?></span></a>
+	<?php endif; ?>
+</div>
+
+<nav class="action-bar" aria-label="<?php esc_attr_e( 'Quick actions', 'prime' ); ?>">
+	<?php if ( prime_tel_url() ) : ?><a href="<?php echo esc_attr( prime_tel_url() ); ?>"><?php echo prime_icon( 'phone', 20 ); // phpcs:ignore ?><span><?php esc_html_e( 'Call', 'prime' ); ?></span></a><?php endif; ?>
+	<?php if ( prime_whatsapp_url() ) : ?><a href="<?php echo esc_url( prime_whatsapp_url() ); ?>" target="_blank" rel="noopener"><?php echo prime_icon( 'whatsapp', 20 ); // phpcs:ignore ?><span>WhatsApp</span></a><?php endif; ?>
+	<a class="action-bar__main" href="<?php echo esc_url( prime_url( 'contact' ) ); ?>#enquiry" data-modal="enquiry"><?php echo prime_icon( 'mail', 20 ); // phpcs:ignore ?><span><?php esc_html_e( 'Enquire', 'prime' ); ?></span></a>
+</nav>
 
 <button class="to-top" type="button" aria-label="<?php esc_attr_e( 'Back to top', 'prime' ); ?>">
 	<svg viewBox="0 0 48 48" aria-hidden="true"><circle class="to-top__track" cx="24" cy="24" r="21"/><circle class="to-top__ring" cx="24" cy="24" r="21"/></svg>

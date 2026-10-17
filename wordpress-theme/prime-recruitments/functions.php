@@ -7,7 +7,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'PRIME_VERSION', '1.1.0' );
+define( 'PRIME_VERSION', '1.2.0' );
 define( 'PRIME_DIR', get_template_directory() );
 define( 'PRIME_URI', get_template_directory_uri() );
 
@@ -19,6 +19,7 @@ require PRIME_DIR . '/inc/elementor.php';
 require PRIME_DIR . '/inc/customizer.php';
 require PRIME_DIR . '/inc/seo.php';
 require PRIME_DIR . '/inc/form.php';
+require PRIME_DIR . '/inc/fluentform.php';
 require PRIME_DIR . '/inc/setup.php';
 
 /**
@@ -54,23 +55,25 @@ add_action( 'after_setup_theme', 'prime_theme_setup' );
 function prime_enqueue_assets() {
 	wp_enqueue_style(
 		'prime-fonts',
-		'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap',
+		'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Instrument+Serif:ital@1&family=JetBrains+Mono:wght@400&display=swap',
 		array(),
 		null
 	);
 	wp_enqueue_style( 'prime-main', PRIME_URI . '/assets/css/main.css', array(), PRIME_VERSION );
 
+	// Deferred, footer-loaded scripts keep the first paint fast.
 	$vendor = PRIME_URI . '/assets/js/vendor/';
-	wp_enqueue_script( 'prime-gsap', $vendor . 'gsap.min.js', array(), '3.13.0', true );
-	wp_enqueue_script( 'prime-scrolltrigger', $vendor . 'ScrollTrigger.min.js', array( 'prime-gsap' ), '3.13.0', true );
-	wp_enqueue_script( 'prime-splittext', $vendor . 'SplitText.min.js', array( 'prime-gsap' ), '3.13.0', true );
-	wp_enqueue_script( 'prime-lenis', $vendor . 'lenis.min.js', array(), '1.3.4', true );
+	$defer  = array( 'in_footer' => true, 'strategy' => 'defer' );
+	wp_enqueue_script( 'prime-gsap', $vendor . 'gsap.min.js', array(), '3.13.0', $defer );
+	wp_enqueue_script( 'prime-scrolltrigger', $vendor . 'ScrollTrigger.min.js', array( 'prime-gsap' ), '3.13.0', $defer );
+	wp_enqueue_script( 'prime-splittext', $vendor . 'SplitText.min.js', array( 'prime-gsap' ), '3.13.0', $defer );
+	wp_enqueue_script( 'prime-lenis', $vendor . 'lenis.min.js', array(), '1.3.4', $defer );
 	wp_enqueue_script(
 		'prime-main',
 		PRIME_URI . '/assets/js/main.js',
 		array( 'prime-gsap', 'prime-scrolltrigger', 'prime-splittext', 'prime-lenis' ),
 		PRIME_VERSION,
-		true
+		$defer
 	);
 
 	if ( prime_opt( 'fluentform_id' ) ) {
