@@ -382,7 +382,7 @@ li:hover > a .chev { transform: rotate(225deg) translateY(-1px); }
 .float-chip strong { display: block; font-size: 14px; line-height: 1.1; }
 .float-chip small { display: block; font-size: 11.5px; color: var(--muted-2); }
 .float-chip--1 { top: -30px; left: 44%; }
-.float-chip--2 { top: 34%; left: -44px; animation-delay: -2s; }
+.float-chip--2 { bottom: -50px; left: 4%; animation-delay: -2s; }
 .float-chip--3 { bottom: -24px; right: -18px; animation-delay: -4s; }
 @keyframes bob { 50% { translate: 0 -12px; } }
 .hero__scroll { position: absolute; left: 50%; bottom: 26px; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 10px; color: var(--muted-2); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; }
@@ -563,9 +563,9 @@ li:hover > a .chev { transform: rotate(225deg) translateY(-1px); }
 
 /* 11 Jobs */
 .jobs-section { background: var(--white); }
-#openings { background: var(--paper); }
+.jobs-section--paper { background: var(--paper); }
 .filter-tabs { position: relative; display: inline-flex; gap: 2px; padding: 6px; margin-bottom: 30px; border-radius: 999px; background: var(--paper); border: 1px solid var(--line); max-width: 100%; overflow-x: auto; scrollbar-width: none; }
-#openings .filter-tabs { background: var(--white); }
+.jobs-section--paper .filter-tabs { background: var(--white); }
 .filter-tabs::-webkit-scrollbar { display: none; }
 .filter-tabs button { position: relative; z-index: 1; padding: 10px 18px; border-radius: 999px; font-size: 14px; font-weight: 600; color: var(--muted); white-space: nowrap; transition: color 0.35s; }
 .filter-tabs button.is-active { color: #fff; }
@@ -893,6 +893,36 @@ li:hover > a .chev { transform: rotate(225deg) translateY(-1px); }
 .post-card h2 { font-size: 21px; letter-spacing: -0.025em; line-height: 1.25; }
 .post-card p { color: var(--muted); font-size: 15px; }
 .pagination { margin-top: 40px; }
+
+/* Layout variants */
+.banner__layout--solo, .intro__layout--solo { grid-template-columns: 1fr; }
+.banner__layout--solo .banner__title { max-width: 1000px; }
+
+/* ==========================================================================
+   Elementor integration
+   ========================================================================== */
+.elementor-widget[class*="elementor-widget-prime-"] { margin-bottom: 0 !important; --widgets-spacing: 0; }
+.elementor-widget[class*="elementor-widget-prime-"] > .elementor-widget-container { margin: 0; padding: 0; }
+.elementor-section.prime-wrap > .elementor-container { max-width: none; }
+.elementor-section.prime-wrap .elementor-widget-wrap { padding: 0 !important; }
+.elementor-section.prime-wrap + .elementor-section.prime-wrap { margin-top: 0; }
+/* Prime widgets placed in a boxed section or container still run edge to edge. */
+.elementor-section:not(.prime-wrap) [class*="elementor-widget-prime-"] .prime-sec,
+.e-con [class*="elementor-widget-prime-"] .prime-sec { width: 100vw; margin-left: calc(50% - 50vw); }
+/* Containers holding a Prime widget lose Elementor's default padding/gap so
+   sections sit flush, exactly like the pre-built pages. */
+.e-con:has(> .elementor-widget[class*="elementor-widget-prime-"]),
+.e-con:has(> .e-con-inner > .elementor-widget[class*="elementor-widget-prime-"]) { --padding-top: 0px; --padding-bottom: 0px; --padding-left: 0px; --padding-right: 0px; --gap: 0px; --row-gap: 0px; --column-gap: 0px; padding: 0; gap: 0; }
+.e-con:has(> .e-con-inner > .elementor-widget[class*="elementor-widget-prime-"]) > .e-con-inner { padding: 0; gap: 0; max-width: none; }
+/* Native Elementor content between Prime sections inherits the theme type. */
+.elementor-widget-text-editor, .elementor-widget-heading .elementor-heading-title { font-family: var(--font); }
+
+/* Editor preview: show everything statically, no loaders or pinning. */
+.elementor-editor-active .preloader, .elementor-editor-active .cursor, .elementor-editor-active .reel__preview { display: none !important; }
+.elementor-editor-active .hscroll__pin { min-height: 0; }
+.elementor-editor-active .hscroll__viewport { overflow-x: auto; scroll-snap-type: x mandatory; }
+.elementor-editor-active .hscroll__meta { display: none; }
+.elementor-editor-active .site-header { position: absolute; }
 
 /* ==========================================================================
    Animation initial states (only when JS is running; see main.js)

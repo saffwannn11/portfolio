@@ -7,12 +7,15 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'PRIME_VERSION', '1.0.0' );
+define( 'PRIME_VERSION', '1.1.0' );
 define( 'PRIME_DIR', get_template_directory() );
 define( 'PRIME_URI', get_template_directory_uri() );
 
 require PRIME_DIR . '/inc/pages-data.php';
 require PRIME_DIR . '/inc/helpers.php';
+require PRIME_DIR . '/inc/sections.php';
+require PRIME_DIR . '/inc/sections-data.php';
+require PRIME_DIR . '/inc/elementor.php';
 require PRIME_DIR . '/inc/customizer.php';
 require PRIME_DIR . '/inc/seo.php';
 require PRIME_DIR . '/inc/form.php';

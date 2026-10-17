@@ -8,7 +8,7 @@
  *
  * If Yoast SEO, Rank Math, AIOSEO or SEOPress is active, the theme stops
  * printing its own title/description/OG tags (the plugin owns them) but keeps
- * the FAQPage and Service schema. On activation the theme pre-fills those
+ * the Service schema. FAQPage schema comes from the FAQ section/widget. On activation the theme pre-fills those
  * plugins' fields with the same values (see inc/setup.php).
  *
  * @package Prime
@@ -236,11 +236,8 @@ function prime_schema() {
 		);
 	}
 
-	if ( $page && ! empty( $page['faqs'] ) ) {
-		$graph[] = prime_faq_schema( $page['faqs'], $seo['url'] );
-	} elseif ( is_front_page() ) {
-		$graph[] = prime_faq_schema( prime_home_faqs(), $home );
-	}
+	// FAQPage schema is printed by the FAQ section itself, from the questions
+	// actually on the page (so Elementor edits stay in sync).
 
 	if ( ! $graph ) {
 		return;
@@ -255,29 +252,6 @@ function prime_schema() {
 	) . "</script>\n";
 }
 add_action( 'wp_head', 'prime_schema', 30 );
-
-/**
- * FAQPage node.
- */
-function prime_faq_schema( $faqs, $url ) {
-	return array(
-		'@type'      => 'FAQPage',
-		'@id'        => $url . '#faq',
-		'mainEntity' => array_map(
-			function ( $f ) {
-				return array(
-					'@type'          => 'Question',
-					'name'           => $f[0],
-					'acceptedAnswer' => array(
-						'@type' => 'Answer',
-						'text'  => $f[1],
-					),
-				);
-			},
-			$faqs
-		),
-	);
-}
 
 /**
  * Homepage FAQs (shared by template and schema).
@@ -353,6 +327,7 @@ function prime_llms_txt() {
 	if ( rtrim( (string) $home_path, '/' ) . '/llms.txt' !== $path ) {
 		return;
 	}
+	status_header( 200 );
 	header( 'Content-Type: text/plain; charset=utf-8' );
 	$home = prime_home_seo();
 	echo '# ' . esc_html( get_bloginfo( 'name' ) ) . "\n\n";

@@ -86,8 +86,8 @@ function prime_logo( $context = 'header' ) {
 /**
  * Inline SVG icon set (stroke icons, inherit currentColor).
  */
-function prime_icon( $name, $size = 22 ) {
-	$paths = array(
+function prime_icon_paths() {
+	return array(
 		'arrow'     => '<path d="M5 12h14M13 6l6 6-6 6"/>',
 		'arrow-ur'  => '<path d="M7 17 17 7M8 7h9v9"/>',
 		'check'     => '<path d="m5 12 5 5L20 7"/>',
@@ -115,6 +115,24 @@ function prime_icon( $name, $size = 22 ) {
 		'instagram' => '<rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5v.01"/>',
 		'x'         => '<path d="M4 4l16 16M20 4 4 20"/>',
 	);
+}
+
+/**
+ * Icon names for Elementor select controls.
+ */
+function prime_icon_options() {
+	$out = array();
+	foreach ( array_keys( prime_icon_paths() ) as $k ) {
+		$out[ $k ] = ucwords( str_replace( '-', ' ', $k ) );
+	}
+	return $out;
+}
+
+/**
+ * Inline SVG icon (stroke icon, inherits currentColor).
+ */
+function prime_icon( $name, $size = 22 ) {
+	$paths = prime_icon_paths();
 	$path = isset( $paths[ $name ] ) ? $paths[ $name ] : $paths['spark'];
 	return sprintf(
 		'<svg class="icon icon-%1$s" width="%2$d" height="%2$d" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">%3$s</svg>',
@@ -156,4 +174,57 @@ function prime_socials() {
 		}
 	}
 	return $out;
+}
+
+/**
+ * URL from an Elementor URL control value (array) or a plain string.
+ */
+function prime_href( $v ) {
+	if ( is_array( $v ) ) {
+		$v = isset( $v['url'] ) ? $v['url'] : '';
+	}
+	return (string) $v;
+}
+
+/**
+ * Image URL from an Elementor media control value or a plain string.
+ */
+function prime_media_url( $v ) {
+	if ( is_array( $v ) ) {
+		if ( ! empty( $v['id'] ) ) {
+			$img = wp_get_attachment_image_url( (int) $v['id'], 'large' );
+			if ( $img ) {
+				return $img;
+			}
+		}
+		return isset( $v['url'] ) ? (string) $v['url'] : '';
+	}
+	return (string) $v;
+}
+
+/**
+ * Link attributes (href + target/rel) from a URL control value.
+ */
+function prime_link_attrs( $v ) {
+	$out = 'href="' . esc_url( prime_href( $v ) ) . '"';
+	if ( is_array( $v ) && ! empty( $v['is_external'] ) ) {
+		$out .= ' target="_blank" rel="noopener' . ( ! empty( $v['nofollow'] ) ? ' nofollow' : '' ) . '"';
+	} elseif ( is_array( $v ) && ! empty( $v['nofollow'] ) ) {
+		$out .= ' rel="nofollow"';
+	}
+	return $out;
+}
+
+/**
+ * Non-empty trimmed lines from a textarea value.
+ */
+function prime_lines( $text ) {
+	return array_values( array_filter( array_map( 'trim', preg_split( '/\r\n|\r|\n/', (string) $text ) ), 'strlen' ) );
+}
+
+/**
+ * Elementor-style URL value.
+ */
+function prime_link( $url ) {
+	return array( 'url' => $url, 'is_external' => '', 'nofollow' => '' );
 }

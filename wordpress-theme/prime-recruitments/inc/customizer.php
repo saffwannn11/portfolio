@@ -14,6 +14,7 @@ defined( 'ABSPATH' ) || exit;
  */
 function prime_opt_defaults() {
 	return array(
+		'brand_color'     => '#2f5bff',
 		'fluentform_id'   => '',
 		'form_recipient'  => '',
 		'contact_email'   => 'hello@primerecruitments.com',
@@ -63,6 +64,12 @@ function prime_customize_register( $wp_customize ) {
 	);
 
 	$sections = array(
+		'prime_colors'  => array(
+			'title'  => __( 'Brand colour', 'prime' ),
+			'fields' => array(
+				'brand_color' => array( __( 'Accent colour (buttons, links, highlights)', 'prime' ), 'color', '' ),
+			),
+		),
 		'prime_form'    => array(
 			'title'  => __( 'Contact form (Fluent Forms)', 'prime' ),
 			'fields' => array(
@@ -121,6 +128,8 @@ function prime_customize_register( $wp_customize ) {
 				$sanitize = 'esc_url_raw';
 			} elseif ( 'textarea' === $type ) {
 				$sanitize = 'sanitize_textarea_field';
+			} elseif ( 'color' === $type ) {
+				$sanitize = 'sanitize_hex_color';
 			}
 			$wp_customize->add_setting(
 				'prime_' . $key,
@@ -129,6 +138,10 @@ function prime_customize_register( $wp_customize ) {
 					'sanitize_callback' => $sanitize,
 				)
 			);
+			if ( 'color' === $type ) {
+				$wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'prime_' . $key, array( 'label' => $label, 'section' => $section_id ) ) );
+				continue;
+			}
 			$wp_customize->add_control(
 				'prime_' . $key,
 				array(
@@ -142,3 +155,14 @@ function prime_customize_register( $wp_customize ) {
 	}
 }
 add_action( 'customize_register', 'prime_customize_register' );
+
+/**
+ * Output the brand colour as CSS variables.
+ */
+function prime_brand_color_css() {
+	$c = sanitize_hex_color( prime_opt( 'brand_color' ) );
+	if ( $c && '#2f5bff' !== strtolower( $c ) ) {
+		wp_add_inline_style( 'prime-main', ':root{--blue:' . $c . ';--blue-2:' . $c . ';}' );
+	}
+}
+add_action( 'wp_enqueue_scripts', 'prime_brand_color_css', 20 );

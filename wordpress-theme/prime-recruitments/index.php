@@ -7,6 +7,16 @@
 
 defined( 'ABSPATH' ) || exit;
 get_header();
+
+// Posts designed in Elementor render edge to edge.
+if ( is_singular() && prime_is_elementor_page( get_queried_object_id() ) ) {
+	while ( have_posts() ) {
+		the_post();
+		the_content();
+	}
+	get_footer();
+	return;
+}
 ?>
 <section class="banner banner--mesh banner--compact">
 	<div class="banner__bg" aria-hidden="true"><span class="aurora a1"></span><span class="aurora a2"></span><span class="banner__grid"></span></div>
@@ -44,5 +54,5 @@ get_header();
 	</div>
 </section>
 <?php
-get_template_part( 'template-parts/cta-form' );
+prime_render_section( 'cta_form', prime_cta_defaults( 'employer' ) );
 get_footer();

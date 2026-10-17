@@ -14,11 +14,18 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Print the enquiry form.
  *
- * @param string $preset Pre-selected enquiry type: 'employer' or 'candidate'.
+ * @param string $preset    Pre-selected enquiry type: 'employer' or 'candidate'.
+ * @param string $shortcode Optional form shortcode set on the Elementor widget.
  */
-function prime_form( $preset = 'employer' ) {
+function prime_form( $preset = 'employer', $shortcode = '' ) {
 	$ff_id = absint( prime_opt( 'fluentform_id' ) );
 	echo '<div class="prime-form-shell">';
+
+	if ( $shortcode && preg_match( '/^\[[a-z0-9_\-]+[^\]]*\]$/i', trim( $shortcode ) ) ) {
+		echo do_shortcode( trim( $shortcode ) ); // phpcs:ignore
+		echo '</div>';
+		return;
+	}
 
 	if ( $ff_id && shortcode_exists( 'fluentform' ) ) {
 		echo do_shortcode( '[fluentform id="' . $ff_id . '"]' );

@@ -1,32 +1,76 @@
-# Prime Recruitments: WordPress Theme
+# Prime Recruitments: WordPress Theme (Elementor-ready)
 
-A high-end, animated WordPress theme for Prime Recruitments. It comes with a cinematic homepage, 18 SEO landing pages, AEO/GEO content, schema markup, Fluent Forms support and a slot for your logo.
+A high-end, animated recruitment-agency theme. Every page is pre-built in Elementor using 22 custom Prime widgets, so you can edit all of it visually.
 
-**Install:** upload `prime-recruitments.zip` in **Appearance → Themes → Add New → Upload Theme**, then click **Activate**.
+## Install (5 minutes)
 
-On activation the theme does the following:
+1. **Upload the theme:** WordPress → **Appearance → Themes → Add New → Upload Theme** → choose `prime-recruitments.zip` → **Install** → **Activate**.
+2. **Pages are created automatically.** Activating the theme does the following:
+   - creates all **19 pages**: Home + 18 SEO landing pages
+   - builds every page as an **Elementor layout**
+   - sets **Home** as your homepage
+   - turns on keyword URLs (`/%postname%/`)
+3. **Install Elementor** (free): **Plugins → Add New → search "Elementor" → Install → Activate**. The theme also shows a one-click "Install Elementor" notice.
+4. **Edit visually:** open any page → **Edit with Elementor**. Every section is a widget; click it to edit text, links, images, lists, colours and spacing.
 
-- creates all 18 pages (plus a **Home** page) and sets Home as the static front page
-- switches permalinks to `/%postname%/` so the keyword URLs work
-- pre-fills Yoast SEO / Rank Math fields with each page's meta title, description and focus keyword, so they carry over if you install either plugin later
+Order doesn't matter: theme first, Elementor first, or Elementor added months later all work. Without Elementor the site still renders exactly the same; you just can't edit it visually.
 
-Existing pages are never overwritten. You can re-run this any time from **Appearance → Prime Setup**, which also lists every page with its meta title and focus keyword.
+## Editing in Elementor
 
-## Before going live (10 minutes)
+- **Find the widgets:** in the Elementor panel, search **"Prime"** or scroll to the **Prime Recruitments** category. All 22 widgets are there.
+- **Content tab:** every text, button, link, image and list item. Repeaters let you add, remove, reorder and duplicate cards, FAQs, jobs, stats, steps and testimonials.
+- **Style tab** (on every Prime widget):
+  - accent colour, background colour, heading colour and text colour
+  - heading typography
+  - top and bottom padding (responsive)
+- **Advanced tab:** Elementor's standard margin, padding, CSS classes, hide-on-mobile and so on.
+- **Navigator:** sections are named ("Hero (homepage)", "FAQ (with FAQ schema)" …). Drag to reorder, or right-click to duplicate or delete.
+- **Mixing widgets:** you can place native Elementor widgets (Heading, Text, Image, Video…) between Prime sections.
+- **Accent words:** in headings, wrap words in `*asterisks*` to get the blue italic accent, e.g. `Hire *faster*`.
+- **New pages:** create a page → **Edit with Elementor** → drag in Prime widgets. They arrive fully designed with sample content. You can also choose the **"Prime – Full width (for Elementor)"** template.
+- **Reset:** **Appearance → Prime Setup → "Reset all pages to original design"** restores the original layouts. This overwrites your edits on those pages and cannot be undone.
 
-1. **Logo:** Appearance → Customize → Site Identity → *Logo*. It replaces the "P Prime" placeholder in the header and footer.
-2. **Contact details:** Customize → *Prime Recruitments → Contact details*. Set email, phone, WhatsApp (this shows a floating button), address and hours. The defaults are placeholders.
-3. **Fluent Forms (CTA form):**
-   - Install **Fluent Forms** and create a form. Suggested fields: Name, Email, Phone, "I am hiring / looking for a job" (radio), Company / Current role, Role, Message, Consent.
-   - Copy the form ID (the number in `[fluentform id="3"]`).
-   - Paste it in Customize → *Prime Recruitments → Contact form*.
-   - The theme restyles Fluent Forms to match the design.
-   - Until you add an ID, a built-in form emails enquiries to the admin email (or the address set there). Use an SMTP plugin so mail is delivered reliably.
-4. **Stats:** Customize → *Homepage stats*. Replace with your real figures.
-5. **Replace sample content:**
-   - **Testimonials** (`prime_testimonials()` in `inc/pages-data.php`) are samples. Use real, approved quotes only.
-   - **Job listings** (`prime_jobs()`) are examples. Replace them with live roles.
-6. **Social links:** Customize → *Social links*.
+### The 22 widgets
+
+| Widget | What it is |
+|---|---|
+| Hero (homepage) | Particle background, rotating headline word, typing code card |
+| Kinetic marquee | Two-row scrolling headline marquee |
+| Scroll statement | Words light up as you scroll |
+| Services slider | Pinned horizontal-scroll service cards |
+| Animated stats | Count-up numbers with rings |
+| Process | Sticky heading + steps with a line that draws on scroll |
+| Industries hover list | Large rows with a floating image on hover |
+| Why us bento grid | Bento cards + animated funnel |
+| Testimonials slider | Auto-play, progress bars, swipe |
+| Locations + India map | City cards + animated map |
+| Job listings | Filterable job cards |
+| FAQ | Accordion that also outputs FAQ schema automatically |
+| CTA + enquiry form | Fluent Forms / built-in form |
+| Page banner | 5 animated styles, breadcrumb, AEO quick-answer card |
+| Contact cards | Email / phone / CV / address cards |
+| Intro + at a glance | Rich text + sticky "at a glance" card |
+| Service card grid | Card grid linking to service pages |
+| Feature grid | Dark feature grid |
+| Roles marquee | Scrolling role chips |
+| Process timeline | Horizontal timeline |
+| Key facts + areas served | GEO fact sheet + service-area chips |
+| Related pages | Hover-invert link cards |
+
+## Before going live
+
+1. **Logo:** Appearance → Customize → Site Identity → Logo. It replaces the "P Prime" placeholder in the header and footer.
+2. **Brand colour, contact details, social links:** Customize → **Prime Recruitments**. The phone number and address are placeholders.
+3. **Fluent Forms:**
+   - Install Fluent Forms and build your form.
+   - Paste its ID in Customize → Prime Recruitments → Contact form. That applies the form site-wide.
+   - Alternatively, paste a shortcode into any **CTA + enquiry form** widget.
+   - Until then, a built-in form emails enquiries to the admin email. Use an SMTP plugin for reliable delivery.
+4. **Replace the sample content:**
+   - the **testimonials** and **job listings** are samples; use real, approved quotes and live roles
+   - the **homepage stats** are placeholders; set your real figures
+   - you can edit all of these directly in Elementor
+5. **Header and footer** come from the theme and are edited in Customize and Appearance → Menus. Assigning a menu to "Primary" replaces the built-in mega menu. Elementor Free can't edit headers and footers; Elementor Pro's Theme Builder can, if you ever want that.
 
 ## Pages, URLs and focus keywords
 
@@ -52,32 +96,23 @@ Existing pages are never overwritten. You can re-run this any time from **Appear
 | Bangalore | `/recruitment-agency-in-bangalore/` | recruitment agency in Bangalore |
 | Contact | `/contact/` | contact recruitment agency |
 
-Every page has a meta title (≤60 characters), a meta description (≤160 characters), a focus keyword and secondary keywords. You can edit them per page in the **Prime SEO** box in the editor; when an SEO plugin is active, edit them in that plugin instead.
+Every page has a meta title (≤60 characters), a meta description (≤160 characters), a focus keyword and secondary keywords. Edit them per page in the **Prime SEO** box below the editor. If Yoast SEO or Rank Math is installed, they are pre-filled there instead and the theme steps aside.
 
-## SEO / AEO / GEO built in
+## SEO / AEO / GEO
 
-- **AEO:** each page opens with a "quick answer" card, a 40–60-word direct answer written for featured snippets and AI answers. FAQs use question headings and are output as `FAQPage` schema.
-- **GEO (generative engines):**
-  - a "Key facts" block of short, quotable entity statements
-  - an "Updated" date on each page
-  - `/llms.txt`, a plain-text site summary for AI crawlers
+- **AEO:** a "quick answer" card in each banner and FAQ accordions. **FAQPage schema is generated from the FAQ widget**, so it stays in sync when you edit questions in Elementor.
+- **GEO (AI search):** a key-facts block, an "Updated" date on each page, and `/llms.txt`.
 - **GEO (local):**
   - city landing pages
-  - an "Areas served" block on every page
+  - an areas-served block on every page
   - `Service` schema with `areaServed`
-  - an India city map on the homepage
 - **Schema:** `EmploymentAgency`, `WebSite`, `WebPage`/`AboutPage`/`ContactPage`, `BreadcrumbList`, `Service`, `FAQPage`.
-- **Plugin coexistence:** if Yoast, Rank Math, AIOSEO or SEOPress is active, the theme stops printing its own title, description and OG tags, and keeps only the FAQ and Service schema.
 
-Keywords were chosen as established high-intent search terms for Indian recruitment. Search volumes were not checked with a keyword tool, so confirm them in Google Search Console / Ahrefs after launch.
-
-## Editing copy
-
-All landing-page copy lives in `inc/pages-data.php`, with one array per page. Text in `*asterisks*` inside headings is set in the italic serif accent. Anything you type in a page's editor is also shown below that page's overview section.
+Keywords were chosen as established high-intent terms for Indian recruitment. Search volumes were not checked with a keyword tool, so confirm them in Search Console or Ahrefs after launch.
 
 ## Tech notes
 
-- Animations: GSAP 3.13 + ScrollTrigger + SplitText, plus Lenis smooth scroll, all bundled locally in `assets/js/vendor/`. Respects `prefers-reduced-motion`. Content stays visible if JavaScript fails.
-- Fonts: Plus Jakarta Sans, Instrument Serif, JetBrains Mono (Google Fonts).
-- The industry hover images on the homepage load from Unsplash. Swap the photo IDs in `front-page.php` for your own images if you prefer.
-- Requires WordPress 6.0+ and PHP 7.4+.
+- Requires WordPress 6.0+ and PHP 7.4+. Tested with WordPress 6.8 and Elementor 3.35.
+- Animations use GSAP 3.13 + ScrollTrigger + SplitText and Lenis smooth scroll, all bundled locally.
+- Respects `prefers-reduced-motion`. Animations pause in the Elementor editor so you see the final design while editing.
+- The homepage industry hover images load from Unsplash. Replace them with your own images in the Industries widget.

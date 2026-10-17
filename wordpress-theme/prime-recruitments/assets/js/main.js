@@ -37,16 +37,6 @@
 		d.addEventListener('keydown', function (e) { if (e.key === 'Escape') set(false); });
 	})();
 
-	// Enquiry form: employer / candidate switch
-	$$('.prime-form').forEach(function (form) {
-		function sync() {
-			var c = form.querySelector('input[name="type"]:checked');
-			form.setAttribute('data-type', c ? c.value : 'employer');
-		}
-		$$('input[name="type"]', form).forEach(function (r) { r.addEventListener('change', sync); });
-		sync();
-	});
-
 	// Header state, progress bar, back-to-top
 	(function () {
 		var header = $('#site-header');
@@ -74,104 +64,147 @@
 		if (top) top.addEventListener('click', function () { lenis ? lenis.scrollTo(0, { duration: 1.6 }) : window.scrollTo({ top: 0, behavior: 'smooth' }); });
 	})();
 
-	// Spotlight glow follows the cursor
-	if (finePointer) {
-		$$('[data-spotlight]').forEach(function (el) {
-			el.addEventListener('pointermove', function (e) {
-				var r = el.getBoundingClientRect();
-				el.style.setProperty('--x', (e.clientX - r.left) + 'px');
-				el.style.setProperty('--y', (e.clientY - r.top) + 'px');
+	// Interactive widgets. Scoped so Elementor can re-initialise a single
+	// widget after re-rendering it in the editor.
+	function once(el) {
+		if (el.__prime) return false;
+		el.__prime = true;
+		return true;
+	}
+	function initWidgets(scope) {
+		// Enquiry form: employer / candidate switch
+		$$('.prime-form', scope).forEach(function (form) {
+			if (!once(form)) return;
+			function sync() {
+				var c = form.querySelector('input[name="type"]:checked');
+				form.setAttribute('data-type', c ? c.value : 'employer');
+			}
+			$$('input[name="type"]', form).forEach(function (r) { r.addEventListener('change', sync); });
+			sync();
+		});
+
+		// Spotlight glow follows the cursor
+		if (finePointer) {
+			$$('[data-spotlight]', scope).forEach(function (el) {
+				if (!once(el)) return;
+				el.addEventListener('pointermove', function (e) {
+					var r = el.getBoundingClientRect();
+					el.style.setProperty('--x', (e.clientX - r.left) + 'px');
+					el.style.setProperty('--y', (e.clientY - r.top) + 'px');
+				});
+			});
+		}
+
+		// Job filters
+		$$('[data-jobs]', scope).forEach(function (wrap) {
+			if (!once(wrap)) return;
+			var tabs = $$('.filter-tabs button', wrap);
+			var pill = $('.filter-tabs__pill', wrap);
+			var cards = $$('.job-card', wrap);
+			function movePill(btn) {
+				if (!pill || !btn) return;
+				pill.style.width = btn.offsetWidth + 'px';
+				pill.style.transform = 'translateX(' + btn.offsetLeft + 'px)';
+			}
+			tabs.forEach(function (btn) {
+				btn.addEventListener('click', function () {
+					tabs.forEach(function (t) { t.classList.toggle('is-active', t === btn); });
+					movePill(btn);
+					var f = btn.getAttribute('data-filter');
+					var shown = [];
+					cards.forEach(function (c) {
+						var match = f === 'all' || c.getAttribute('data-cat') === f;
+						c.classList.toggle('is-hidden', !match);
+						if (match) shown.push(c);
+					});
+					if (hasGSAP && !reduce) {
+						gsap.fromTo(shown, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.7, ease: 'expo.out', stagger: 0.06, overwrite: true });
+						ScrollTrigger.refresh();
+					}
+				});
+			});
+			var init = function () { movePill($('.filter-tabs button.is-active', wrap)); };
+			init();
+			window.addEventListener('resize', init);
+			if (d.fonts && d.fonts.ready) d.fonts.ready.then(init);
+		});
+
+		// Testimonial slider (autoplay, progress, swipe)
+		$$('[data-slider]', scope).forEach(function (wrap) {
+			if (!once(wrap)) return;
+			var slides = $$('[data-slide]', wrap);
+			var dots = $$('[data-goto]', wrap);
+			if (slides.length < 2) return;
+			var i = 0, t0 = 0, raf = null, paused = false, elapsed = 0, DUR = 6500;
+			function show(n) {
+				slides[i].classList.remove('is-active');
+				dots.forEach(function (b, k) { b.style.setProperty('--prog', k < n ? 1 : 0); });
+				i = (n + slides.length) % slides.length;
+				slides[i].classList.add('is-active');
+				dots.forEach(function (b, k) { b.querySelector('i').style.setProperty('--prog', k < i ? 1 : 0); });
+				elapsed = 0; t0 = performance.now();
+				if (hasGSAP && !reduce) {
+					gsap.fromTo(slides[i].querySelector('blockquote'), { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 1, ease: 'expo.out' });
+					gsap.fromTo(slides[i].querySelector('figcaption'), { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 1, delay: 0.15, ease: 'expo.out' });
+				}
+			}
+			function tick(now) {
+				if (!paused) {
+					elapsed += now - t0;
+					var p = Math.min(1, elapsed / DUR);
+					var bar = dots[i] && dots[i].querySelector('i');
+					if (bar) bar.style.setProperty('--prog', p);
+					if (p >= 1) show(i + 1);
+				}
+				t0 = now;
+				raf = requestAnimationFrame(tick);
+			}
+			var next = $('[data-next]', wrap), prev = $('[data-prev]', wrap);
+			if (next) next.addEventListener('click', function () { show(i + 1); });
+			if (prev) prev.addEventListener('click', function () { show(i - 1); });
+			dots.forEach(function (b) { b.addEventListener('click', function () { show(+b.getAttribute('data-goto')); }); });
+			wrap.addEventListener('pointerenter', function () { paused = true; });
+			wrap.addEventListener('pointerleave', function () { paused = false; });
+			var sx = null;
+			wrap.addEventListener('pointerdown', function (e) { sx = e.clientX; });
+			wrap.addEventListener('pointerup', function (e) {
+				if (sx === null) return;
+				var dx = e.clientX - sx; sx = null;
+				if (Math.abs(dx) > 50) show(dx < 0 ? i + 1 : i - 1);
+			});
+			if (!reduce) { t0 = performance.now(); raf = requestAnimationFrame(tick); }
+		});
+	}
+	initWidgets(d);
+
+	// Elementor: initialise widgets as they render (editor and frontend).
+	var editMode = d.body.classList.contains('elementor-editor-active') || /[?&]elementor-preview=/.test(location.search);
+	if (window.jQuery) {
+		jQuery(window).on('elementor/frontend/init', function () {
+			if (window.elementorFrontend && elementorFrontend.isEditMode && elementorFrontend.isEditMode()) editMode = true;
+			elementorFrontend.hooks.addAction('frontend/element_ready/global', function ($scope) {
+				var el = $scope && $scope[0];
+				if (!el) return;
+				initWidgets(el);
+				if (editMode) showStatic(el);
 			});
 		});
 	}
 
-	// Job filters
-	$$('[data-jobs]').forEach(function (wrap) {
-		var tabs = $$('.filter-tabs button', wrap);
-		var pill = $('.filter-tabs__pill', wrap);
-		var cards = $$('.job-card', wrap);
-		function movePill(btn) {
-			if (!pill || !btn) return;
-			pill.style.width = btn.offsetWidth + 'px';
-			pill.style.transform = 'translateX(' + btn.offsetLeft + 'px)';
-		}
-		tabs.forEach(function (btn) {
-			btn.addEventListener('click', function () {
-				tabs.forEach(function (t) { t.classList.toggle('is-active', t === btn); });
-				movePill(btn);
-				var f = btn.getAttribute('data-filter');
-				var shown = [];
-				cards.forEach(function (c) {
-					var match = f === 'all' || c.getAttribute('data-cat') === f;
-					c.classList.toggle('is-hidden', !match);
-					if (match) shown.push(c);
-				});
-				if (hasGSAP && !reduce) {
-					gsap.fromTo(shown, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.7, ease: 'expo.out', stagger: 0.06, overwrite: true });
-					ScrollTrigger.refresh();
-				}
-			});
-		});
-		var init = function () { movePill($('.filter-tabs button.is-active', wrap)); };
-		init();
-		window.addEventListener('resize', init);
-		if (d.fonts && d.fonts.ready) d.fonts.ready.then(init);
-	});
-
-	// Testimonial slider (autoplay, progress, swipe)
-	$$('[data-slider]').forEach(function (wrap) {
-		var slides = $$('[data-slide]', wrap);
-		var dots = $$('[data-goto]', wrap);
-		if (slides.length < 2) return;
-		var i = 0, t0 = 0, raf = null, paused = false, elapsed = 0, DUR = 6500;
-		function show(n) {
-			slides[i].classList.remove('is-active');
-			dots.forEach(function (b, k) { b.style.setProperty('--prog', k < n ? 1 : 0); });
-			i = (n + slides.length) % slides.length;
-			slides[i].classList.add('is-active');
-			dots.forEach(function (b, k) { b.querySelector('i').style.setProperty('--prog', k < i ? 1 : 0); });
-			elapsed = 0; t0 = performance.now();
-			if (hasGSAP && !reduce) {
-				gsap.fromTo(slides[i].querySelector('blockquote'), { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 1, ease: 'expo.out' });
-				gsap.fromTo(slides[i].querySelector('figcaption'), { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 1, delay: 0.15, ease: 'expo.out' });
-			}
-		}
-		function tick(now) {
-			if (!paused) {
-				elapsed += now - t0;
-				var p = Math.min(1, elapsed / DUR);
-				var bar = dots[i] && dots[i].querySelector('i');
-				if (bar) bar.style.setProperty('--prog', p);
-				if (p >= 1) show(i + 1);
-			}
-			t0 = now;
-			raf = requestAnimationFrame(tick);
-		}
-		var next = $('[data-next]', wrap), prev = $('[data-prev]', wrap);
-		if (next) next.addEventListener('click', function () { show(i + 1); });
-		if (prev) prev.addEventListener('click', function () { show(i - 1); });
-		dots.forEach(function (b) { b.addEventListener('click', function () { show(+b.getAttribute('data-goto')); }); });
-		wrap.addEventListener('pointerenter', function () { paused = true; });
-		wrap.addEventListener('pointerleave', function () { paused = false; });
-		var sx = null;
-		wrap.addEventListener('pointerdown', function (e) { sx = e.clientX; });
-		wrap.addEventListener('pointerup', function (e) {
-			if (sx === null) return;
-			var dx = e.clientX - sx; sx = null;
-			if (Math.abs(dx) > 50) show(dx < 0 ? i + 1 : i - 1);
-		});
-		if (!reduce) { t0 = performance.now(); raf = requestAnimationFrame(tick); }
-	});
+	// Final, fully visible state for every animated element in a scope.
+	function showStatic(scope) {
+		$$('[data-count]', scope).forEach(function (el) { el.textContent = el.getAttribute('data-count'); });
+		$$('.stat', scope).forEach(function (el) { el.classList.add('is-in'); });
+		$$('.process__step, .timeline__step', scope).forEach(function (el) { el.classList.add('is-active'); });
+	}
 
 	/* ------------------------------------------------------------------
-	 * No GSAP or reduced motion: show everything and stop here.
+	 * No GSAP, reduced motion or the Elementor editor: show everything statically.
 	 * ---------------------------------------------------------------- */
-	if (!hasGSAP || reduce) {
+	if (!hasGSAP || reduce || editMode) {
 		root.classList.remove('js');
 		root.classList.add('anim-ready');
-		$$('[data-count]').forEach(function (el) { el.textContent = el.getAttribute('data-count'); });
-		$$('.stat').forEach(function (el) { el.classList.add('is-in'); });
-		$$('.process__step, .timeline__step').forEach(function (el) { el.classList.add('is-active'); });
+		showStatic(d);
 		return;
 	}
 
@@ -459,6 +492,7 @@
 			var stat = el.closest('.stat');
 			if (isNaN(target)) { el.textContent = el.getAttribute('data-count'); return; }
 			var o = { v: 0 };
+			el.textContent = '0';
 			ScrollTrigger.create({
 				trigger: el,
 				start: 'top 88%',
