@@ -38,7 +38,7 @@ function prime_widget_schemas() {
 			'title'  => 'Hero (homepage)',
 			'icon'   => 'eicon-header',
 			'fields' => array(
-				'image'       => array( 'media', 'Background photo (empty = built-in photo)' ),
+				'image'       => array( 'media', 'Photo in the liquid shape (empty = built-in photo)' ),
 				'eyebrow'     => array( 'text', 'Eyebrow' ),
 				'title_1'     => array( 'text', 'Headline line 1' ),
 				'title_2'     => array( 'text', 'Headline line 2' ),
@@ -51,9 +51,11 @@ function prime_widget_schemas() {
 				'btn2_link'   => array( 'url', 'Secondary button link' ),
 				'trust_title' => array( 'text', 'Trust line – bold part' ),
 				'trust_text'  => array( 'text', 'Trust line – text' ),
-				'panel_title' => array( 'text', 'Right card – title' ),
-				'panel_text'  => array( 'text', 'Right card – text' ),
-				'options'     => array( 'repeater', 'Right card – options', array( 'title' => 'title', 'fields' => array( 'icon' => array( 'icon', 'Icon' ), 'title' => array( 'text', 'Title' ), 'text' => array( 'text', 'Text' ), 'link' => array( 'url', 'Link (#enquiry = popup)' ), 'preset' => $preset ) ) ),
+				'panel_mode'     => array( 'select', 'Right side', array( 'options' => array( 'form' => 'Enquiry form card', 'options' => 'Photo only' ) ) ),
+				'panel_title'    => array( 'text', 'Form card – title' ),
+				'panel_text'     => array( 'text', 'Form card – text' ),
+				'form_shortcode' => array( 'text', 'Form shortcode (optional – e.g. [fluentform id="3"]). Empty = Customizer form.' ),
+				'options'        => array( 'repeater', 'Quick links under the buttons (optional)', array( 'title' => 'title', 'fields' => array( 'icon' => array( 'icon', 'Icon' ), 'title' => array( 'text', 'Title' ), 'text' => array( 'text', 'Text' ), 'link' => array( 'url', 'Link (#enquiry = popup)' ), 'preset' => $preset ) ) ),
 			),
 		),
 		'stats'           => array(

@@ -37,6 +37,28 @@
 		d.addEventListener('keydown', function (e) { if (e.key === 'Escape') set(false); });
 	})();
 
+	// Desktop menu: a liquid pill glides to the hovered item.
+	(function () {
+		var nav = $('.main-nav');
+		var pill = nav && $('.nav-pill', nav);
+		if (!nav || !pill) return;
+		var items = $$('.main-nav__list > li', nav);
+		function move(li) {
+			var a = li.querySelector('a');
+			if (!a) return;
+			var nr = nav.getBoundingClientRect(), r = a.getBoundingClientRect();
+			pill.style.width = r.width + 'px';
+			pill.style.setProperty('--x', (r.left - nr.left) + 'px');
+			items.forEach(function (x) { x.classList.toggle('is-hot', x === li); });
+			nav.classList.add('is-hovering');
+		}
+		items.forEach(function (li) {
+			li.addEventListener('pointerenter', function () { move(li); });
+			li.addEventListener('focusin', function () { move(li); });
+		});
+		nav.addEventListener('pointerleave', function () { nav.classList.remove('is-hovering'); items.forEach(function (x) { x.classList.remove('is-hot'); }); });
+	})();
+
 	// Enquiry popup: centred dialog opened by any #enquiry link or [data-modal].
 	(function () {
 		var modal = d.getElementById('prime-modal');
@@ -364,10 +386,10 @@
 	function hero() {
 		var heroEl = $('[data-hero]');
 		if (!heroEl) return;
-		var img = $('.hero__media img', heroEl);
+		var img = $('.hero__photo img', heroEl);
 		if (img) {
 			gsap.fromTo(img, { scale: 1.12 }, { scale: 1, duration: 2.4, ease: 'power2.out' });
-			gsap.to(img, { yPercent: 12, ease: 'none', scrollTrigger: { trigger: heroEl, start: 'top top', end: 'bottom top', scrub: true } });
+			gsap.to($('.hero__photo', heroEl), { yPercent: -14, ease: 'none', scrollTrigger: { trigger: heroEl, start: 'top top', end: 'bottom top', scrub: true } });
 		}
 		var rot = $('[data-rotator]', heroEl);
 		if (rot) {
@@ -388,7 +410,7 @@
 
 	/* Banners and photo bands: subtle parallax on the background photo */
 	function media() {
-		$$('.banner__media img, .cta-band__media img, .audience__img').forEach(function (img) {
+		$$('.audience__img').forEach(function (img) {
 			var sec = img.closest('section') || img;
 			gsap.fromTo(img, { yPercent: -6, scale: 1.12 }, { yPercent: 6, scale: 1.12, ease: 'none', scrollTrigger: { trigger: sec, start: 'top bottom', end: 'bottom top', scrub: true } });
 		});

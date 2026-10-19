@@ -11,7 +11,7 @@ defined( 'ABSPATH' ) || exit;
 <head>
 <meta charset="<?php bloginfo( 'charset' ); ?>">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#ffffff">
+<meta name="theme-color" content="#a10d24">
 <?php wp_head(); ?>
 </head>
 <body <?php body_class(); ?>>
@@ -20,9 +20,8 @@ defined( 'ABSPATH' ) || exit;
 
 <div class="preloader" aria-hidden="true">
 	<div class="preloader__inner">
-		<img class="preloader__mark" src="<?php echo esc_url( prime_mark_url() ); ?>" width="64" height="58" alt="" decoding="async" fetchpriority="high">
+		<span class="preloader__orb"><i class="preloader__wave"></i><img class="preloader__mark" src="<?php echo esc_url( prime_mark_url() ); ?>" width="64" height="58" alt="" decoding="async" fetchpriority="high"></span>
 		<span class="preloader__word">PRIME RECRUITMENTS</span>
-		<span class="preloader__bar"><i></i></span>
 	</div>
 </div>
 
@@ -92,6 +91,7 @@ defined( 'ABSPATH' ) || exit;
 					<li><a href="<?php echo esc_url( prime_url( 'contact' ) ); ?>"><?php esc_html_e( 'Contact', 'prime' ); ?></a></li>
 				</ul>
 			<?php endif; ?>
+			<span class="nav-pill" aria-hidden="true"></span>
 		</nav>
 
 		<div class="site-header__actions">

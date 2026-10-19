@@ -1,6 +1,6 @@
-# Prime Recruitments: WordPress Theme v1.3 (Elementor-ready)
+# Prime Recruitments: WordPress Theme v1.4 "Liquid" (Elementor-ready)
 
-A professional recruitment and corporate gifting theme in charcoal, warm ivory and your logo's gold. Every page is pre-built in Elementor using 27 custom Prime widgets.
+A professional recruitment and corporate gifting theme with a crimson-red gradient on white and a liquid design: morphing shapes, flowing wave edges and liquid-fill buttons. Every page is pre-built in Elementor using 27 custom Prime widgets.
 
 ## Install or update
 
@@ -22,9 +22,29 @@ Activating creates **20 pages** automatically and sets the homepage and URLs. Th
 3. Install the free **Elementor** plugin and open any page with **Edit with Elementor**.
 4. *(Optional)* Install **Fluent Forms**. The theme then creates a ready **"Prime Recruitments Enquiry"** form for you, connects it to the popup and every CTA, and sends enquiries to your contact email.
 
-## What's new in v1.3
+## What's new in v1.4 ("Liquid")
 
-- **No more blue.** The palette is charcoal (#141311), warm ivory (#FAF8F3 / #F3EFE6) and your logo's gold (#C9A227). This is the restrained look used by leading executive-search firms: dark neutrals, plenty of white space, serif headlines and one accent colour.
+- **Colours:** a red gradient (#7A0C1B → #C8102E → #D61F36) on white, with soft rose tints (#FFF4F4) for alternate sections. Every text and colour combination passes an automated readability check, and white text stays at least 5:1 contrast on every part of the gradient.
+- **Liquid design:**
+  - soft blobs that slowly morph and drift
+  - photos shown in morphing liquid shapes
+  - red sections with flowing, animated wave edges
+  - pill buttons that fill with "liquid" on hover
+  - service cards that flood with the red gradient when you hover over them
+- **Menu:** a floating frosted-glass bar. A red pill glides to whichever menu item you hover over. On phones, the menu opens with a red liquid circle that expands from the menu button.
+- **Banners:** every inner page has a red-gradient banner, a red-toned photo in a liquid shape, a glass "quick answer" card and a wavy bottom edge.
+- **The enquiry form is everywhere:**
+  - in the homepage hero ("Get started in 60 seconds")
+  - in the red enquiry section at the bottom of every page
+  - in the popup that opens from every enquiry button
+  It uses your Fluent Form automatically when Fluent Forms is installed.
+- **Fonts:** Poppins for headings and Nunito Sans for text.
+- **Preloader:** your logo inside a circle that fills with red liquid. It is short, and shown only on a visitor's first page.
+
+To change the red, use Customize → Prime Recruitments → Brand colour.
+
+## Earlier (v1.3)
+
 - **New fonts.** Headings use *Playfair Display*, an editorial serif; body text uses *Source Sans 3*.
 - **Removed the "coded" look:**
   - monospace `// 01` labels
@@ -145,7 +165,7 @@ Keyword search volumes were not checked with a keyword tool. Confirm them in Sea
 
 - Requires WordPress 6.0+ and PHP 7.4+.
 - Tested on WordPress 6.8 with Elementor 3.35.
-- Photos: CC0 (public domain) architecture images from rawpixel, as shipped with WordPress's Twenty Twenty-Four theme, converted to warm monochrome WebP.
+- Photos: CC0 (public domain) architecture images from rawpixel, as shipped with WordPress's Twenty Twenty-Four theme, converted to red duotone WebP.
 - Fluent Forms couldn't be run in the test environment. The auto-created form was built from Fluent Forms 6.2's own source and template format. If it can't be created on your site, the theme shows a notice and keeps the built-in form working.
 - Animations use GSAP 3.13 + ScrollTrigger + SplitText and Lenis, all bundled locally.
 - Motion is reduced for visitors who prefer it, and paused inside the Elementor editor.

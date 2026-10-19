@@ -140,7 +140,19 @@ function prime_photo( $key ) {
 	$legacy = array( 'mesh' => 'facade', 'grid' => 'windows', 'orbit' => 'tower', 'beam' => 'atrium', 'wave' => 'geometry' );
 	$key    = isset( $legacy[ $key ] ) ? $legacy[ $key ] : $key;
 	$all    = prime_photos();
-	return prime_img( isset( $all[ $key ] ) ? $all[ $key ] : $all['facade'] );
+	// Red duotone versions match the brand gradient.
+	return prime_img( str_replace( 'photo-', 'duo-', isset( $all[ $key ] ) ? $all[ $key ] : $all['facade'] ) );
+}
+
+/**
+ * Decorative liquid blobs (morph and drift in CSS).
+ */
+function prime_blobs( $count = 3 ) {
+	$out = '<div class="liquid" aria-hidden="true">';
+	for ( $i = 1; $i <= $count; $i++ ) {
+		$out .= '<span class="blob blob--' . $i . '"></span>';
+	}
+	return $out . '</div>';
 }
 
 /**
