@@ -112,20 +112,21 @@ function prime_home_sections() {
 				'btn1_link'   => prime_link( '#enquiry' ),
 				'btn2_text'   => 'Browse jobs',
 				'btn2_link'   => prime_link( prime_url( 'jobs' ) ),
-				'trust_title' => 'Every candidate interviewed.',
-				'trust_text'  => 'Shortlists typically within 48–72 hours of your brief.',
-				'tags'        => "Software Engineers\nSales Managers\nHR Business Partners\nFinance Controllers\nStaff Nurses\nData Analysts\nPlant Heads\nCustomer Success\nLeadership Hiring\nBulk Hiring",
-				'cards'       => array(
-					array( 'role' => 'Senior Java Developer', 'name' => 'Aarav', 'city' => 'Bangalore', 'status' => 'Interviewed', 'match' => 96 ),
-					array( 'role' => 'HR Business Partner', 'name' => 'Priya', 'city' => 'Mumbai', 'status' => 'Shortlisted', 'match' => 92 ),
-					array( 'role' => 'Regional Sales Manager', 'name' => 'Rohan', 'city' => 'Delhi NCR', 'status' => 'Offer accepted', 'match' => 94 ),
-					array( 'role' => 'ICU Staff Nurse', 'name' => 'Neha', 'city' => 'Pune', 'status' => 'Placed', 'match' => 98 ),
+				'proof'       => "Every candidate interviewed\nShortlists in 48–72 hours\nPan-India + overseas",
+				'image_alt'   => 'Corporate office building',
+				'pipe_title'  => 'Hiring pipeline',
+				'pipe_role'   => 'Regional Sales Manager · Delhi NCR',
+				'stages'      => array(
+					array( 'label' => 'Sourced', 'count' => 240 ),
+					array( 'label' => 'Screened', 'count' => 58 ),
+					array( 'label' => 'Interviewed', 'count' => 12 ),
+					array( 'label' => 'Shortlisted', 'count' => 4 ),
 				),
-				'options'     => array(),
-				'proof'       => "Every candidate interviewed\nShortlists in 48–72 hours\nPan-India + overseas hiring",
+				'toast_title' => 'Shortlist delivered',
+				'toast_text'  => '4 interviewed candidates in 48 hrs',
 			),
 		),
-		array( 'stats', array( 'style' => 'light', 'items' => prime_stats_items() ) ),
+		array( 'stats', array( 'style' => 'dark', 'items' => prime_stats_items() ) ),
 		array(
 			'about_split',
 			array(
@@ -326,7 +327,7 @@ function prime_page_sections( $key ) {
 	}
 
 	if ( 'about' === $type ) {
-		$out[] = array( 'stats', array( 'style' => 'light', 'title' => 'Prime Recruitments in numbers', 'items' => prime_stats_items() ) );
+		$out[] = array( 'stats', array( 'style' => 'dark', 'title' => 'Prime Recruitments in numbers', 'items' => prime_stats_items() ) );
 	}
 
 	if ( 'hub' === $type ) {

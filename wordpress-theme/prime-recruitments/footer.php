@@ -92,31 +92,6 @@ $phone_href = preg_replace( '/[^0-9+]/', '', prime_opt( 'contact_phone' ) );
 
 <?php get_template_part( 'template-parts/enquiry-modal' ); ?>
 
-<?php
-$prime_side = array();
-if ( prime_whatsapp_url() ) {
-	$prime_side[] = array( 'whatsapp', 'WhatsApp', prime_whatsapp_url(), true );
-}
-foreach ( array( 'instagram' => 'Instagram', 'linkedin' => 'LinkedIn', 'facebook' => 'Facebook', 'x' => 'X (Twitter)', 'youtube' => 'YouTube' ) as $prime_net => $prime_label ) {
-	if ( prime_opt( 'social_' . $prime_net ) ) {
-		$prime_side[] = array( $prime_net, $prime_label, prime_opt( 'social_' . $prime_net ), true );
-	} elseif ( in_array( $prime_net, array( 'instagram', 'linkedin' ), true ) && current_user_can( 'edit_theme_options' ) ) {
-		// Shown to admins only, as a reminder to add the link.
-		$prime_side[] = array( $prime_net, sprintf( /* translators: %s: network */ __( 'Add %s link', 'prime' ), $prime_label ), admin_url( 'customize.php?autofocus[section]=prime_social' ), false, 'is-empty' );
-	}
-}
-if ( prime_tel_url() ) {
-	$prime_side[] = array( 'phone', __( 'Call us', 'prime' ), prime_tel_url(), false );
-}
-$prime_side[] = array( 'mail', __( 'Email us', 'prime' ), 'mailto:' . prime_opt( 'contact_email' ), false );
-?>
-<aside class="side-social" aria-label="<?php esc_attr_e( 'Connect with us', 'prime' ); ?>">
-	<ul>
-		<?php foreach ( $prime_side as $item ) : ?>
-			<li><a class="side-social__item is-<?php echo esc_attr( $item[0] ); ?> <?php echo esc_attr( isset( $item[4] ) ? $item[4] : '' ); ?>" href="<?php echo esc_url( $item[2] ); ?>" <?php echo $item[3] ? 'target="_blank" rel="noopener"' : ''; ?>><span class="side-social__icon"><?php echo prime_icon( $item[0], 19 ); // phpcs:ignore ?></span><span class="side-social__label"><?php echo esc_html( $item[1] ); ?></span></a></li>
-		<?php endforeach; ?>
-	</ul>
-</aside>
 
 <nav class="action-bar" aria-label="<?php esc_attr_e( 'Quick actions', 'prime' ); ?>">
 	<?php if ( prime_tel_url() ) : ?><a href="<?php echo esc_attr( prime_tel_url() ); ?>"><?php echo prime_icon( 'phone', 20 ); // phpcs:ignore ?><span><?php esc_html_e( 'Call', 'prime' ); ?></span></a><?php endif; ?>

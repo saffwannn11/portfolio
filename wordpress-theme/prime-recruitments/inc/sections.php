@@ -77,78 +77,63 @@ function prime_shead( $s, $args = array() ) {
    ========================================================================== */
 
 function prime_sec_hero( $s ) {
-	$words   = array_values( array_filter( array_map( 'trim', explode( ',', prime_v( $s, 'rotator', '' ) ) ) ) );
-	$options = (array) prime_v( $s, 'options', array() );
-	$cards   = array_slice( (array) prime_v( $s, 'cards', array() ), 0, 4 );
-	$tags    = prime_lines( prime_v( $s, 'tags' ) );
-	$states  = array( 'is-blue', 'is-rose', 'is-dark', 'is-blue' );
-	$card    = function ( $c, $k, $extra = '' ) use ( $states ) {
-		$name = prime_v( $c, 'name', 'Candidate' );
-		?>
-		<div class="tcard tcard--<?php echo (int) $k + 1; ?> <?php echo esc_attr( $extra ); ?>">
-			<span class="tcard__av <?php echo esc_attr( $states[ $k % 4 ] ); ?>"><?php echo esc_html( mb_substr( $name, 0, 1 ) ); ?></span>
-			<span class="tcard__info"><strong><?php echo esc_html( prime_v( $c, 'role' ) ); ?></strong><small><?php echo esc_html( $name ); ?> · <?php echo esc_html( prime_v( $c, 'city' ) ); ?></small></span>
-			<?php if ( prime_v( $c, 'status' ) ) : ?><span class="tcard__status"><?php echo prime_icon( 'check', 12 ); // phpcs:ignore ?><?php echo esc_html( $c['status'] ); ?></span><?php endif; ?>
-			<?php $match = max( 0, min( 100, (int) prime_v( $c, 'match', 0 ) ) ); if ( $match ) : ?>
-				<span class="tcard__match"><span class="tcard__bar"><i style="--w:<?php echo esc_attr( $match ); ?>%"></i></span><b><?php echo esc_html( $match ); ?>%</b></span>
-			<?php endif; ?>
-		</div>
-		<?php
-	};
+	$words  = array_values( array_filter( array_map( 'trim', explode( ',', prime_v( $s, 'rotator', '' ) ) ) ) );
+	$img    = prime_media_or_photo( prime_v( $s, 'image' ), 'tower' );
+	$proof  = prime_lines( prime_v( $s, 'proof' ) );
+	$stages = (array) prime_v( $s, 'stages', array() );
+	$max    = 1;
+	foreach ( $stages as $st ) {
+		$max = max( $max, (int) prime_v( $st, 'count', 0 ) );
+	}
 	?>
 	<section class="hero prime-sec" data-hero>
-		<div class="hero__bg" aria-hidden="true">
-			<span class="hero__glow hero__glow--blue"></span><span class="hero__glow hero__glow--rose"></span>
-			<span class="hero__grid"></span>
-			<svg class="hero__net" viewBox="0 0 1440 860" preserveAspectRatio="none">
-				<defs><linearGradient id="netGrad" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#1D4ED8"/><stop offset="1" stop-color="#F43F5E"/></linearGradient></defs>
-				<path id="heroLoop" class="hero__loop" d="M300 210 C 520 40, 920 40, 1140 190 C 1320 300, 1290 470, 1110 540 C 930 800, 520 800, 330 560 C 170 450, 150 300, 300 210 Z" vector-effect="non-scaling-stroke"/>
-				<path class="hero__loop hero__loop--dash" d="M300 210 C 520 40, 920 40, 1140 190 C 1320 300, 1290 470, 1110 540 C 930 800, 520 800, 330 560 C 170 450, 150 300, 300 210 Z" vector-effect="non-scaling-stroke"/>
-				<?php foreach ( array( 0, 2.6, 5.2, 7.8 ) as $n => $begin ) : ?>
-					<circle class="hero__pulse hero__pulse--<?php echo (int) $n % 2; ?>" r="5"><animateMotion dur="10.4s" begin="<?php echo esc_attr( $begin ); ?>s" repeatCount="indefinite" rotate="auto"><mpath href="#heroLoop"/></animateMotion></circle>
-				<?php endforeach; ?>
-			</svg>
-			<?php foreach ( $cards as $k => $c ) { $card( $c, $k, 'tcard--float' ); } ?>
-		</div>
-
-		<div class="container hero__center">
-			<?php if ( prime_v( $s, 'eyebrow' ) ) : ?><p class="eyebrow" data-anim="fade-up"><?php echo esc_html( $s['eyebrow'] ); ?></p><?php endif; ?>
-			<h1 class="hero__title">
-				<?php if ( prime_v( $s, 'title_1' ) ) : ?><span class="hero__line" data-split><?php echo esc_html( $s['title_1'] ); ?></span><?php endif; ?>
-				<?php if ( prime_v( $s, 'title_2' ) ) : ?><span class="hero__line" data-split><?php echo esc_html( $s['title_2'] ); ?></span><?php endif; ?>
-				<?php if ( prime_v( $s, 'title_3' ) || $words ) : ?>
-					<span class="hero__line" data-anim="fade-up"><?php echo esc_html( prime_v( $s, 'title_3' ) ); ?>
-						<?php if ( $words ) : ?><span class="rotator" data-rotator="<?php echo esc_attr( implode( ',', $words ) ); ?>"><em class="accent"><?php echo esc_html( $words[0] ); ?></em><i class="rotator__mark" aria-hidden="true"></i></span><?php endif; ?>
-					</span>
+		<div class="hero__bg" aria-hidden="true"><span class="hero__shape"></span><span class="hero__dots"></span></div>
+		<div class="container hero__layout">
+			<div class="hero__copy">
+				<?php if ( prime_v( $s, 'eyebrow' ) ) : ?><p class="eyebrow" data-anim="fade-up"><?php echo esc_html( $s['eyebrow'] ); ?></p><?php endif; ?>
+				<h1 class="hero__title">
+					<?php if ( prime_v( $s, 'title_1' ) ) : ?><span class="hero__line" data-split><?php echo esc_html( $s['title_1'] ); ?></span><?php endif; ?>
+					<?php if ( prime_v( $s, 'title_2' ) ) : ?><span class="hero__line" data-split><?php echo esc_html( $s['title_2'] ); ?></span><?php endif; ?>
+					<?php if ( prime_v( $s, 'title_3' ) || $words ) : ?>
+						<span class="hero__line" data-anim="fade-up"><?php echo esc_html( prime_v( $s, 'title_3' ) ); ?>
+							<?php if ( $words ) : ?><span class="rotator" data-rotator="<?php echo esc_attr( implode( ',', $words ) ); ?>"><em class="accent"><?php echo esc_html( $words[0] ); ?></em></span><?php endif; ?>
+						</span>
+					<?php endif; ?>
+				</h1>
+				<?php if ( prime_v( $s, 'lead' ) ) : ?><p class="hero__lead" data-anim="fade-up"><?php echo esc_html( $s['lead'] ); ?></p><?php endif; ?>
+				<div class="hero__actions" data-anim="fade-up">
+					<?php if ( prime_v( $s, 'btn1_text' ) ) : ?><a class="btn btn--primary btn--lg" <?php echo prime_cta_attrs( prime_v( $s, 'btn1_link' ), 'employer' ); // phpcs:ignore ?>><span><?php echo esc_html( $s['btn1_text'] ); ?></span><?php echo prime_icon( 'arrow', 18 ); // phpcs:ignore ?></a><?php endif; ?>
+					<?php if ( prime_v( $s, 'btn2_text' ) ) : ?><a class="btn btn--outline btn--lg" <?php echo prime_cta_attrs( prime_v( $s, 'btn2_link' ), 'candidate' ); // phpcs:ignore ?>><span><?php echo esc_html( $s['btn2_text'] ); ?></span></a><?php endif; ?>
+				</div>
+				<?php if ( $proof ) : ?>
+					<ul class="hero__proof" data-anim="stagger"><?php foreach ( $proof as $pf ) : ?><li><?php echo prime_icon( 'check', 14 ); // phpcs:ignore ?><?php echo esc_html( $pf ); ?></li><?php endforeach; ?></ul>
 				<?php endif; ?>
-			</h1>
-			<?php if ( prime_v( $s, 'lead' ) ) : ?><p class="hero__lead" data-anim="fade-up"><?php echo esc_html( $s['lead'] ); ?></p><?php endif; ?>
-			<div class="hero__actions" data-anim="fade-up">
-				<?php if ( prime_v( $s, 'btn1_text' ) ) : ?><a class="btn btn--primary btn--lg" <?php echo prime_cta_attrs( prime_v( $s, 'btn1_link' ), 'employer' ); // phpcs:ignore ?>><span><?php echo esc_html( $s['btn1_text'] ); ?></span><?php echo prime_icon( 'arrow', 18 ); // phpcs:ignore ?></a><?php endif; ?>
-				<?php if ( prime_v( $s, 'btn2_text' ) ) : ?><a class="btn btn--outline btn--lg" <?php echo prime_cta_attrs( prime_v( $s, 'btn2_link' ), 'candidate' ); // phpcs:ignore ?>><span><?php echo esc_html( $s['btn2_text'] ); ?></span></a><?php endif; ?>
 			</div>
-			<?php if ( $options ) : ?>
-				<ul class="hero__quick" data-anim="stagger">
-					<?php foreach ( $options as $o ) : ?>
-						<li><a class="hero-chip" <?php echo prime_cta_attrs( prime_v( $o, 'link' ), prime_v( $o, 'preset' ) ); // phpcs:ignore ?>><span class="hero-chip__icon"><?php echo prime_icon( prime_v( $o, 'icon', 'users' ), 16 ); // phpcs:ignore ?></span><?php echo esc_html( prime_v( $o, 'title' ) ); ?></a></li>
-					<?php endforeach; ?>
-				</ul>
-			<?php endif; ?>
-			<?php $proof = prime_lines( prime_v( $s, 'proof' ) ); if ( $proof ) : ?>
-				<ul class="hero__proof" data-anim="stagger"><?php foreach ( $proof as $pf ) : ?><li><?php echo prime_icon( 'check', 15 ); // phpcs:ignore ?><?php echo esc_html( $pf ); ?></li><?php endforeach; ?></ul>
-			<?php elseif ( prime_v( $s, 'trust_title' ) ) : ?>
-				<p class="hero__trust" data-anim="fade-up"><?php echo prime_icon( 'shield', 18 ); // phpcs:ignore ?><span><strong><?php echo esc_html( $s['trust_title'] ); ?></strong> <?php echo esc_html( prime_v( $s, 'trust_text' ) ); ?></span></p>
-			<?php endif; ?>
-			<?php if ( $cards ) : ?>
-				<div class="hero__stack" aria-hidden="true"><?php foreach ( array_slice( $cards, 0, 2 ) as $k => $c ) { $card( $c, $k ); } ?></div>
-			<?php endif; ?>
-		</div>
 
-		<?php if ( $tags ) : ?>
-			<div class="hero__ticker" aria-hidden="true"><div class="ticker__track">
-				<?php for ( $r = 0; $r < 2; $r++ ) : foreach ( $tags as $t ) : ?><span><?php echo esc_html( $t ); ?></span><i></i><?php endforeach; endfor; ?>
-			</div></div>
-		<?php endif; ?>
+			<div class="hero__visual" data-anim="rise">
+				<div class="hero__photo"><img src="<?php echo esc_url( $img ); ?>" alt="<?php echo esc_attr( prime_v( $s, 'image_alt', 'Prime Recruitments' ) ); ?>" width="1500" height="703" fetchpriority="high" decoding="async"></div>
+				<?php if ( $stages ) : ?>
+					<div class="pipeline">
+						<div class="pipeline__head">
+							<span><strong><?php echo esc_html( prime_v( $s, 'pipe_title', 'Hiring pipeline' ) ); ?></strong><small><?php echo esc_html( prime_v( $s, 'pipe_role' ) ); ?></small></span>
+							<span class="pipeline__live"><i></i><?php esc_html_e( 'Live', 'prime' ); ?></span>
+						</div>
+						<ul class="pipeline__list">
+							<?php foreach ( $stages as $k => $st ) : $c = (int) prime_v( $st, 'count', 0 ); ?>
+								<li class="<?php echo count( $stages ) - 1 === $k ? 'is-final' : ''; ?>">
+									<span class="pipeline__label"><?php echo esc_html( prime_v( $st, 'label' ) ); ?></span>
+									<span class="pipeline__bar"><i style="--w:<?php echo esc_attr( max( 6, round( $c / $max * 100 ) ) ); ?>%"></i></span>
+									<b data-count="<?php echo esc_attr( $c ); ?>"><?php echo esc_html( $c ); ?></b>
+								</li>
+							<?php endforeach; ?>
+						</ul>
+					</div>
+				<?php endif; ?>
+				<?php if ( prime_v( $s, 'toast_title' ) ) : ?>
+					<div class="hero__toast"><span class="hero__toast-icon"><?php echo prime_icon( 'check', 18 ); // phpcs:ignore ?></span><span><strong><?php echo esc_html( $s['toast_title'] ); ?></strong><small><?php echo esc_html( prime_v( $s, 'toast_text' ) ); ?></small></span></div>
+				<?php endif; ?>
+			</div>
+		</div>
 	</section>
 	<?php
 }

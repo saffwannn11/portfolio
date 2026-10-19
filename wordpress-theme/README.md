@@ -1,6 +1,6 @@
-# Prime Recruitments: WordPress Theme v1.6 (Elementor-ready)
+# Prime Recruitments: WordPress Theme v1.7 (Elementor-ready)
 
-A professional recruitment and corporate gifting theme in white and off-white (#EDEBE4), with black (#111111), blue (#1D4ED8) and rose (#F43F5E) accents. Every page is pre-built in Elementor using 27 custom Prime widgets.
+A professional recruitment and corporate gifting theme in white and off-white (#EDEBE4), with deep navy (#0B1B3F), royal blue (#1D4ED8) and a rose (#F43F5E) accent. Every page is pre-built in Elementor using 27 custom Prime widgets.
 
 ## Install or update
 
@@ -21,6 +21,13 @@ Activating creates **20 pages** automatically and sets the homepage and URLs. Th
 
 3. Install the free **Elementor** plugin and open any page with **Edit with Elementor**.
 4. *(Optional)* Install **Fluent Forms**. The theme then creates a ready **"Prime Recruitments Enquiry"** form for you, connects it to the popup and every CTA, and sends enquiries to your contact email.
+
+## What's new in v1.7
+
+- **Colours:** deep navy (#0B1B3F) replaces black for the top bar, dark sections and footer. Buttons and highlighted words are solid royal blue, and rose is kept as a small accent.
+- **New homepage banner:** the headline, buttons and proof points sit on the left. On the right is a photo with a "Hiring pipeline" card (Sourced → Screened → Interviewed → Shortlisted, with animated bars) and a small "Shortlist delivered" card. Every label, number and the photo can be edited in Elementor.
+- **Removed:** the scrolling roles strip, the four floating candidate cards, and the sticky left social bar. Social links now appear in the top bar and footer once added in Customize → Prime Recruitments → Social links.
+- **Stats:** the four stat boxes are now one clean navy band (homepage and About Us).
 
 ## What's new in v1.6
 
