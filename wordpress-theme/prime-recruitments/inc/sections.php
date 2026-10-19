@@ -78,52 +78,76 @@ function prime_shead( $s, $args = array() ) {
 
 function prime_sec_hero( $s ) {
 	$words   = array_values( array_filter( array_map( 'trim', explode( ',', prime_v( $s, 'rotator', '' ) ) ) ) );
-	$img     = prime_media_or_photo( prime_v( $s, 'image' ), 'stairs' );
 	$options = (array) prime_v( $s, 'options', array() );
-	$form    = 'options' !== prime_v( $s, 'panel_mode', 'form' );
-	?>
-	<section class="hero prime-sec has-wave" data-hero>
-		<?php echo prime_blobs( 4 ); // phpcs:ignore ?>
-		<div class="container hero__layout">
-			<div class="hero__copy">
-				<?php if ( prime_v( $s, 'eyebrow' ) ) : ?><p class="eyebrow eyebrow--light" data-anim="fade-up"><?php echo esc_html( $s['eyebrow'] ); ?></p><?php endif; ?>
-				<h1 class="hero__title">
-					<?php if ( prime_v( $s, 'title_1' ) ) : ?><span class="hero__line" data-split><?php echo esc_html( $s['title_1'] ); ?></span><?php endif; ?>
-					<?php if ( prime_v( $s, 'title_2' ) ) : ?><span class="hero__line" data-split><?php echo esc_html( $s['title_2'] ); ?></span><?php endif; ?>
-					<?php if ( prime_v( $s, 'title_3' ) || $words ) : ?>
-						<span class="hero__line" data-anim="fade-up"><?php echo esc_html( prime_v( $s, 'title_3' ) ); ?>
-							<?php if ( $words ) : ?><span class="rotator" data-rotator="<?php echo esc_attr( implode( ',', $words ) ); ?>"><em class="accent"><?php echo esc_html( $words[0] ); ?></em></span><?php endif; ?>
-						</span>
-					<?php endif; ?>
-				</h1>
-				<?php if ( prime_v( $s, 'lead' ) ) : ?><p class="hero__lead" data-anim="fade-up"><?php echo esc_html( $s['lead'] ); ?></p><?php endif; ?>
-				<div class="hero__actions" data-anim="fade-up">
-					<?php if ( prime_v( $s, 'btn1_text' ) ) : ?><a class="btn btn--light btn--lg" <?php echo prime_cta_attrs( prime_v( $s, 'btn1_link' ), 'employer' ); // phpcs:ignore ?>><span><?php echo esc_html( $s['btn1_text'] ); ?></span><?php echo prime_icon( 'arrow', 18 ); // phpcs:ignore ?></a><?php endif; ?>
-					<?php if ( prime_v( $s, 'btn2_text' ) ) : ?><a class="btn btn--glass btn--lg" <?php echo prime_cta_attrs( prime_v( $s, 'btn2_link' ), 'candidate' ); // phpcs:ignore ?>><span><?php echo esc_html( $s['btn2_text'] ); ?></span></a><?php endif; ?>
-				</div>
-				<?php if ( $options ) : ?>
-					<ul class="hero__quick" data-anim="stagger">
-						<?php foreach ( $options as $o ) : ?>
-							<li><a class="hero-chip" <?php echo prime_cta_attrs( prime_v( $o, 'link' ), prime_v( $o, 'preset' ) ); // phpcs:ignore ?>><span class="hero-chip__icon"><?php echo prime_icon( prime_v( $o, 'icon', 'users' ), 18 ); // phpcs:ignore ?></span><span><strong><?php echo esc_html( prime_v( $o, 'title' ) ); ?></strong><small><?php echo esc_html( prime_v( $o, 'text' ) ); ?></small></span></a></li>
-						<?php endforeach; ?>
-					</ul>
-				<?php endif; ?>
-				<?php if ( prime_v( $s, 'trust_title' ) ) : ?>
-					<p class="hero__trust" data-anim="fade-up"><?php echo prime_icon( 'shield', 18 ); // phpcs:ignore ?><span><strong><?php echo esc_html( $s['trust_title'] ); ?></strong> <?php echo esc_html( prime_v( $s, 'trust_text' ) ); ?></span></p>
-				<?php endif; ?>
-			</div>
-
-			<div class="hero__side">
-				<div class="hero__photo morph" aria-hidden="true"><img src="<?php echo esc_url( $img ); ?>" alt="" width="1400" height="811" fetchpriority="high" decoding="async"></div>
-				<?php if ( $form ) : ?>
-					<aside class="hero-panel glass" data-anim="rise" id="hero-enquiry">
-						<?php if ( prime_v( $s, 'panel_title' ) ) : ?><p class="hero-panel__title"><?php echo esc_html( $s['panel_title'] ); ?></p><?php endif; ?>
-						<?php if ( prime_v( $s, 'panel_text' ) ) : ?><p class="hero-panel__text"><?php echo esc_html( $s['panel_text'] ); ?></p><?php endif; ?>
-						<?php prime_form( 'employer', prime_v( $s, 'form_shortcode' ), 'light' ); ?>
-					</aside>
-				<?php endif; ?>
-			</div>
+	$cards   = array_slice( (array) prime_v( $s, 'cards', array() ), 0, 4 );
+	$tags    = prime_lines( prime_v( $s, 'tags' ) );
+	$states  = array( 'is-blue', 'is-rose', 'is-dark', 'is-blue' );
+	$card    = function ( $c, $k, $extra = '' ) use ( $states ) {
+		$name = prime_v( $c, 'name', 'Candidate' );
+		?>
+		<div class="tcard tcard--<?php echo (int) $k + 1; ?> <?php echo esc_attr( $extra ); ?>">
+			<span class="tcard__av <?php echo esc_attr( $states[ $k % 4 ] ); ?>"><?php echo esc_html( mb_substr( $name, 0, 1 ) ); ?></span>
+			<span class="tcard__info"><strong><?php echo esc_html( prime_v( $c, 'role' ) ); ?></strong><small><?php echo esc_html( $name ); ?> · <?php echo esc_html( prime_v( $c, 'city' ) ); ?></small></span>
+			<?php if ( prime_v( $c, 'status' ) ) : ?><span class="tcard__status"><?php echo prime_icon( 'check', 12 ); // phpcs:ignore ?><?php echo esc_html( $c['status'] ); ?></span><?php endif; ?>
 		</div>
+		<?php
+	};
+	?>
+	<section class="hero prime-sec" data-hero>
+		<div class="hero__bg" aria-hidden="true">
+			<span class="hero__glow hero__glow--blue"></span><span class="hero__glow hero__glow--rose"></span>
+			<span class="hero__grid"></span>
+			<svg class="hero__net" viewBox="0 0 1440 860" preserveAspectRatio="none">
+				<defs><linearGradient id="netGrad" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#1D4ED8"/><stop offset="1" stop-color="#F43F5E"/></linearGradient></defs>
+				<path id="heroLoop" class="hero__loop" d="M300 210 C 520 40, 920 40, 1140 190 C 1320 300, 1290 470, 1110 540 C 930 800, 520 800, 330 560 C 170 450, 150 300, 300 210 Z" vector-effect="non-scaling-stroke"/>
+				<path class="hero__loop hero__loop--dash" d="M300 210 C 520 40, 920 40, 1140 190 C 1320 300, 1290 470, 1110 540 C 930 800, 520 800, 330 560 C 170 450, 150 300, 300 210 Z" vector-effect="non-scaling-stroke"/>
+				<?php foreach ( array( 0, 2.6, 5.2, 7.8 ) as $n => $begin ) : ?>
+					<circle class="hero__pulse hero__pulse--<?php echo (int) $n % 2; ?>" r="5"><animateMotion dur="10.4s" begin="<?php echo esc_attr( $begin ); ?>s" repeatCount="indefinite" rotate="auto"><mpath href="#heroLoop"/></animateMotion></circle>
+				<?php endforeach; ?>
+			</svg>
+			<?php foreach ( $cards as $k => $c ) { $card( $c, $k, 'tcard--float' ); } ?>
+			<span class="hero__bubble hero__bubble--1"><?php echo prime_icon( 'briefcase', 20 ); // phpcs:ignore ?></span>
+			<span class="hero__bubble hero__bubble--2"><?php echo prime_icon( 'users', 20 ); // phpcs:ignore ?></span>
+			<span class="hero__bubble hero__bubble--3"><?php echo prime_icon( 'star', 20 ); // phpcs:ignore ?></span>
+			<span class="hero__bubble hero__bubble--4"><?php echo prime_icon( 'check', 20 ); // phpcs:ignore ?></span>
+		</div>
+
+		<div class="container hero__center">
+			<?php if ( prime_v( $s, 'eyebrow' ) ) : ?><p class="eyebrow" data-anim="fade-up"><?php echo esc_html( $s['eyebrow'] ); ?></p><?php endif; ?>
+			<h1 class="hero__title">
+				<?php if ( prime_v( $s, 'title_1' ) ) : ?><span class="hero__line" data-split><?php echo esc_html( $s['title_1'] ); ?></span><?php endif; ?>
+				<?php if ( prime_v( $s, 'title_2' ) ) : ?><span class="hero__line" data-split><?php echo esc_html( $s['title_2'] ); ?></span><?php endif; ?>
+				<?php if ( prime_v( $s, 'title_3' ) || $words ) : ?>
+					<span class="hero__line" data-anim="fade-up"><?php echo esc_html( prime_v( $s, 'title_3' ) ); ?>
+						<?php if ( $words ) : ?><span class="rotator" data-rotator="<?php echo esc_attr( implode( ',', $words ) ); ?>"><em class="accent"><?php echo esc_html( $words[0] ); ?></em><i class="rotator__mark" aria-hidden="true"></i></span><?php endif; ?>
+					</span>
+				<?php endif; ?>
+			</h1>
+			<?php if ( prime_v( $s, 'lead' ) ) : ?><p class="hero__lead" data-anim="fade-up"><?php echo esc_html( $s['lead'] ); ?></p><?php endif; ?>
+			<div class="hero__actions" data-anim="fade-up">
+				<?php if ( prime_v( $s, 'btn1_text' ) ) : ?><a class="btn btn--primary btn--lg" <?php echo prime_cta_attrs( prime_v( $s, 'btn1_link' ), 'employer' ); // phpcs:ignore ?>><span><?php echo esc_html( $s['btn1_text'] ); ?></span><?php echo prime_icon( 'arrow', 18 ); // phpcs:ignore ?></a><?php endif; ?>
+				<?php if ( prime_v( $s, 'btn2_text' ) ) : ?><a class="btn btn--outline btn--lg" <?php echo prime_cta_attrs( prime_v( $s, 'btn2_link' ), 'candidate' ); // phpcs:ignore ?>><span><?php echo esc_html( $s['btn2_text'] ); ?></span></a><?php endif; ?>
+			</div>
+			<?php if ( $options ) : ?>
+				<ul class="hero__quick" data-anim="stagger">
+					<?php foreach ( $options as $o ) : ?>
+						<li><a class="hero-chip" <?php echo prime_cta_attrs( prime_v( $o, 'link' ), prime_v( $o, 'preset' ) ); // phpcs:ignore ?>><span class="hero-chip__icon"><?php echo prime_icon( prime_v( $o, 'icon', 'users' ), 16 ); // phpcs:ignore ?></span><?php echo esc_html( prime_v( $o, 'title' ) ); ?></a></li>
+					<?php endforeach; ?>
+				</ul>
+			<?php endif; ?>
+			<?php if ( prime_v( $s, 'trust_title' ) ) : ?>
+				<p class="hero__trust" data-anim="fade-up"><span class="hero__avatars" aria-hidden="true"><i>A</i><i>P</i><i>R</i><i>+</i></span><span><strong><?php echo esc_html( $s['trust_title'] ); ?></strong> <?php echo esc_html( prime_v( $s, 'trust_text' ) ); ?></span></p>
+			<?php endif; ?>
+			<?php if ( $cards ) : ?>
+				<div class="hero__stack" aria-hidden="true"><?php foreach ( array_slice( $cards, 0, 2 ) as $k => $c ) { $card( $c, $k ); } ?></div>
+			<?php endif; ?>
+		</div>
+
+		<?php if ( $tags ) : ?>
+			<div class="hero__ticker" aria-hidden="true"><div class="ticker__track">
+				<?php for ( $r = 0; $r < 2; $r++ ) : foreach ( $tags as $t ) : ?><span><?php echo esc_html( $t ); ?></span><i></i><?php endforeach; endfor; ?>
+			</div></div>
+		<?php endif; ?>
 	</section>
 	<?php
 }
@@ -551,7 +575,7 @@ function prime_sec_faq( $s ) {
 function prime_sec_cta_form( $s ) {
 	$points = prime_lines( prime_v( $s, 'points' ) );
 	?>
-	<section class="cta-form prime-sec is-red has-wave-top" id="enquiry">
+	<section class="cta-form prime-sec is-dark" id="enquiry">
 		<?php echo prime_blobs( 3 ); // phpcs:ignore ?>
 		<div class="container cta-form__layout">
 			<div class="cta-form__copy">
@@ -597,8 +621,8 @@ function prime_sec_banner( $s ) {
 	$chips   = prime_lines( prime_v( $s, 'chips' ) );
 	$answer  = 'yes' === prime_v( $s, 'show_answer', 'yes' ) && prime_v( $s, 'answer_text' );
 	?>
-	<section class="banner prime-sec has-wave">
-		<?php echo prime_blobs( 3 ); // phpcs:ignore ?>
+	<section class="banner prime-sec">
+		<div class="hero__bg" aria-hidden="true"><span class="hero__glow hero__glow--blue"></span><span class="hero__glow hero__glow--rose"></span><span class="hero__grid"></span></div>
 		<div class="banner__media morph" aria-hidden="true"><img src="<?php echo esc_url( $img ); ?>" alt="" fetchpriority="high" decoding="async"></div>
 		<div class="container banner__layout <?php echo $answer ? '' : 'banner__layout--solo'; ?>">
 			<div class="banner__copy">
@@ -609,13 +633,13 @@ function prime_sec_banner( $s ) {
 						<span aria-current="page"><?php echo esc_html( $current ); ?></span>
 					</nav>
 				<?php endif; ?>
-				<?php if ( prime_v( $s, 'eyebrow' ) ) : ?><p class="eyebrow eyebrow--light" data-anim="fade-up"><?php echo esc_html( $s['eyebrow'] ); ?></p><?php endif; ?>
+				<?php if ( prime_v( $s, 'eyebrow' ) ) : ?><p class="eyebrow" data-anim="fade-up"><?php echo esc_html( $s['eyebrow'] ); ?></p><?php endif; ?>
 				<h1 class="banner__title" data-split><?php echo prime_h( prime_v( $s, 'title', $current ) ); // phpcs:ignore ?></h1>
 				<?php if ( prime_v( $s, 'lead' ) ) : ?><p class="banner__lead" data-anim="fade-up"><?php echo esc_html( $s['lead'] ); ?></p><?php endif; ?>
 				<?php if ( prime_v( $s, 'btn1_text' ) || prime_v( $s, 'btn2_text' ) ) : ?>
 					<div class="banner__actions" data-anim="fade-up">
-						<?php if ( prime_v( $s, 'btn1_text' ) ) : ?><a class="btn btn--light btn--lg" <?php echo prime_cta_attrs( prime_v( $s, 'btn1_link', prime_link( '#enquiry' ) ) ); // phpcs:ignore ?>><span><?php echo esc_html( $s['btn1_text'] ); ?></span><?php echo prime_icon( 'arrow', 18 ); // phpcs:ignore ?></a><?php endif; ?>
-						<?php if ( prime_v( $s, 'btn2_text' ) ) : ?><a class="btn btn--glass btn--lg" <?php echo prime_link_attrs( prime_v( $s, 'btn2_link', prime_link( '#faq' ) ) ); // phpcs:ignore ?>><span><?php echo esc_html( $s['btn2_text'] ); ?></span></a><?php endif; ?>
+						<?php if ( prime_v( $s, 'btn1_text' ) ) : ?><a class="btn btn--primary btn--lg" <?php echo prime_cta_attrs( prime_v( $s, 'btn1_link', prime_link( '#enquiry' ) ) ); // phpcs:ignore ?>><span><?php echo esc_html( $s['btn1_text'] ); ?></span><?php echo prime_icon( 'arrow', 18 ); // phpcs:ignore ?></a><?php endif; ?>
+						<?php if ( prime_v( $s, 'btn2_text' ) ) : ?><a class="btn btn--outline btn--lg" <?php echo prime_link_attrs( prime_v( $s, 'btn2_link', prime_link( '#faq' ) ) ); // phpcs:ignore ?>><span><?php echo esc_html( $s['btn2_text'] ); ?></span></a><?php endif; ?>
 					</div>
 				<?php endif; ?>
 				<?php if ( $chips ) : ?>
@@ -863,15 +887,15 @@ function prime_sec_gifting( $s ) {
 						<span class="gift-art__blob morph"></span>
 						<svg class="gift-art__box" viewBox="0 0 240 240">
 							<defs>
-								<linearGradient id="gaGold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e2c35e"/><stop offset="1" stop-color="#a8841c"/></linearGradient>
-								<linearGradient id="gaBox" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d61f36"/><stop offset="1" stop-color="#7a0c1b"/></linearGradient>
+								<linearGradient id="gaGold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FB7185"/><stop offset="1" stop-color="#E11D48"/></linearGradient>
+								<linearGradient id="gaBox" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2b5ce6"/><stop offset="1" stop-color="#1D4ED8"/></linearGradient>
 							</defs>
 							<rect x="44" y="104" width="152" height="112" rx="6" fill="url(#gaBox)"/>
-							<rect x="34" y="78" width="172" height="36" rx="5" fill="#a10d24"/>
+							<rect x="34" y="78" width="172" height="36" rx="5" fill="#1E40AF"/>
 							<rect x="108" y="78" width="24" height="138" fill="url(#gaGold)"/>
 							<path d="M120 78c-10-26-46-38-52-18-5 16 26 20 52 18Z" fill="none" stroke="url(#gaGold)" stroke-width="10" stroke-linejoin="round"/>
 							<path d="M120 78c10-26 46-38 52-18 5 16-26 20-52 18Z" fill="none" stroke="url(#gaGold)" stroke-width="10" stroke-linejoin="round"/>
-							<circle cx="120" cy="78" r="10" fill="#e2c35e"/>
+							<circle cx="120" cy="78" r="10" fill="#FB7185"/>
 						</svg>
 						<span class="gift-art__chip gift-art__chip--1"><?php echo prime_icon( 'palette', 16 ); // phpcs:ignore ?><span><strong><?php esc_html_e( 'Your logo', 'prime' ); ?></strong><small><?php esc_html_e( 'on every gift', 'prime' ); ?></small></span></span>
 						<span class="gift-art__chip gift-art__chip--2"><?php echo prime_icon( 'truck', 16 ); // phpcs:ignore ?><span><strong><?php esc_html_e( 'Pan-India', 'prime' ); ?></strong><small><?php esc_html_e( 'delivery', 'prime' ); ?></small></span></span>

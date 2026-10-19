@@ -11,7 +11,15 @@ $phone_href = preg_replace( '/[^0-9+]/', '', prime_opt( 'contact_phone' ) );
 </main>
 
 <footer class="site-footer">
+	<div class="footer-glow" aria-hidden="true"></div>
 	<div class="container">
+		<div class="footer-top">
+			<p class="footer-top__title"><?php echo wp_kses_post( prime_heading_html( 'Let’s build your *next great team.*' ) ); ?></p>
+			<div class="footer-top__actions">
+				<a class="btn btn--primary" href="<?php echo esc_url( prime_url( 'contact' ) ); ?>#enquiry" data-modal="enquiry"><span><?php esc_html_e( 'Start a conversation', 'prime' ); ?></span><?php echo prime_icon( 'arrow', 18 ); // phpcs:ignore ?></a>
+				<?php if ( prime_whatsapp_url() ) : ?><a class="btn btn--glass" href="<?php echo esc_url( prime_whatsapp_url() ); ?>" target="_blank" rel="noopener"><?php echo prime_icon( 'whatsapp', 18 ); // phpcs:ignore ?><span>WhatsApp</span></a><?php endif; ?>
+			</div>
+		</div>
 		<div class="footer-grid">
 			<div class="footer-brand">
 				<?php prime_logo( 'footer' ); ?>
@@ -49,6 +57,11 @@ $phone_href = preg_replace( '/[^0-9+]/', '', prime_opt( 'contact_phone' ) );
 					<li><?php echo prime_icon( 'pin', 16 ); // phpcs:ignore ?><span><?php echo esc_html( prime_opt( 'contact_address' ) ); ?></span></li>
 				</ul>
 			</div>
+		</div>
+
+		<div class="footer-mega" aria-hidden="true">
+			<div class="footer-mega__word"><?php foreach ( str_split( 'PRIME' ) as $i => $ch ) : ?><span style="--i:<?php echo (int) $i; ?>"><?php echo esc_html( $ch ); ?></span><?php endforeach; ?></div>
+			<div class="footer-mega__sub"><span>RECRUITMENTS</span><i></i><span><?php esc_html_e( 'Pan India Recruitment Solutions', 'prime' ); ?></span></div>
 		</div>
 
 		<div class="footer-bottom">

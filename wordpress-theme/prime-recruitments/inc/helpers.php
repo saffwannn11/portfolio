@@ -140,8 +140,7 @@ function prime_photo( $key ) {
 	$legacy = array( 'mesh' => 'facade', 'grid' => 'windows', 'orbit' => 'tower', 'beam' => 'atrium', 'wave' => 'geometry' );
 	$key    = isset( $legacy[ $key ] ) ? $legacy[ $key ] : $key;
 	$all    = prime_photos();
-	// Red duotone versions match the brand gradient.
-	return prime_img( str_replace( 'photo-', 'duo-', isset( $all[ $key ] ) ? $all[ $key ] : $all['facade'] ) );
+	return prime_img( isset( $all[ $key ] ) ? $all[ $key ] : $all['facade'] );
 }
 
 /**

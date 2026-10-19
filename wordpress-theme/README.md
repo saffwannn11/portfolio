@@ -1,6 +1,6 @@
-# Prime Recruitments: WordPress Theme v1.4 "Liquid" (Elementor-ready)
+# Prime Recruitments: WordPress Theme v1.5 (Elementor-ready)
 
-A professional recruitment and corporate gifting theme with a crimson-red gradient on white and a liquid design: morphing shapes, flowing wave edges and liquid-fill buttons. Every page is pre-built in Elementor using 27 custom Prime widgets.
+A professional recruitment and corporate gifting theme in white and off-white (#EDEBE4), with black (#111111), blue (#1D4ED8) and rose (#F43F5E) accents. Every page is pre-built in Elementor using 27 custom Prime widgets.
 
 ## Install or update
 
@@ -22,26 +22,23 @@ Activating creates **20 pages** automatically and sets the homepage and URLs. Th
 3. Install the free **Elementor** plugin and open any page with **Edit with Elementor**.
 4. *(Optional)* Install **Fluent Forms**. The theme then creates a ready **"Prime Recruitments Enquiry"** form for you, connects it to the popup and every CTA, and sends enquiries to your contact email.
 
-## What's new in v1.4 ("Liquid")
+## What's new in v1.5
 
-- **Colours:** a red gradient (#7A0C1B → #C8102E → #D61F36) on white, with soft rose tints (#FFF4F4) for alternate sections. Every text and colour combination passes an automated readability check, and white text stays at least 5:1 contrast on every part of the gradient.
-- **Liquid design:**
-  - soft blobs that slowly morph and drift
-  - photos shown in morphing liquid shapes
-  - red sections with flowing, animated wave edges
-  - pill buttons that fill with "liquid" on hover
-  - service cards that flood with the red gradient when you hover over them
-- **Menu:** a floating frosted-glass bar. A red pill glides to whichever menu item you hover over. On phones, the menu opens with a red liquid circle that expands from the menu button.
-- **Banners:** every inner page has a red-gradient banner, a red-toned photo in a liquid shape, a glass "quick answer" card and a wavy bottom edge.
-- **The enquiry form is everywhere:**
-  - in the homepage hero ("Get started in 60 seconds")
-  - in the red enquiry section at the bottom of every page
-  - in the popup that opens from every enquiry button
-  It uses your Fluent Form automatically when Fluent Forms is installed.
-- **Fonts:** Poppins for headings and Nunito Sans for text.
-- **Preloader:** your logo inside a circle that fills with red liquid. It is short, and shown only on a visitor's first page.
+- **Your colours:** white and #EDEBE4 backgrounds, black #111111, blue #1D4ED8 and rose #F43F5E. Buttons use a blue-to-rose gradient. All text passes an automated readability check.
+- **Homepage banner:** centred headline with an animated "talent network" behind it:
+  - candidate cards (role, city, status such as "Interviewed" or "Offer accepted") float around the headline and follow the mouse with a depth effect
+  - glowing dots travel along a network loop, over a slowly moving grid
+  - the rotating word ("grow", "lead", "scale", "win") changes with a blur transition and a gradient underline
+  - a scrolling strip of roles runs along the bottom
+  - there is no form in the banner; the cards, roles and status labels are editable in Elementor
+- **Inner-page banners:** light background with the same grid and glow, a breadcrumb, highlight chips and a "quick answer" card.
+- **Footer:**
+  - a "Let's build your next great team" call-to-action
+  - a giant animated **PRIME** wordmark: the letters rise one by one on scroll, a colour shine moves across them, and each letter lifts on hover
+- **Menu:** a floating glass bar. A black pill glides to whichever item you hover over, and a rose dot marks the current page. On phones, the menu opens with an expanding circle.
+- **Enquiry form:** the built-in or Fluent Forms enquiry form appears in the enquiry section at the bottom of every page and in the popup.
 
-To change the red, use Customize → Prime Recruitments → Brand colour.
+## Earlier (v1.3)
 
 ## Earlier (v1.3)
 

@@ -14,7 +14,7 @@ defined( 'ABSPATH' ) || exit;
  */
 function prime_opt_defaults() {
 	return array(
-		'brand_color'     => '#c8102e',
+		'brand_color'     => '#1D4ED8',
 		'modal_image'     => '',
 		'fluentform_id'   => '',
 		'form_recipient'  => '',
@@ -196,8 +196,8 @@ add_action( 'customize_register', 'prime_customize_register' );
  */
 function prime_brand_color_css() {
 	$c = sanitize_hex_color( prime_opt( 'brand_color' ) );
-	if ( $c && '#c8102e' !== strtolower( $c ) ) {
-		wp_add_inline_style( 'prime-main', ':root{--gold:' . $c . ';--red-600:' . $c . ';--accent-text:' . $c . ';--grad:linear-gradient(125deg,' . $c . ',' . $c . ');}' );
+	if ( $c && '#1d4ed8' !== strtolower( $c ) ) {
+		wp_add_inline_style( 'prime-main', ':root{--blue:' . $c . ';--gold:' . $c . ';--accent-text:' . $c . ';}' );
 	}
 }
 add_action( 'wp_enqueue_scripts', 'prime_brand_color_css', 20 );

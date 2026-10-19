@@ -370,6 +370,7 @@
 
 		hero();
 		media();
+		footerMega();
 		statement();
 		counters();
 		processLine();
@@ -382,30 +383,50 @@
 		window.addEventListener('load', function () { ScrollTrigger.refresh(); });
 	}
 
-	/* Hero: slow photo zoom, rotating word, gentle parallax */
+	/* Hero: talent cards pop in and follow the pointer, rotating word */
 	function hero() {
 		var heroEl = $('[data-hero]');
 		if (!heroEl) return;
-		var img = $('.hero__photo img', heroEl);
-		if (img) {
-			gsap.fromTo(img, { scale: 1.12 }, { scale: 1, duration: 2.4, ease: 'power2.out' });
-			gsap.to($('.hero__photo', heroEl), { yPercent: -14, ease: 'none', scrollTrigger: { trigger: heroEl, start: 'top top', end: 'bottom top', scrub: true } });
+		var cards = $$('.tcard--float, .hero__bubble', heroEl);
+		if (cards.length) {
+			gsap.from(cards, { opacity: 0, scale: 0.6, y: 40, duration: 1, stagger: 0.12, delay: 0.5, ease: 'back.out(1.6)' });
+			if (finePointer) {
+				var movers = cards.map(function (el, k) {
+					var depth = (k % 3 + 1) * 10;
+					return { x: gsap.quickTo(el, 'x', { duration: 1.2, ease: 'power3' }), y: gsap.quickTo(el, 'y', { duration: 1.2, ease: 'power3' }), d: depth };
+				});
+				heroEl.addEventListener('pointermove', function (e) {
+					var r = heroEl.getBoundingClientRect();
+					var px = (e.clientX - r.left) / r.width - 0.5, py = (e.clientY - r.top) / r.height - 0.5;
+					movers.forEach(function (m) { m.x(px * m.d * -2); m.y(py * m.d * -2); });
+				});
+			}
 		}
+		gsap.from($$('.hero__stack .tcard', heroEl), { opacity: 0, y: 30, stagger: 0.15, duration: 0.9, delay: 0.7 });
 		var rot = $('[data-rotator]', heroEl);
 		if (rot) {
 			var words = rot.getAttribute('data-rotator').split(',');
 			var em = rot.querySelector('em');
+			var mark = rot.querySelector('.rotator__mark');
 			var idx = 0;
 			if (words.length > 1) {
 				setInterval(function () {
 					idx = (idx + 1) % words.length;
 					gsap.timeline()
-						.to(em, { yPercent: -40, opacity: 0, duration: 0.4, ease: 'power2.in' })
-						.add(function () { em.textContent = words[idx]; })
-						.fromTo(em, { yPercent: 40, opacity: 0 }, { yPercent: 0, opacity: 1, duration: 0.6, ease: 'power3.out' });
+						.to(em, { yPercent: -60, opacity: 0, filter: 'blur(6px)', duration: 0.4, ease: 'power2.in' })
+						.add(function () { em.textContent = words[idx]; if (mark) { mark.style.animation = 'none'; void mark.offsetWidth; mark.style.animation = ''; } })
+						.fromTo(em, { yPercent: 60, opacity: 0, filter: 'blur(6px)' }, { yPercent: 0, opacity: 1, filter: 'blur(0px)', duration: 0.6, ease: 'power3.out' });
 				}, 2800);
 			}
 		}
+	}
+
+	/* Footer: giant PRIME letters rise in one by one */
+	function footerMega() {
+		var letters = $$('.footer-mega__word span');
+		if (!letters.length) return;
+		gsap.from(letters, { yPercent: 110, rotate: 8, duration: 1.2, stagger: 0.08, ease: 'power4.out', scrollTrigger: { trigger: '.footer-mega', start: 'top 92%', once: true } });
+		gsap.from('.footer-mega__sub', { opacity: 0, y: 20, duration: 0.8, delay: 0.5, scrollTrigger: { trigger: '.footer-mega', start: 'top 92%', once: true } });
 	}
 
 	/* Banners and photo bands: subtle parallax on the background photo */

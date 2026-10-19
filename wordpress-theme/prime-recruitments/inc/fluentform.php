@@ -116,7 +116,7 @@ function prime_ff_template( $forms ) {
 						'button_style'     => 'default',
 						'container_class'  => '',
 						'help_message'     => '',
-						'background_color' => '#c8102e',
+						'background_color' => '#1D4ED8',
 						'button_size'      => 'lg',
 						'color'            => '#ffffff',
 						'button_ui'        => array( 'type' => 'default', 'text' => 'Send enquiry', 'img_url' => '' ),
