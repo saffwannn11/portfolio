@@ -112,21 +112,10 @@ function prime_home_sections() {
 				'btn1_link'   => prime_link( '#enquiry' ),
 				'btn2_text'   => 'Browse jobs',
 				'btn2_link'   => prime_link( prime_url( 'jobs' ) ),
-				'proof'       => "Every candidate interviewed\nShortlists in 48–72 hours\nPan-India + overseas",
-				'image_alt'   => 'Corporate office building',
-				'pipe_title'  => 'Hiring pipeline',
-				'pipe_role'   => 'Regional Sales Manager · Delhi NCR',
-				'stages'      => array(
-					array( 'label' => 'Sourced', 'count' => 240 ),
-					array( 'label' => 'Screened', 'count' => 58 ),
-					array( 'label' => 'Interviewed', 'count' => 12 ),
-					array( 'label' => 'Shortlisted', 'count' => 4 ),
-				),
-				'toast_title' => 'Shortlist delivered',
-				'toast_text'  => '4 interviewed candidates in 48 hrs',
+				'proof'       => "Every candidate interviewed\nShortlists in 48–72 hours\nPan-India + overseas hiring",
+				'stats'       => prime_stats_items(),
 			),
 		),
-		array( 'stats', array( 'style' => 'dark', 'items' => prime_stats_items() ) ),
 		array(
 			'about_split',
 			array(
