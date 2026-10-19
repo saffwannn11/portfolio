@@ -7,7 +7,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'PRIME_VERSION', '1.5.0' );
+define( 'PRIME_VERSION', '1.6.0' );
 define( 'PRIME_DIR', get_template_directory() );
 define( 'PRIME_URI', get_template_directory_uri() );
 

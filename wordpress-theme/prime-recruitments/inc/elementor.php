@@ -51,8 +51,9 @@ function prime_widget_schemas() {
 				'trust_title' => array( 'text', 'Trust line – bold part' ),
 				'trust_text'  => array( 'text', 'Trust line – text' ),
 				'tags'           => array( 'textarea', 'Scrolling roles strip at the bottom (one per line)' ),
-				'cards'          => array( 'repeater', 'Animated talent cards (4)', array( 'title' => 'role', 'fields' => array( 'role' => array( 'text', 'Role' ), 'name' => array( 'text', 'Name' ), 'city' => array( 'text', 'City' ), 'status' => array( 'text', 'Status badge' ) ) ) ),
-				'options'        => array( 'repeater', 'Quick links under the buttons (optional)', array( 'title' => 'title', 'fields' => array( 'icon' => array( 'icon', 'Icon' ), 'title' => array( 'text', 'Title' ), 'text' => array( 'text', 'Text' ), 'link' => array( 'url', 'Link (#enquiry = popup)' ), 'preset' => $preset ) ) ),
+				'proof'          => array( 'textarea', 'Proof points under the buttons (one per line)' ),
+				'cards'          => array( 'repeater', 'Animated talent cards (4)', array( 'title' => 'role', 'fields' => array( 'role' => array( 'text', 'Role' ), 'name' => array( 'text', 'Name' ), 'city' => array( 'text', 'City' ), 'status' => array( 'text', 'Status badge' ), 'match' => array( 'number', 'Match % (0 = hide bar)' ) ) ) ),
+				'options'        => array( 'repeater', 'Quick links under the buttons (optional, empty = hidden)', array( 'title' => 'title', 'fields' => array( 'icon' => array( 'icon', 'Icon' ), 'title' => array( 'text', 'Title' ), 'text' => array( 'text', 'Text' ), 'link' => array( 'url', 'Link (#enquiry = popup)' ), 'preset' => $preset ) ) ),
 			),
 		),
 		'stats'           => array(

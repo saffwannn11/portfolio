@@ -153,6 +153,32 @@
 		if (top) top.addEventListener('click', function () { lenis ? lenis.scrollTo(0, { duration: 1.6 }) : window.scrollTo({ top: 0, behavior: 'smooth' }); });
 	})();
 
+	// Footer wordmark: letters rise when the footer scrolls into view.
+	(function () {
+		var mega = $('.footer-mega');
+		if (!mega) return;
+		if (!('IntersectionObserver' in window)) { mega.classList.add('is-in'); return; }
+		var io = new IntersectionObserver(function (en) {
+			if (en[0].isIntersecting) { mega.classList.add('is-in'); io.disconnect(); }
+		}, { threshold: 0.15 });
+		io.observe(mega);
+	})();
+
+	// Safety net: anything already on screen that is still waiting for its
+	// scroll animation is shown immediately (e.g. at the very bottom of a page).
+	function flushVisible() {
+		if (!window.ScrollTrigger) return;
+		ScrollTrigger.getAll().forEach(function (st) {
+			var el = st.trigger;
+			if (!el || !st.animation || st.animation.progress() === 1) return;
+			var r = el.getBoundingClientRect();
+			if (r.top < window.innerHeight && r.bottom > 0 && st.vars && st.vars.once) st.animation.progress(1);
+		});
+	}
+	var flushT = null;
+	window.addEventListener('scroll', function () { clearTimeout(flushT); flushT = setTimeout(flushVisible, 400); }, { passive: true });
+	window.addEventListener('load', function () { setTimeout(flushVisible, 1500); });
+
 	// Interactive widgets. Scoped so Elementor can re-initialise a single
 	// widget after re-rendering it in the editor.
 	function once(el) {
@@ -370,7 +396,6 @@
 
 		hero();
 		media();
-		footerMega();
 		statement();
 		counters();
 		processLine();
@@ -419,14 +444,6 @@
 				}, 2800);
 			}
 		}
-	}
-
-	/* Footer: giant PRIME letters rise in one by one */
-	function footerMega() {
-		var letters = $$('.footer-mega__word span');
-		if (!letters.length) return;
-		gsap.from(letters, { yPercent: 110, rotate: 8, duration: 1.2, stagger: 0.08, ease: 'power4.out', scrollTrigger: { trigger: '.footer-mega', start: 'top 92%', once: true } });
-		gsap.from('.footer-mega__sub', { opacity: 0, y: 20, duration: 0.8, delay: 0.5, scrollTrigger: { trigger: '.footer-mega', start: 'top 92%', once: true } });
 	}
 
 	/* Banners and photo bands: subtle parallax on the background photo */

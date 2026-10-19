@@ -14,16 +14,16 @@ $phone_href = preg_replace( '/[^0-9+]/', '', prime_opt( 'contact_phone' ) );
 	<div class="footer-glow" aria-hidden="true"></div>
 	<div class="container">
 		<div class="footer-top">
-			<p class="footer-top__title"><?php echo wp_kses_post( prime_heading_html( 'Let’s build your *next great team.*' ) ); ?></p>
+			<p class="footer-top__title"><?php echo wp_kses_post( prime_heading_html( prime_opt( 'footer_cta_title' ) ) ); ?></p>
 			<div class="footer-top__actions">
-				<a class="btn btn--primary" href="<?php echo esc_url( prime_url( 'contact' ) ); ?>#enquiry" data-modal="enquiry"><span><?php esc_html_e( 'Start a conversation', 'prime' ); ?></span><?php echo prime_icon( 'arrow', 18 ); // phpcs:ignore ?></a>
+				<a class="btn btn--primary" href="<?php echo esc_url( prime_url( 'contact' ) ); ?>#enquiry" data-modal="enquiry"><span><?php echo esc_html( prime_opt( 'footer_cta_button' ) ); ?></span><?php echo prime_icon( 'arrow', 18 ); // phpcs:ignore ?></a>
 				<?php if ( prime_whatsapp_url() ) : ?><a class="btn btn--glass" href="<?php echo esc_url( prime_whatsapp_url() ); ?>" target="_blank" rel="noopener"><?php echo prime_icon( 'whatsapp', 18 ); // phpcs:ignore ?><span>WhatsApp</span></a><?php endif; ?>
 			</div>
 		</div>
 		<div class="footer-grid">
 			<div class="footer-brand">
 				<?php prime_logo( 'footer' ); ?>
-				<p><?php echo esc_html( prime_home_seo()['meta_desc'] ); ?></p>
+				<p><?php echo esc_html( prime_opt( 'footer_about' ) ? prime_opt( 'footer_about' ) : prime_home_seo()['meta_desc'] ); ?></p>
 				<?php if ( prime_socials() ) : ?><div class="social social--dark"><?php echo prime_socials(); // phpcs:ignore ?></div><?php endif; ?>
 			</div>
 			<div>
@@ -60,13 +60,13 @@ $phone_href = preg_replace( '/[^0-9+]/', '', prime_opt( 'contact_phone' ) );
 		</div>
 
 		<div class="footer-mega" aria-hidden="true">
-			<div class="footer-mega__word"><?php foreach ( str_split( 'PRIME' ) as $i => $ch ) : ?><span style="--i:<?php echo (int) $i; ?>"><?php echo esc_html( $ch ); ?></span><?php endforeach; ?></div>
-			<div class="footer-mega__sub"><span>RECRUITMENTS</span><i></i><span><?php esc_html_e( 'Pan India Recruitment Solutions', 'prime' ); ?></span></div>
+			<div class="footer-mega__word"><?php foreach ( preg_split( '//u', prime_opt( 'footer_word' ), -1, PREG_SPLIT_NO_EMPTY ) as $i => $ch ) : ?><span style="--i:<?php echo (int) $i; ?>"><?php echo esc_html( $ch ); ?></span><?php endforeach; ?></div>
+			<div class="footer-mega__sub"><span><?php echo esc_html( prime_opt( 'footer_word_sub' ) ); ?></span><i></i><span><?php echo esc_html( prime_opt( 'footer_tagline' ) ); ?></span></div>
 		</div>
 
 		<div class="footer-bottom">
-			<span>© <?php echo esc_html( gmdate( 'Y' ) ); ?> <?php bloginfo( 'name' ); ?>. <?php esc_html_e( 'All rights reserved.', 'prime' ); ?></span>
-			<span class="footer-note"><?php esc_html_e( 'We never charge candidates a fee.', 'prime' ); ?></span>
+			<span>© <?php echo esc_html( gmdate( 'Y' ) ); ?> <?php echo esc_html( prime_opt( 'company_name' ) ); ?>. <?php esc_html_e( 'All rights reserved.', 'prime' ); ?></span>
+			<span class="footer-note"><?php echo esc_html( prime_opt( 'footer_note' ) ); ?></span>
 			<?php
 			if ( has_nav_menu( 'footer' ) ) {
 				wp_nav_menu(
@@ -92,14 +92,31 @@ $phone_href = preg_replace( '/[^0-9+]/', '', prime_opt( 'contact_phone' ) );
 
 <?php get_template_part( 'template-parts/enquiry-modal' ); ?>
 
-<div class="fab" aria-label="<?php esc_attr_e( 'Quick contact', 'prime' ); ?>">
-	<?php if ( prime_whatsapp_url() ) : ?>
-		<a class="fab__btn fab__btn--wa" href="<?php echo esc_url( prime_whatsapp_url() ); ?>" target="_blank" rel="noopener" aria-label="<?php esc_attr_e( 'Chat on WhatsApp', 'prime' ); ?>"><svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2c-1.5 0-3-.4-4.3-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.4.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.4.1-.7.3-.2.3-.9.9-.9 2.2s.9 2.5 1 2.7c.1.2 1.8 2.8 4.4 3.9 1.6.7 2.3.8 3.1.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3Z"/></svg><span class="fab__tip"><?php esc_html_e( 'WhatsApp us', 'prime' ); ?></span></a>
-	<?php endif; ?>
-	<?php if ( prime_tel_url() ) : ?>
-		<a class="fab__btn fab__btn--call" href="<?php echo esc_attr( prime_tel_url() ); ?>" aria-label="<?php esc_attr_e( 'Call us', 'prime' ); ?>"><?php echo prime_icon( 'phone', 22 ); // phpcs:ignore ?><span class="fab__tip"><?php echo esc_html( prime_opt( 'contact_phone' ) ); ?></span></a>
-	<?php endif; ?>
-</div>
+<?php
+$prime_side = array();
+if ( prime_whatsapp_url() ) {
+	$prime_side[] = array( 'whatsapp', 'WhatsApp', prime_whatsapp_url(), true );
+}
+foreach ( array( 'instagram' => 'Instagram', 'linkedin' => 'LinkedIn', 'facebook' => 'Facebook', 'x' => 'X (Twitter)', 'youtube' => 'YouTube' ) as $prime_net => $prime_label ) {
+	if ( prime_opt( 'social_' . $prime_net ) ) {
+		$prime_side[] = array( $prime_net, $prime_label, prime_opt( 'social_' . $prime_net ), true );
+	} elseif ( in_array( $prime_net, array( 'instagram', 'linkedin' ), true ) && current_user_can( 'edit_theme_options' ) ) {
+		// Shown to admins only, as a reminder to add the link.
+		$prime_side[] = array( $prime_net, sprintf( /* translators: %s: network */ __( 'Add %s link', 'prime' ), $prime_label ), admin_url( 'customize.php?autofocus[section]=prime_social' ), false, 'is-empty' );
+	}
+}
+if ( prime_tel_url() ) {
+	$prime_side[] = array( 'phone', __( 'Call us', 'prime' ), prime_tel_url(), false );
+}
+$prime_side[] = array( 'mail', __( 'Email us', 'prime' ), 'mailto:' . prime_opt( 'contact_email' ), false );
+?>
+<aside class="side-social" aria-label="<?php esc_attr_e( 'Connect with us', 'prime' ); ?>">
+	<ul>
+		<?php foreach ( $prime_side as $item ) : ?>
+			<li><a class="side-social__item is-<?php echo esc_attr( $item[0] ); ?> <?php echo esc_attr( isset( $item[4] ) ? $item[4] : '' ); ?>" href="<?php echo esc_url( $item[2] ); ?>" <?php echo $item[3] ? 'target="_blank" rel="noopener"' : ''; ?>><span class="side-social__icon"><?php echo prime_icon( $item[0], 19 ); // phpcs:ignore ?></span><span class="side-social__label"><?php echo esc_html( $item[1] ); ?></span></a></li>
+		<?php endforeach; ?>
+	</ul>
+</aside>
 
 <nav class="action-bar" aria-label="<?php esc_attr_e( 'Quick actions', 'prime' ); ?>">
 	<?php if ( prime_tel_url() ) : ?><a href="<?php echo esc_attr( prime_tel_url() ); ?>"><?php echo prime_icon( 'phone', 20 ); // phpcs:ignore ?><span><?php esc_html_e( 'Call', 'prime' ); ?></span></a><?php endif; ?>
@@ -107,10 +124,7 @@ $phone_href = preg_replace( '/[^0-9+]/', '', prime_opt( 'contact_phone' ) );
 	<a class="action-bar__main" href="<?php echo esc_url( prime_url( 'contact' ) ); ?>#enquiry" data-modal="enquiry"><?php echo prime_icon( 'mail', 20 ); // phpcs:ignore ?><span><?php esc_html_e( 'Enquire', 'prime' ); ?></span></a>
 </nav>
 
-<button class="to-top" type="button" aria-label="<?php esc_attr_e( 'Back to top', 'prime' ); ?>">
-	<svg viewBox="0 0 48 48" aria-hidden="true"><circle class="to-top__track" cx="24" cy="24" r="21"/><circle class="to-top__ring" cx="24" cy="24" r="21"/></svg>
-	<?php echo prime_icon( 'arrow', 16 ); // phpcs:ignore ?>
-</button>
+
 
 <?php wp_footer(); ?>
 </body>

@@ -89,6 +89,9 @@ function prime_sec_hero( $s ) {
 			<span class="tcard__av <?php echo esc_attr( $states[ $k % 4 ] ); ?>"><?php echo esc_html( mb_substr( $name, 0, 1 ) ); ?></span>
 			<span class="tcard__info"><strong><?php echo esc_html( prime_v( $c, 'role' ) ); ?></strong><small><?php echo esc_html( $name ); ?> · <?php echo esc_html( prime_v( $c, 'city' ) ); ?></small></span>
 			<?php if ( prime_v( $c, 'status' ) ) : ?><span class="tcard__status"><?php echo prime_icon( 'check', 12 ); // phpcs:ignore ?><?php echo esc_html( $c['status'] ); ?></span><?php endif; ?>
+			<?php $match = max( 0, min( 100, (int) prime_v( $c, 'match', 0 ) ) ); if ( $match ) : ?>
+				<span class="tcard__match"><span class="tcard__bar"><i style="--w:<?php echo esc_attr( $match ); ?>%"></i></span><b><?php echo esc_html( $match ); ?>%</b></span>
+			<?php endif; ?>
 		</div>
 		<?php
 	};
@@ -106,10 +109,6 @@ function prime_sec_hero( $s ) {
 				<?php endforeach; ?>
 			</svg>
 			<?php foreach ( $cards as $k => $c ) { $card( $c, $k, 'tcard--float' ); } ?>
-			<span class="hero__bubble hero__bubble--1"><?php echo prime_icon( 'briefcase', 20 ); // phpcs:ignore ?></span>
-			<span class="hero__bubble hero__bubble--2"><?php echo prime_icon( 'users', 20 ); // phpcs:ignore ?></span>
-			<span class="hero__bubble hero__bubble--3"><?php echo prime_icon( 'star', 20 ); // phpcs:ignore ?></span>
-			<span class="hero__bubble hero__bubble--4"><?php echo prime_icon( 'check', 20 ); // phpcs:ignore ?></span>
 		</div>
 
 		<div class="container hero__center">
@@ -135,8 +134,10 @@ function prime_sec_hero( $s ) {
 					<?php endforeach; ?>
 				</ul>
 			<?php endif; ?>
-			<?php if ( prime_v( $s, 'trust_title' ) ) : ?>
-				<p class="hero__trust" data-anim="fade-up"><span class="hero__avatars" aria-hidden="true"><i>A</i><i>P</i><i>R</i><i>+</i></span><span><strong><?php echo esc_html( $s['trust_title'] ); ?></strong> <?php echo esc_html( prime_v( $s, 'trust_text' ) ); ?></span></p>
+			<?php $proof = prime_lines( prime_v( $s, 'proof' ) ); if ( $proof ) : ?>
+				<ul class="hero__proof" data-anim="stagger"><?php foreach ( $proof as $pf ) : ?><li><?php echo prime_icon( 'check', 15 ); // phpcs:ignore ?><?php echo esc_html( $pf ); ?></li><?php endforeach; ?></ul>
+			<?php elseif ( prime_v( $s, 'trust_title' ) ) : ?>
+				<p class="hero__trust" data-anim="fade-up"><?php echo prime_icon( 'shield', 18 ); // phpcs:ignore ?><span><strong><?php echo esc_html( $s['trust_title'] ); ?></strong> <?php echo esc_html( prime_v( $s, 'trust_text' ) ); ?></span></p>
 			<?php endif; ?>
 			<?php if ( $cards ) : ?>
 				<div class="hero__stack" aria-hidden="true"><?php foreach ( array_slice( $cards, 0, 2 ) as $k => $c ) { $card( $c, $k ); } ?></div>

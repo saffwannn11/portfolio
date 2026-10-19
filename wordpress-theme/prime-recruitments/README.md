@@ -1,4 +1,4 @@
-# Prime Recruitments: WordPress Theme v1.5 (Elementor-ready)
+# Prime Recruitments: WordPress Theme v1.6 (Elementor-ready)
 
 A professional recruitment and corporate gifting theme in white and off-white (#EDEBE4), with black (#111111), blue (#1D4ED8) and rose (#F43F5E) accents. Every page is pre-built in Elementor using 27 custom Prime widgets.
 
@@ -15,12 +15,31 @@ Upload it as a **theme**, not as a plugin; the plugin uploader reports "No valid
 2. Open any admin page once. The update then runs by itself:
    - every page you **haven't** edited gets the new design and the new layouts
    - pages you **have** edited in Elementor keep your content, shown in the new style
-3. To give edited pages the new layouts too, go to **Appearance → Prime Setup → Apply the latest design to all pages**. Your old layouts are backed up first, and **Restore my previous layouts** puts them back.
+3. To give edited pages the new layouts too, go to **Prime Website (wp-admin menu) → Apply the latest design to all pages**. Your old layouts are backed up first, and **Restore my previous layouts** puts them back.
 
 Activating creates **20 pages** automatically and sets the homepage and URLs. Then:
 
 3. Install the free **Elementor** plugin and open any page with **Edit with Elementor**.
 4. *(Optional)* Install **Fluent Forms**. The theme then creates a ready **"Prime Recruitments Enquiry"** form for you, connects it to the popup and every CTA, and sends enquiries to your contact email.
+
+## What's new in v1.6
+
+- **Footer fixed:** the giant animated PRIME word now always appears. Its letters rise in as the footer comes into view.
+- **Header with the admin bar:** when you're logged in, the header sits below the WordPress admin bar instead of overlapping it.
+- **Copyright line:** shows your company name ("Prime Recruitments"), not the hosting site title. Change it in Customize → Prime Recruitments → Header & footer texts.
+- **Homepage banner, more professional:**
+  - candidate cards with match-score bars
+  - three proof points under the buttons
+  - removed: the playful icon bubbles, the extra chip row and the letter avatars
+- **Sticky social bar on the left:** WhatsApp, Instagram, LinkedIn, Facebook, X, YouTube, Call and Email. Each icon slides out to show its label on hover.
+  - Add your social links in Customize → Prime Recruitments → Social links. Only networks with a link are shown to visitors.
+  - While Instagram and LinkedIn are empty, admins see dashed "Add link" placeholders as a reminder.
+- **Removed:** the bottom-right floating buttons and the back-to-top button. Phones keep the Call / WhatsApp / Enquire bar at the bottom.
+- **Everything editable:**
+  - a new **Prime Website** menu in wp-admin lists every page with **Edit with Elementor** and **View** buttons, plus shortcuts to the site-wide settings
+  - every page section is a Prime widget in Elementor, with all text, links, lists and images editable
+  - header and footer texts, contact details, social links, logo, stats and the form are in the Customizer
+  - footer settings: footer headline, button, about text, the giant word, tagline, note and company name
 
 ## What's new in v1.5
 
@@ -86,7 +105,7 @@ Activating creates **20 pages** automatically and sets the homepage and URLs. Th
   - Call, WhatsApp and Email buttons
   - a **Save contact** button that downloads a vCard to the phone
 - **WhatsApp and call:**
-  - floating WhatsApp and Call buttons on desktop
+  - a sticky social bar on the left (desktop)
   - a Call / WhatsApp / Enquire bar on mobile
   - WhatsApp opens a chat with a pre-filled message
 - **Social links:** add LinkedIn, Instagram, Facebook, X and YouTube in Customize → Prime Recruitments → Social links. They appear in the footer, mobile menu and Contact page.
@@ -153,7 +172,7 @@ Keyword search volumes were not checked with a keyword tool. Confirm them in Sea
   - **Advanced:** Elementor's standard options
 - In headings, wrap words in `*asterisks*` for the gold italic accent.
 - Any link to `#enquiry` opens the popup.
-- **Appearance → Prime Setup** can:
+- **Prime Website** (wp-admin menu) can:
   - create missing pages
   - (re)create the Fluent Forms enquiry form
   - apply the latest design to all pages (your current layouts are backed up and can be restored)

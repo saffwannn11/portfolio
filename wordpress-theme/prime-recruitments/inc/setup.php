@@ -164,7 +164,7 @@ add_action( 'admin_notices', 'prime_setup_notice' );
  * Appearance → Prime Setup.
  */
 function prime_setup_menu() {
-	add_theme_page( __( 'Prime Setup', 'prime' ), __( 'Prime Setup', 'prime' ), 'manage_options', 'prime-setup', 'prime_setup_page' );
+	add_menu_page( __( 'Prime Website', 'prime' ), __( 'Prime Website', 'prime' ), 'manage_options', 'prime-setup', 'prime_setup_page', 'dashicons-admin-site-alt3', 3 );
 }
 add_action( 'admin_menu', 'prime_setup_menu' );
 
@@ -213,17 +213,39 @@ function prime_setup_page() {
 	}
 	echo '</p></form>';
 
-	echo '<h2>' . esc_html__( 'Pages and SEO', 'prime' ) . '</h2><table class="widefat striped"><thead><tr><th>Page</th><th>URL</th><th>Meta title</th><th>Focus keyword</th></tr></thead><tbody>';
+	echo '<h2>' . esc_html__( 'Edit any page', 'prime' ) . '</h2>';
+	echo '<p>' . esc_html__( 'Every page is built from Prime sections in Elementor. Click “Edit with Elementor”, click any section, and change its text, images, links and lists in the left panel (Content tab) or its colours and spacing (Style tab). You can also drag sections to reorder them, duplicate or delete them, or add new Prime sections by searching “Prime” in the widget panel.', 'prime' ) . '</p>';
+	echo '<p><strong>' . esc_html__( 'Site-wide parts:', 'prime' ) . '</strong> ';
+	$links = array(
+		array( 'prime_footer', __( 'Header & footer texts', 'prime' ) ),
+		array( 'prime_contact', __( 'Phone, email, WhatsApp, address', 'prime' ) ),
+		array( 'prime_social', __( 'Social links (left sticky bar)', 'prime' ) ),
+		array( 'prime_logo', __( 'Logo', 'prime' ) ),
+		array( 'prime_stats', __( 'Stats numbers', 'prime' ) ),
+		array( 'prime_form', __( 'Enquiry form / Fluent Forms', 'prime' ) ),
+	);
+	foreach ( $links as $l ) {
+		echo '<a class="button" style="margin:0 6px 6px 0" href="' . esc_url( admin_url( 'customize.php?autofocus[section]=' . $l[0] ) ) . '">' . esc_html( $l[1] ) . '</a>';
+	}
+	echo '<a class="button" style="margin:0 6px 6px 0" href="' . esc_url( admin_url( 'nav-menus.php' ) ) . '">' . esc_html__( 'Menu (optional custom menu)', 'prime' ) . '</a></p>';
+
+	$rows = array();
+	$home = (int) get_option( 'page_on_front' );
+	if ( $home ) {
+		$seo    = prime_home_seo();
+		$rows[] = array( $home, 'Home', $seo['meta_title'], $seo['focus_kw'] );
+	}
 	foreach ( prime_pages() as $key => $p ) {
-		$exists = get_page_by_path( $p['path'] );
-		printf(
-			'<tr><td>%1$s %2$s</td><td><code>/%3$s/</code></td><td>%4$s</td><td>%5$s</td></tr>',
-			esc_html( $p['menu'] ),
-			$exists ? '✅' : '—',
-			esc_html( $p['path'] ),
-			esc_html( $p['meta_title'] ),
-			esc_html( $p['focus_kw'] )
-		);
+		$post   = get_page_by_path( $p['path'] );
+		$rows[] = array( $post ? $post->ID : 0, $p['menu'], $p['meta_title'], $p['focus_kw'], $p['path'] );
+	}
+	echo '<table class="widefat striped"><thead><tr><th>Page</th><th>Edit</th><th>Meta title</th><th>Focus keyword</th></tr></thead><tbody>';
+	foreach ( $rows as $r ) {
+		$actions = '—';
+		if ( $r[0] ) {
+			$actions = '<a class="button button-primary button-small" href="' . esc_url( admin_url( 'post.php?post=' . $r[0] . '&action=elementor' ) ) . '">' . esc_html__( 'Edit with Elementor', 'prime' ) . '</a> <a class="button button-small" href="' . esc_url( get_permalink( $r[0] ) ) . '" target="_blank">' . esc_html__( 'View', 'prime' ) . '</a>';
+		}
+		printf( '<tr><td><strong>%1$s</strong></td><td>%2$s</td><td>%3$s</td><td>%4$s</td></tr>', esc_html( $r[1] ), $actions, esc_html( $r[2] ), esc_html( $r[3] ) ); // phpcs:ignore
 	}
 	echo '</tbody></table></div>';
 }
@@ -342,6 +364,6 @@ function prime_upgrade_notice() {
 		return;
 	}
 	delete_transient( 'prime_upgrade_notice' );
-	echo '<div class="notice notice-success is-dismissible"><p><strong>Prime Recruitments updated to ' . esc_html( PRIME_VERSION ) . '.</strong> ' . esc_html__( 'Unedited pages received the new design and layout. Pages you edited in Elementor keep your content in the new style.', 'prime' ) . ' <a href="' . esc_url( admin_url( 'themes.php?page=prime-setup' ) ) . '">' . esc_html__( 'Apply the new layouts to edited pages too', 'prime' ) . '</a></p></div>';
+	echo '<div class="notice notice-success is-dismissible"><p><strong>Prime Recruitments updated to ' . esc_html( PRIME_VERSION ) . '.</strong> ' . esc_html__( 'Unedited pages received the new design and layout. Pages you edited in Elementor keep your content in the new style.', 'prime' ) . ' <a href="' . esc_url( admin_url( 'admin.php?page=prime-setup' ) ) . '">' . esc_html__( 'Apply the new layouts to edited pages too', 'prime' ) . '</a></p></div>';
 }
 add_action( 'admin_notices', 'prime_upgrade_notice' );
