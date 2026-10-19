@@ -224,7 +224,7 @@ function prime_sec_services_slider( $s ) {
 			<div class="svc-grid" data-anim="stagger">
 				<?php foreach ( $cards as $n => $c ) : ?>
 					<a class="svc-card" <?php echo prime_link_attrs( prime_v( $c, 'link' ) ); // phpcs:ignore ?>>
-						<span class="svc-card__num" aria-hidden="true"><?php echo esc_html( prime_nn( $n + 1 ) ); ?></span>
+						<span class="svc-card__num" aria-hidden="true" data-n="<?php echo esc_attr( prime_nn( $n + 1 ) ); ?>"></span>
 						<span class="svc-card__icon"><?php echo prime_icon( prime_v( $c, 'icon', 'users' ), 26 ); // phpcs:ignore ?></span>
 						<h3><?php echo esc_html( prime_v( $c, 'title' ) ); ?></h3>
 						<p><?php echo esc_html( prime_v( $c, 'text' ) ); ?></p>
