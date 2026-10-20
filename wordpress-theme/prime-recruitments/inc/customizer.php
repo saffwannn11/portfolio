@@ -14,7 +14,7 @@ defined( 'ABSPATH' ) || exit;
  */
 function prime_opt_defaults() {
 	return array(
-		'brand_color'     => '#1D4ED8',
+		'brand_color'     => '#F43F5E',
 		'modal_image'     => '',
 		'fluentform_id'   => '',
 		'form_recipient'  => '',
@@ -126,7 +126,7 @@ function prime_customize_register( $wp_customize ) {
 			'title'  => __( 'Header & footer texts', 'prime' ),
 			'fields' => array(
 				'company_name'      => array( __( 'Company name (copyright line)', 'prime' ), 'text', '' ),
-				'footer_cta_title'  => array( __( 'Footer headline (*asterisks* = gradient words)', 'prime' ), 'text', '' ),
+				'footer_cta_title'  => array( __( 'Footer headline (*asterisks* = coral words)', 'prime' ), 'text', '' ),
 				'footer_cta_button' => array( __( 'Footer button text', 'prime' ), 'text', '' ),
 				'footer_about'      => array( __( 'Footer about text (empty = homepage meta description)', 'prime' ), 'textarea', '' ),
 				'footer_word'       => array( __( 'Giant footer word', 'prime' ), 'text', '' ),
@@ -217,8 +217,8 @@ add_action( 'customize_register', 'prime_customize_register' );
  */
 function prime_brand_color_css() {
 	$c = sanitize_hex_color( prime_opt( 'brand_color' ) );
-	if ( $c && '#1d4ed8' !== strtolower( $c ) ) {
-		wp_add_inline_style( 'prime-main', ':root{--blue:' . $c . ';--gold:' . $c . ';--accent-text:' . $c . ';}' );
+	if ( $c && '#f43f5e' !== strtolower( $c ) ) {
+		wp_add_inline_style( 'prime-main', ':root{--coral:' . $c . ';--rose:' . $c . ';}' );
 	}
 }
 add_action( 'wp_enqueue_scripts', 'prime_brand_color_css', 20 );

@@ -168,6 +168,7 @@
 	// scroll animation is shown immediately (e.g. at the very bottom of a page).
 	function flushVisible() {
 		if (!window.ScrollTrigger) return;
+		$$('[data-rows]').forEach(function (l) { var r = l.getBoundingClientRect(); if (r.top < window.innerHeight && r.bottom > 0) l.classList.add('is-in'); });
 		ScrollTrigger.getAll().forEach(function (st) {
 			var el = st.trigger;
 			if (!el || !st.animation || st.animation.progress() === 1) return;
@@ -446,8 +447,34 @@
 		}
 	}
 
-	/* Banners and photo bands: subtle parallax on the background photo */
+	/* Photos: a clip-path wipe on entry, then the image drifts with the scroll */
 	function media() {
+		$$('[data-parallax]').forEach(function (box) {
+			var img = box.querySelector('img');
+			var tag = box.querySelector('.hero__tag');
+			var tl = gsap.timeline({ scrollTrigger: { trigger: box, start: 'top 92%', once: true }, delay: box.closest('.hero, .banner') ? 0.35 : 0 });
+			tl.fromTo(box, { clipPath: 'inset(12% 8% 12% 8% round 26px)' }, { clipPath: 'inset(0% 0% 0% 0% round 26px)', duration: 1.4, ease: 'power4.inOut' });
+			if (tag) tl.fromTo(tag, { opacity: 0, y: 30, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: 'back.out(1.7)' }, '-=0.5');
+			if (img) gsap.fromTo(img, { yPercent: -12 }, { yPercent: 0, ease: 'none', scrollTrigger: { trigger: box, start: 'top bottom', end: 'bottom top', scrub: true } });
+		});
+		// Big hero headline drifts up and the stats row lifts in, one by one.
+		var title = $('.hero__title');
+		if (title) gsap.to(title, { yPercent: -18, opacity: 0.25, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: '45% top', scrub: true } });
+		$$('.hero__nums, .stats__grid').forEach(function (g) {
+			gsap.fromTo(g.children, { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.9, stagger: 0.1, scrollTrigger: { trigger: g, start: 'top 92%', once: true } });
+		});
+		// Service rows: slide up one after another (CSS transitions, keyed by --i).
+		$$('[data-rows]').forEach(function (list) {
+			$$('.svc-row', list).forEach(function (r, i) { r.style.setProperty('--i', i); });
+			ScrollTrigger.create({ trigger: list, start: 'top 85%', once: true, onEnter: function () { list.classList.add('is-in'); } });
+		});
+		// Process cards rise in a staggered wave.
+		$$('.process__steps').forEach(function (g) {
+			gsap.fromTo(g.children, { opacity: 0, y: 70, rotate: 2 }, { opacity: 1, y: 0, rotate: 0, duration: 1, stagger: 0.12, scrollTrigger: { trigger: g, start: 'top 85%', once: true } });
+		});
+		// Footer giant word: slow horizontal drift as it scrolls into view.
+		var mega = $('.footer-mega__word');
+		if (mega) gsap.fromTo(mega, { xPercent: -4 }, { xPercent: 2, ease: 'none', scrollTrigger: { trigger: '.site-footer', start: 'top bottom', end: 'bottom bottom', scrub: true } });
 		$$('.audience__img').forEach(function (img) {
 			var sec = img.closest('section') || img;
 			gsap.fromTo(img, { yPercent: -6, scale: 1.12 }, { yPercent: 6, scale: 1.12, ease: 'none', scrollTrigger: { trigger: sec, start: 'top bottom', end: 'bottom top', scrub: true } });
@@ -457,8 +484,11 @@
 	/* Statement words light up as you scroll */
 	function statement() {
 		$$('[data-scrub-text]').forEach(function (el) {
-			var words = el.textContent.trim().split(/\s+/);
-			el.innerHTML = words.map(function (w) { return '<span class="w">' + w.replace(/[<>&]/g, '') + '</span>'; }).join(' ');
+			// Wrap each word in a span, keeping highlighted (*accent*) phrases intact.
+			var wrap = function (txt) { return txt.split(/(\s+)/).map(function (w) { return /^\s*$/.test(w) ? w : '<span class="w">' + w.replace(/&/g, '&amp;').replace(/</g, '&lt;') + '</span>'; }).join(''); };
+			el.innerHTML = Array.prototype.map.call(el.childNodes, function (n) {
+				return n.nodeType === 3 ? wrap(n.textContent) : '<span class="' + (n.className || '') + '">' + wrap(n.textContent) + '</span>';
+			}).join('');
 			gsap.to($$('.w', el), { opacity: 1, stagger: 0.1, ease: 'none', scrollTrigger: { trigger: el, start: 'top 80%', end: 'bottom 45%', scrub: 0.6 } });
 		});
 	}

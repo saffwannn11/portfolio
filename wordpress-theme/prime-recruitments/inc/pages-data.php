@@ -1029,7 +1029,7 @@ function prime_jobs() {
  */
 function prime_testimonials() {
 	return array(
-		array( 'Prime sent four candidates for a role we had struggled with for two months. We hired two of them. The shortlist notes alone saved our managers hours.', 'Head of Talent', 'SaaS company, Bangalore' ),
+		array( 'Prime sent four candidates for a role we had struggled with for two months. *We hired two of them.* The shortlist notes alone saved our managers hours.', 'Head of Talent', 'SaaS company, Bangalore' ),
 		array( 'They understood our plant hiring needs immediately and ran a 120-person ramp-up without a single compliance issue on contract staff.', 'HR Director', 'Manufacturing group, Pune' ),
 		array( 'My recruiter prepared me properly for every round and was honest about the salary range. I joined within five weeks of my first call.', 'Senior Analyst', 'Placed in Mumbai' ),
 		array( 'A genuinely confidential leadership search. The market map they shared changed how our board thought about the role.', 'Founder & CEO', 'Fintech, Delhi NCR' ),

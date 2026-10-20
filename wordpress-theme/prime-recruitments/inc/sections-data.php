@@ -102,34 +102,20 @@ function prime_home_sections() {
 		array(
 			'hero',
 			array(
-				'eyebrow'     => 'Pan India Recruitment Solutions',
-				'title_1'     => 'Recruitment agency',
-				'title_2'     => 'in India for teams',
-				'title_3'     => 'that',
-				'rotator'     => 'grow., lead., scale., win.',
-				'lead'        => 'Prime Recruitments finds, interviews and shortlists the people your business needs — permanent, contract, executive and volume hiring, delivered by specialists who answer the phone.',
+				'eyebrow'     => 'Recruitment agency in India',
+				'title_1'     => 'We find the people',
+				'title_2'     => 'who *move* your',
+				'title_3'     => 'business forward.',
+				'rotator'     => '',
+				'lead'        => 'Pan-India recruitment for permanent, contract, executive and volume hiring — every candidate interviewed before you meet them.',
 				'btn1_text'   => 'Hire talent',
 				'btn1_link'   => prime_link( '#enquiry' ),
 				'btn2_text'   => 'Browse jobs',
 				'btn2_link'   => prime_link( prime_url( 'jobs' ) ),
 				'proof'       => "Every candidate interviewed\nShortlists in 48–72 hours\nPan-India + overseas hiring",
+				'image_alt'   => 'Modern office building',
+				'tag'         => 'Shortlists in 48–72 hours',
 				'stats'       => prime_stats_items(),
-			),
-		),
-		array(
-			'about_split',
-			array(
-				'label'      => 'Who we are',
-				'title'      => 'We don’t send CVs. We send *people worth meeting.*',
-				'anchor'     => 'about',
-				'badge_num'  => '100%',
-				'badge_text' => 'of candidates personally interviewed',
-				'text'       => "Prime Recruitments is a pan-India recruitment partner for companies that care about who they hire. Every profile we share has been interviewed, skills-checked and salary-aligned, so your managers spend their time hiring, not sifting.\nFor professionals, we are a recruiter who answers the phone, explains the role honestly and never charges a fee.",
-				'points'     => "Function-specialist consultants\nSalary benchmarks with every brief\nReplacement guarantee on permanent hires",
-				'sig_title'  => 'The Prime promise',
-				'sig_text'   => 'Quality over volume, on every brief',
-				'link_text'  => 'About Prime',
-				'link'       => prime_link( prime_url( 'about' ) ),
 			),
 		),
 		array(
@@ -146,6 +132,30 @@ function prime_home_sections() {
 				'cta_text'       => 'Tell us the role. We’ll recommend the fastest, most cost-effective route.',
 				'cta_link_text'  => 'Compare services',
 				'cta_link'       => prime_link( prime_url( 'services' ) ),
+			),
+		),
+		array(
+			'about_split',
+			array(
+				'label'      => 'Who we are',
+				'title'      => 'We don’t send CVs. We send *people worth meeting.*',
+				'anchor'     => 'about',
+				'background' => 'dark',
+				'badge_num'  => '',
+				'badge_text' => 'of candidates personally interviewed',
+				'text'       => "Prime Recruitments is a pan-India recruitment partner for companies that care about who they hire. Every profile we share has been interviewed, skills-checked and salary-aligned, so your managers spend their time hiring, not sifting.\nFunction-specialist consultants, salary benchmarks with every brief and a replacement guarantee on permanent hires.",
+				'points'     => "Technology
+BFSI & Fintech
+Healthcare
+Manufacturing
+Retail & E-commerce
+Logistics
+FMCG
+Overseas & Gulf",
+				'sig_title'  => 'The Prime promise',
+				'sig_text'   => 'Quality over volume, on every brief',
+				'link_text'  => 'About Prime',
+				'link'       => prime_link( prime_url( 'about' ) ),
 			),
 		),
 		array(

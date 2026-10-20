@@ -1,6 +1,6 @@
-# Prime Recruitments: WordPress Theme v1.8 (Elementor-ready)
+# Prime Recruitments: WordPress Theme v2.0 (Elementor-ready)
 
-A professional recruitment and corporate gifting theme in white and off-white (#EDEBE4), with deep navy (#0B1B3F), royal blue (#1D4ED8) and a rose (#F43F5E) accent. Every page is pre-built in Elementor using 27 custom Prime widgets.
+A professional recruitment and corporate gifting theme in an editorial style: cream (#EDEBE4), black (#111111) and a coral (#F43F5E) accent, set in Space Grotesk and Inter. Every page is pre-built in Elementor using 27 custom Prime widgets.
 
 ## Install or update
 
@@ -21,6 +21,29 @@ Activating creates **20 pages** automatically and sets the homepage and URLs. Th
 
 3. Install the free **Elementor** plugin and open any page with **Edit with Elementor**.
 4. *(Optional)* Install **Fluent Forms**. The theme then creates a ready **"Prime Recruitments Enquiry"** form for you, connects it to the popup and every CTA, and sends enquiries to your contact email.
+
+## What's new in v2.0: "Editorial Bold" (the client-approved design)
+
+- **Colours:** cream background, black text and sections, coral highlights. Small coral text uses a deeper coral (#BE123C) so it stays readable.
+- **Fonts:** Space Grotesk for headings and Inter for body text, the menu and the footer.
+- **Header:** a cream bar with a thin black rule, a coral underline on the active menu item and a black pill "Hire Talent" button.
+- **Homepage:**
+  - **Hero:** a big left-aligned headline ("We find the people who *move* your business forward."), lead text and buttons, a wide black-and-white photo with a coral "Shortlists in 48–72 hours" tag, and a bordered row of four stats.
+  - **Services:** numbered rows. Hovering a row turns it black and shows a coral arrow.
+  - **Who we are:** a black section with the photo on the left and the industries shown as pills.
+  - **Process:** "From brief to signed offer in four steps", shown as white cards with large coral numbers.
+  - **Testimonial:** a large quote. Words wrapped in `*asterisks*` show in coral.
+  - **CTA:** a coral band with the enquiry form.
+  - **Footer:** black, with a giant "PRIME" and a coral dot.
+- **Inner pages:** the same editorial banner, with a big headline, buttons, highlight pills, and a black "Quick answer" card next to a black-and-white photo.
+- **Scroll animations:**
+  - photos open with a clip-path wipe and drift as you scroll (parallax)
+  - the hero headline lifts away as you scroll
+  - stats count up
+  - service rows, process cards and other content slide in one after another
+  - testimonial words light up as you read
+  - the footer "PRIME" glides sideways
+  - all motion switches off for visitors who prefer reduced motion, and inside the Elementor editor
 
 ## What's new in v1.8
 
